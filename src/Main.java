@@ -76,9 +76,7 @@ class AppFrame extends BorderPane{
     private Footer footer;
     private RecipeList recipeList;
     private ScrollPane scrollBar;
-
     private Button createButton;
-
 
     AppFrame()
     {
