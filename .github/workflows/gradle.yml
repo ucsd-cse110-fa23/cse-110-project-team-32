@@ -1,8 +1,6 @@
-name: Java CI
-
 name: Java CI with Gradle
 
- on:[push]
+on: [push]
 
 permissions:
     contents: read
