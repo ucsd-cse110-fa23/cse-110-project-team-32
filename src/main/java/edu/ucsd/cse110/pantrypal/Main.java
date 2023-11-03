@@ -1,3 +1,4 @@
+package main.java.edu.ucsd.cse110.pantrypal;
 import java.io.*;
 import java.util.*;
 import javafx.application.Application;
@@ -23,14 +24,15 @@ import javafx.scene.layout.VBox;
 class MealType {
     private String type;
 
-    MealType(){
+    // Constructor for MealTypes
+    MealType(String mealtype){
         //Calls on voice activation:
         //Gets meal time from 1st voice activation
-
+        String type = mealtype;
     }
 
     public String getMealType(){
-        return "";
+        return type;
     }
 }
 
@@ -41,21 +43,24 @@ class Recipe extends HBox {
     private List<String> ingredients;
     private String instructions;
 
-    Recipe(){
-        // this.timeOfMeal = getMealType();
-
+    // Constructor for taking in ChatGPT responses
+    Recipe(MealType mealType, String title, List<String> ingredients, String instructions){
+        timeOfMeal = mealType;
+        this.title = title;
+        this.ingredients = ingredients;
+        this.instructions = instructions;
     }
 
     public String getTitle(){
-        return "";
+        return this.title;
     }
     
-    public String getIngredients(){
-        return "";
+    public List<String> getIngredients(){
+        return this.ingredients;
     }
 
     public String getInstructions(){
-        return "";
+        return this.instructions;
     }
 
 }

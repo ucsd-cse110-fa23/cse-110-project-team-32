@@ -1,3 +1,4 @@
+package main.java.edu.ucsd.cse110.pantrypal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
