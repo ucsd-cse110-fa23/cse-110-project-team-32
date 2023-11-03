@@ -19,11 +19,45 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.layout.VBox;
 
-class Recipe extends HBox {
+//Either Dinner, Lunch, Breakfast
+class MealType {
+    private String type;
 
-    Recipe(){
+    MealType(){
+        //Calls on voice activation:
+        //Gets meal time from 1st voice activation
 
     }
+
+    public String getMealType(){
+        return "";
+    }
+}
+
+class Recipe extends HBox {
+
+    private MealType timeOfMeal;
+    private String title;
+    private List<String> ingredients;
+    private String instructions;
+
+    Recipe(){
+        // this.timeOfMeal = getMealType();
+
+    }
+
+    public String getTitle(){
+        return "";
+    }
+    
+    public String getIngredients(){
+        return "";
+    }
+
+    public String getInstructions(){
+        return "";
+    }
+
 }
 
 class RecipeList extends VBox{ 
@@ -114,6 +148,12 @@ class AppFrame extends BorderPane{
 
             createButton.setOnAction(e -> {
                 //Get Voice Activation Stuff
+                //Create Start, Stop --> With Start stop 
+                //Add a prompt "Specify Meal Type: Breakfast, Lunch, Dinner"
+                //After Meal Type Said(Stop Button)
+                //Change Prompt to be: 'List Ingredients'
+
+                //After stop button --> Change buttons to be Save, Cancel
             });
 
 
