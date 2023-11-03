@@ -46,7 +46,6 @@ class Recipe extends HBox {
 
     }
 
-
     public String getTitle(){
         return "";
     }
@@ -77,17 +76,12 @@ class RecipeList extends VBox{
 
 class Footer extends HBox {
     private Button createButton;
-    private Button startButton;
-    private Button stopButton;
-    private Button saveButton;
-    private Button cancelButton;
-    public String defaultButtonStyle = "-fx-font-style: italic; -fx-background-color: #FFFFFF;  -fx-font-weight: bold; -fx-font: 11 arial;";
 
     Footer() {
         this.setPrefSize(500, 60);
         this.setStyle("-fx-background-color: #F0F8FF;");
         this.setSpacing(15);
-        // String defaultButtonStyle = "-fx-font-style: italic; -fx-background-color: #FFFFFF;  -fx-font-weight: bold; -fx-font: 11 arial;";
+        String defaultButtonStyle = "-fx-font-style: italic; -fx-background-color: #FFFFFF;  -fx-font-weight: bold; -fx-font: 11 arial;";
         createButton = new Button("CREATE");
         createButton.setStyle(defaultButtonStyle); 
         this.getChildren().add(createButton);
@@ -96,22 +90,6 @@ class Footer extends HBox {
 
     public Button getCreateButton(){
         return this.createButton;
-    }
-
-    public void removeCreateButton(){
-        this.getChildren().remove(createButton);
-    }
-
-    public void addStartButton(){
-        startButton = new Button("START");
-        startButton.setStyle(defaultButtonStyle);
-        this.getChildren().add(startButton);
-    }
-
-    public void addStopButton(){
-        stopButton = new Button("STOP");
-        stopButton.setStyle(defaultButtonStyle);
-        this.getChildren().add(stopButton);
     }
 }
 
@@ -171,9 +149,6 @@ class AppFrame extends BorderPane{
             createButton.setOnAction(e -> {
                 //Get Voice Activation Stuff
                 //Create Start, Stop --> With Start stop 
-                // footer.remove(createButton);
-                
-
                 //Add a prompt "Specify Meal Type: Breakfast, Lunch, Dinner"
                 //After Meal Type Said(Stop Button)
                 //Change Prompt to be: 'List Ingredients'
