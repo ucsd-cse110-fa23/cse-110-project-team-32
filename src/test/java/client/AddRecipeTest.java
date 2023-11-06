@@ -8,15 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 public class AddRecipeTest {
-    @Test void addRecipeTitle(){
+    @Test void addRecipeTest(){
         Recipe recipe = new Recipe("Chicken and Rice", "Dinner", "Its Chicken and Rice man...");
         assertEquals(recipe.getTitle(), "Chicken and Rice");
-        // RecipeList lst = new RecipeList();
-        // lst.addRecipe(new Recipe("Chicken and Rice", "Dinner", "Its Chicken and Rice man..."));
-        // List<RecipeListItem> t = lst.getRecipeList();
-        // assertEquals("Chicken and Rice", ((Recipe) lst.getChildren()).getTitle());
-    }
-    @Test void recipeList(){
-        
+        assertEquals(recipe.getMealType(), "Dinner");
+        assertEquals(recipe.getRecipeDetail(), "Its Chicken and Rice man...");
+
     }
 }
