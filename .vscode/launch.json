@@ -6,10 +6,10 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Main",
+            "name": "PantryPal",
             "request": "launch",
-            "mainClass": "main.Main",
-            "vmArgs": "--module-path 'C:/Users//openjfx-21.0.1_windows-x64_bin-sdk/javafx-sdk-21.0.1/lib' --add-modules javafx.controls,javafx.fxml"
-        }, //Enter your own file dir path for openjfx file 
+            "mainClass": "client.PantryPal",
+            "vmArgs": "--module-path 'C:/Users/alexa/OneDrive/Desktop/CSE/CSE110/openjfx-21.0.1_windows-x64_bin-sdk/javafx-sdk-21.0.1/lib' --add-modules javafx.controls,javafx.fxml"
+        }, //Update your own file path for libary
     ]
 }
