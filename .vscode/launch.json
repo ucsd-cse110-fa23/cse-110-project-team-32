@@ -8,8 +8,8 @@
             "type": "java",
             "name": "Main",
             "request": "launch",
-            "mainClass": "Main",
-            "vmArgs": "--module-path 'C:/Users/ryan5/Downloads/openjfx-21_windows-x64_bin-sdk/javafx-sdk-21/lib' --add-modules javafx.controls,javafx.fxml"
-        }
+            "mainClass": "main.Main",
+            "vmArgs": "--module-path 'C:/Users//openjfx-21.0.1_windows-x64_bin-sdk/javafx-sdk-21.0.1/lib' --add-modules javafx.controls,javafx.fxml"
+        }, //Enter your own file dir path for openjfx file 
     ]
 }

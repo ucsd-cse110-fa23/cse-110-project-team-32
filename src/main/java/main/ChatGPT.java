@@ -1,3 +1,4 @@
+package main;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
