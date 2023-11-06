@@ -10,15 +10,34 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import client.Recipe;
-public class ChatGPT {
-    private static final String API_ENDPOINT = "https://api.openai.com/v1/completions";
-    private static final String API_KEY = "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";
-    private static final String MODEL = "text-davinci-003";
 
-    public Recipe generate(String title, String mealType, String ingredients) throws IOException, InterruptedException, URISyntaxException {
+public class ChatGPT implements API{
+    private String API_ENDPOINT;// = "https://api.openai.com/v1/completions";
+    private String API_KEY;// = "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";
+    private String MODEL;// = "text-davinci-003";
+    private String recipeTitle;
+
+    public ChatGPT(){
+        API_ENDPOINT = "https://api.openai.com/v1/completions";
+        API_KEY = "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";
+        MODEL = "text-davinci-003";
+    }
+
+    public API initializeAPI(String API_ENDPOINT, String API_KEY, String MODEL){
+        this.API_ENDPOINT = API_ENDPOINT;
+        this.API_KEY = API_KEY;
+        this.MODEL = MODEL;
+        return this;
+    }
+
+    public String getInfo(){
+        return this.recipeTitle;
+    }
+
+    public Recipe generate(String mealType, String ingredients) throws IOException, InterruptedException, URISyntaxException {
 // Set request parameters
-        int maxTokens = 100;
-        String prompt = "Give me a simple " + mealType + " recipe with the ingredients " + ingredients;
+        int maxTokens = 300;
+        String prompt = "Give me a simple " + mealType + " recipe with the ingredients " + ingredients + ". Give me the title of the dish on the first line";
 
         System.out.println(maxTokens + ", " + prompt);
 
@@ -51,11 +70,16 @@ public class ChatGPT {
 
         JSONObject responseJson = new JSONObject(responseBody);
         JSONArray choices = responseJson.getJSONArray("choices");
-        String generatedText = choices.getJSONObject(0).getString("text");
+        String generatedText = choices.getJSONObject(0).getString("text").strip();
 
 
         System.out.println(generatedText);
-        Recipe createdRecipe = new Recipe(title, mealType, generatedText);
+        // int firstLineBreakPos = generatedText.indexOf('\n');
+        String title = generatedText.substring(0, generatedText.indexOf('\n'));
+        String recipeDetail = generatedText.substring(generatedText.indexOf('\n')+1);
+        Recipe createdRecipe = new Recipe(title, mealType, recipeDetail);
+        recipeTitle = title;
+        System.out.println("ChatGPT.java line 61:" + "Title: " + title + ", recipe detail: " + recipeDetail);
         return createdRecipe;
     }
 

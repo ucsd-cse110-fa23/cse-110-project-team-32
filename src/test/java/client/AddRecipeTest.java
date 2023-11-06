@@ -17,10 +17,6 @@ public class AddRecipeTest {
         // assertEquals("Chicken and Rice", ((Recipe) lst.getChildren()).getTitle());
     }
     @Test void recipeList(){
-        RecipeList lst = new RecipeList();
-        // RecipeList lst = new RecipeList();
-        // lst.addRecipe(new Recipe("Chicken and Rice", "Dinner", "Its Chicken and Rice man..."));
-        // List<RecipeListItem> t = lst.getRecipeList();
-        // assertEquals("Chicken and Rice", ((Recipe) lst.getChildren()).getTitle());
+        
     }
 }
