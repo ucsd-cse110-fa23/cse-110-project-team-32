@@ -49,7 +49,7 @@ public class RecipeList extends VBox {
     }
     public RecipeList(Recipe recipe) {
         this.setSpacing(5);
-        this.setPrefSize(500, 560);
+        this.setPrefSize(500, 500);
         this.setStyle("-fx-background-color: #F0F8FF;");
 
         this.recipeList = new ArrayList<>();
