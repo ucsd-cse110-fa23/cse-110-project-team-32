@@ -2,7 +2,6 @@ package client.AddRecipe;
 import java.io.*;
 import java.net.*;
 import org.json.*;
-
 public class Whisper implements API{
     private String API_ENDPOINT;// = "https://api.openai.com/v1/audio/transcriptions";
     private String TOKEN;// = "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";
@@ -26,16 +25,6 @@ public class Whisper implements API{
 
     public String getInfo(){
         return text;
-    }
-
-public class Whisper {
-    private static final String API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
-    private static final String TOKEN = "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";
-    private static final String MODEL = "whisper-1";
-    private String FILE_PATH;
-
-    public Whisper(String path) {
-        this.FILE_PATH = path;
     }
     // Helper method to write a parameter to the output stream in multipart form data format
     private static void writeParameterToOutputStream(
@@ -115,7 +104,6 @@ public class Whisper {
     }
 
     public String translateVoiceToText() throws IOException, URISyntaxException {
-
         // Create file object from file path
         File file = new File(FILE_PATH);
 
@@ -179,6 +167,5 @@ public class Whisper {
         connection.disconnect();
         return resultText;
     }
-}
 
 }
