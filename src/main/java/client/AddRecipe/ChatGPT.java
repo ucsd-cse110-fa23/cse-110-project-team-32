@@ -72,14 +72,15 @@ public class ChatGPT implements API{
         JSONArray choices = responseJson.getJSONArray("choices");
         String generatedText = choices.getJSONObject(0).getString("text").strip();
 
-
+        System.out.println("==========");
         System.out.println(generatedText);
+        System.out.println("==========");
         // int firstLineBreakPos = generatedText.indexOf('\n');
         String title = generatedText.substring(0, generatedText.indexOf('\n'));
         String recipeDetail = generatedText.substring(generatedText.indexOf('\n')+1);
         Recipe createdRecipe = new Recipe(title, mealType, recipeDetail);
         recipeTitle = title;
-        System.out.println("ChatGPT.java line 61:" + "Title: " + title + ", recipe detail: " + recipeDetail);
+        System.out.println("ChatGPT.java line 61:" + "Title: " + title + "Meal Type: " + mealType + ", recipe detail: " + recipeDetail);
         return createdRecipe;
     }
 

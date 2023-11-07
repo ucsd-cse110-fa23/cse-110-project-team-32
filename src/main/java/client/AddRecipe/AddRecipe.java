@@ -110,6 +110,8 @@ public class AddRecipe extends VBox {
                 }
                 this.newRecipe = this.chatGPT.generate(mealType, ingredients);
                 // this.newRecipe = this.chatGPT.generate(true);
+                this.getChildren().add(new Text(this.newRecipe.getTitle()));
+                this.getChildren().add(new Text(this.newRecipe.getMealType()));
                 this.getChildren().add(new Text(this.newRecipe.getRecipeDetail()));
             } catch (Exception exception) {
                 System.out.println(exception.getMessage());
@@ -124,7 +126,7 @@ public class AddRecipe extends VBox {
     public Recipe createNewRecipe() {
         // Recipe recipe = new Recipe(getTitle(), getMealType(), getRecipeDetail());
         clearForm();
-        // setUpAddRecipeForm();
+        setUpAddRecipeForm();
         return this.newRecipe;
     }
 

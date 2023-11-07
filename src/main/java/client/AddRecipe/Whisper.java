@@ -100,7 +100,7 @@ public class Whisper implements API{
         errorReader.close();
         String errorResult = errorResponse.toString();
         // System.out.println("Error Result: " + errorResult);
-        return "Error Result: " + errorResult;
+        return "Error Result! Please try again :> ";
     }
 
     public String translateVoiceToText() throws IOException, URISyntaxException {
@@ -158,7 +158,7 @@ public class Whisper implements API{
         if (responseCode == HttpURLConnection.HTTP_OK) {
             resultText = handleSuccessResponse(connection);
         } else {
-            resultText = handleErrorResponse(connection);
+            resultText = "Error result! Please try again :>"; // handleErrorResponse(connection);
         }
         text = resultText;
 
