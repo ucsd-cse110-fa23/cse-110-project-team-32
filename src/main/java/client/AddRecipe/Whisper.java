@@ -2,16 +2,30 @@ package client.AddRecipe;
 import java.io.*;
 import java.net.*;
 import org.json.*;
-public class Whisper {
-    private static final String API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
-    private static final String TOKEN = "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";
-    private static final String MODEL = "whisper-1";
+public class Whisper implements API{
+    private String API_ENDPOINT;// = "https://api.openai.com/v1/audio/transcriptions";
+    private String TOKEN;// = "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";
+    private String MODEL; //= "whisper-1";
     private String FILE_PATH;
+    private String text;
 
     public Whisper(String path) {
         this.FILE_PATH = path;
+        API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
+        TOKEN = "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";
+        MODEL = "whisper-1";
     }
 
+    public API initializeAPI(String API_ENDPOINT,String API_TOKEN,String MODEL){
+        this.API_ENDPOINT = API_ENDPOINT;
+        this.TOKEN = API_TOKEN;
+        this.MODEL = MODEL;
+        return this;
+    }
+
+    public String getInfo(){
+        return text;
+    }
     // Helper method to write a parameter to the output stream in multipart form data format
     private static void writeParameterToOutputStream(
             OutputStream outputStream,
@@ -90,14 +104,14 @@ public class Whisper {
     }
 
     public String translateVoiceToText() throws IOException, URISyntaxException {
-// Create file object from file path
+        // Create file object from file path
         File file = new File(FILE_PATH);
 
-//        for (String s : args) {
-//            System.out.println(s);
-//        }
+        //        for (String s : args) {
+        //            System.out.println(s);
+        //        }
 
-// Set up HTTP connection
+        // Set up HTTP connection
 
         URL url = new URI(API_ENDPOINT).toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -146,6 +160,7 @@ public class Whisper {
         } else {
             resultText = handleErrorResponse(connection);
         }
+        text = resultText;
 
 
 // Disconnect connection

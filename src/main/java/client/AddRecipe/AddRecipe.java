@@ -36,6 +36,12 @@ public class AddRecipe extends VBox {
     String defaultButtonStyle = "-fx-border-color: #000000; -fx-font: 13 arial; -fx-pref-width: 175px; -fx-pref-height: 50px;";
     String defaultLabelStyle = "-fx-font: 13 arial; -fx-pref-height: 50px; -fx-text-fill: red; visibility: hidden";
 
+    //Constructor for testing
+    public AddRecipe(API custom1, API custom2){
+        this.getChildren().add(new Text(custom1.getInfo()));
+        this.getChildren().add(new Text(custom2.getInfo()));
+    }
+
     public AddRecipe() {
         // Get the audio format
         audioFormat = getAudioFormat();
@@ -74,6 +80,7 @@ public class AddRecipe extends VBox {
         this.recordedIngredients = new Text("");
         this.recordedIngredients.setVisible(false);
         this.getChildren().addAll(voiceInputPrompt, mealTypeErrorMsg, recordedMealType, recordedIngredients);
+
         mealTypeStartButton = new Button("Start");
         mealTypeStartButton.setStyle(defaultButtonStyle);
         mealTypeStartButton.setOnAction(e -> {
@@ -86,6 +93,7 @@ public class AddRecipe extends VBox {
         });
         recordingLabel = new Label("Recording...");
         recordingLabel.setStyle(defaultLabelStyle);
+      
         HBox buttonGroup = new HBox(mealTypeStartButton, mealTypeStopButton);
         
         this.getChildren().addAll(buttonGroup, recordingLabel);

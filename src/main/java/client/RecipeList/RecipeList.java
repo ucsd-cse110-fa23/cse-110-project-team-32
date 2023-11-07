@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class RecipeList extends VBox {
+    private List<Recipe> lst;
     private List<RecipeListItem> recipeList;
 
     public RecipeList() {
@@ -42,6 +43,17 @@ public class RecipeList extends VBox {
         for (RecipeListItem recipeListItem : this.recipeList) {
             this.getChildren().add(recipeListItem);
         }
+        
+    }
+    public RecipeList(Recipe recipe) {
+        this.setSpacing(5);
+        this.setPrefSize(500, 560);
+        this.setStyle("-fx-background-color: #F0F8FF;");
+
+        this.recipeList = new ArrayList<>();
+        lst = new ArrayList<>();
+        lst.add(recipe);
+
     }
 
     public List<RecipeListItem> getRecipeList() {
@@ -52,10 +64,24 @@ public class RecipeList extends VBox {
         RecipeListItem recipeListItem = new RecipeListItem(recipe);
         this.recipeList.add(0, recipeListItem);
         this.getChildren().add(0, recipeListItem);
+        lst.add(0, recipe);
+    }
+
+    public void addRecipeToList(Recipe recipe){
+        // this.getChildren().add(0, );
+        lst.add(0, recipe);
+    }
+
+    public Recipe getMostRecentRecipe(){
+        return lst.get(0);
+    }
+
+    public boolean containsRecipe(Recipe recipe){
+        return lst.contains(recipe);
     }
 }
 
-class RecipeListItem extends HBox {
+    class RecipeListItem extends HBox {
     private Recipe recipe;
     private Text title;
     private RecipeDetailView recipeDetailView = RecipeDetailView.getRecipeDetailView();
