@@ -78,9 +78,13 @@ public class ChatGPT implements API{
         String title = generatedText.substring(0, generatedText.indexOf('\n'));
         String recipeDetail = generatedText.substring(generatedText.indexOf('\n')+1);
         Recipe createdRecipe = new Recipe(title, mealType, recipeDetail);
+
         recipeTitle = title;
         System.out.println("ChatGPT.java line 61:" + "Title: " + title + ", recipe detail: " + recipeDetail);
         return createdRecipe;
     }
 
+    public Recipe generate(boolean isTest) {
+        return new Recipe("dummy title", "dummy meal type", "dummy detail");
+    }
 }

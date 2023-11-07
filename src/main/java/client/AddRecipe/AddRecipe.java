@@ -24,12 +24,17 @@ public class AddRecipe extends VBox {
     private TargetDataLine targetDataLine;
     private Label recordingLabel;
     private Text voiceInputPrompt;
+    private Label generateRecipeErrorLabel;
+    private Button generateRecipeButton;
+    
+    private Text recordedMealType;
+    private Text recordedIngredients;
+    private Text mealTypeErrorMsg;
 
     private String ingredients;
     private String mealType;
-
     String defaultButtonStyle = "-fx-border-color: #000000; -fx-font: 13 arial; -fx-pref-width: 175px; -fx-pref-height: 50px;";
-    String defaultLabelStyle = "-fx-font: 13 arial; -fx-pref-width: 175px; -fx-pref-height: 50px; -fx-text-fill: red; visibility: hidden";
+    String defaultLabelStyle = "-fx-font: 13 arial; -fx-pref-height: 50px; -fx-text-fill: red; visibility: hidden";
 
     //Constructor for testing
     public AddRecipe(API custom1, API custom2){
@@ -64,9 +69,18 @@ public class AddRecipe extends VBox {
     }
 
     private void setUpAddRecipeForm() {
+        this.getChildren().clear();
         // Add the buttons and text fields
-        this.voiceInputPrompt = new Text("Please record the meal type");
-        this.getChildren().add(0, voiceInputPrompt); // 0
+        this.voiceInputPrompt = new Text("Please record the meal type from \"Breakfast\", \"Lunch\", and \"Dinner\"");
+        this.mealTypeErrorMsg = new Text("Oops, please record the meal type again");
+        this.mealTypeErrorMsg.setStyle("-fx-text-fill: red; visibility: hidden");
+        
+        this.recordedMealType = new Text("");
+        this.recordedMealType.setVisible(false);
+        this.recordedIngredients = new Text("");
+        this.recordedIngredients.setVisible(false);
+        this.getChildren().addAll(voiceInputPrompt, mealTypeErrorMsg, recordedMealType, recordedIngredients);
+
         mealTypeStartButton = new Button("Start");
         mealTypeStartButton.setStyle(defaultButtonStyle);
         mealTypeStartButton.setOnAction(e -> {
@@ -79,13 +93,24 @@ public class AddRecipe extends VBox {
         });
         recordingLabel = new Label("Recording...");
         recordingLabel.setStyle(defaultLabelStyle);
-        this.getChildren().addAll(mealTypeStartButton, mealTypeStopButton, recordingLabel);
+      
+        HBox buttonGroup = new HBox(mealTypeStartButton, mealTypeStopButton);
+        
+        this.getChildren().addAll(buttonGroup, recordingLabel);
 
-        Button generateRecipeButton = new Button("Generate Recipe");
+        generateRecipeButton = new Button("Generate Recipe");
+        generateRecipeButton.setStyle(defaultButtonStyle);
+        generateRecipeErrorLabel = new Label("Error! Please record the meal type and your ingredients!");
+        generateRecipeErrorLabel.setStyle(defaultLabelStyle);
         generateRecipeButton.setOnAction(e -> {
             try {
-            this.newRecipe = this.chatGPT.generate(mealType, ingredients);
-            this.getChildren().add(new Text(this.newRecipe.getRecipeDetail()));
+                if (this.mealType == null || this.ingredients == null) {
+                    generateRecipeErrorLabel.setVisible(true);
+                    return;
+                }
+                this.newRecipe = this.chatGPT.generate(mealType, ingredients);
+                // this.newRecipe = this.chatGPT.generate(true);
+                this.getChildren().add(new Text(this.newRecipe.getRecipeDetail()));
             } catch (Exception exception) {
                 System.out.println(exception.getMessage());
             }
@@ -93,6 +118,7 @@ public class AddRecipe extends VBox {
         });
         
         this.getChildren().addAll(generateRecipeButton);
+        this.getChildren().addAll(generateRecipeErrorLabel);
     }
 
     public Recipe createNewRecipe() {
@@ -145,17 +171,33 @@ public class AddRecipe extends VBox {
         targetDataLine.close();
         String text = "";
         try {
-            text = whisper.translateVoiceToText();
+            text = whisper.translateVoiceToText().toLowerCase();
+            text = text.charAt(text.length()-1) == '.' ? text.substring(0, text.indexOf('.')) : text;
             if (this.mealType == null || this.mealType.equals("")) {
-                this.mealType = text;
-                this.getChildren().set(0, new Text("Please record your ingredients"));
-                this.getChildren().add(0, new Text("Meal Type: " + this.mealType));
+                System.out.println("0");
+                System.out.println("|" + text + "|");
+
+                if (!text.equals("breakfast") && !text.equals("lunch") && !text.equals("dinner")) {
+                    System.out.println("1");
+                    System.out.println("meal type error msg: " + this.mealTypeErrorMsg.getText());
+                    this.mealTypeErrorMsg.setVisible(true);
+                } else {
+                    System.out.println("2");
+                    System.out.println("recorded: " + text);
+                    this.mealTypeErrorMsg.setVisible(false);
+                    this.mealType = text;
+                    this.voiceInputPrompt.setText("Please record your ingredients");
+                    recordedMealType.setText("Recorded Meal Type: " + mealType);
+                    this.recordedMealType.setVisible(true);
+                }
             } else {
+                System.out.println("3");
                 this.ingredients = text;
-                this.getChildren().add(1, new Text("Ingredients: " + this.ingredients));
+                this.recordedIngredients.setText("Recorded ingredients: " + ingredients);
+                this.recordedIngredients.setVisible(true);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         
     }

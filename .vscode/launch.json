@@ -9,7 +9,7 @@
             "name": "PantryPal",
             "request": "launch",
             "mainClass": "client.PantryPal",
-            "vmArgs": "--module-path 'C:/Users/alexa/OneDrive/Desktop/CSE/CSE110/openjfx-21.0.1_windows-x64_bin-sdk/javafx-sdk-21.0.1/lib' --add-modules javafx.controls,javafx.fxml"
-        }, //Update your own file path for libary
+            "vmArgs": "--module-path '/Users/fangzhongli/Desktop/UCSD/Fall_2023/CSE_110/javafx-sdk-21/lib' --add-modules javafx.controls,javafx.fxml"
+        },
     ]
 }

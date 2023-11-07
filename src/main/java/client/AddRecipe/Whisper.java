@@ -2,6 +2,7 @@ package client.AddRecipe;
 import java.io.*;
 import java.net.*;
 import org.json.*;
+
 public class Whisper implements API{
     private String API_ENDPOINT;// = "https://api.openai.com/v1/audio/transcriptions";
     private String TOKEN;// = "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";
@@ -25,6 +26,16 @@ public class Whisper implements API{
 
     public String getInfo(){
         return text;
+    }
+
+public class Whisper {
+    private static final String API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
+    private static final String TOKEN = "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";
+    private static final String MODEL = "whisper-1";
+    private String FILE_PATH;
+
+    public Whisper(String path) {
+        this.FILE_PATH = path;
     }
     // Helper method to write a parameter to the output stream in multipart form data format
     private static void writeParameterToOutputStream(
@@ -104,6 +115,7 @@ public class Whisper implements API{
     }
 
     public String translateVoiceToText() throws IOException, URISyntaxException {
+
         // Create file object from file path
         File file = new File(FILE_PATH);
 
@@ -167,20 +179,6 @@ public class Whisper implements API{
         connection.disconnect();
         return resultText;
     }
+}
 
 }
-// /Users/fangzhongli/Music/Music/Media/Music/(c)Taira Komori/Unknown Album/enemyshoot.mp3"
-
-/*
-lab questions
-Q1: In your own words, explain what the three layer architecture is. Explain what each layer is for.
-client: render information for users, interact with users
-server: calculate, run business logic, generate output based on users inputs
-database: store data, give data to server to calculate
-Q2: In your own words, explain what the benefits of using the APIs are.
-so that the client and server and communicate
-more generally, support communication between software
-Q3: Would the company need to reimplement the whole app from scratch for each version? Explain your reasoning
-No, because the server side logic, aka what the API calls would return only needs to be written once.
-The client rendering probly needs to be changed based on different platforms
- */
