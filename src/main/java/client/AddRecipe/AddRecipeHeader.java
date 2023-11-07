@@ -14,10 +14,10 @@ public class AddRecipeHeader extends HBox {
     private Button saveButton;
     private Button cancelButton;
     public AddRecipeHeader() {
-        Label helloWorldLabel = new Label("Add Recipe View");
+        this.setStyle("-fx-pref-height: 50px");
         this.saveButton = new Button("save");
-        this.cancelButton = new Button("cancelButton");
-        this.getChildren().addAll(helloWorldLabel, this.saveButton, this.cancelButton);
+        this.cancelButton = new Button("cancel");
+        this.getChildren().addAll(this.saveButton, this.cancelButton);
     }
 
     public void loadButtonsWithHandler(EventHandler<ActionEvent> eventHandler) {
