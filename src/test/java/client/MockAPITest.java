@@ -1,7 +1,6 @@
 package client;
 import org.junit.jupiter.api.Test;
-import client.AddRecipe.AddRecipe;
-import client.AddRecipe.API;
+
 import javafx.scene.text.Text;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,8 +77,10 @@ public class MockAPITest {
         budgetChatGPT.initializeAPI("API-Link", "token", "model");
         mockWhisper whisper = new mockWhisper("lol.mp3");
         whisper.initializeAPI("API-Link", "token", "model");
-        AddRecipe test = new AddRecipe(budgetChatGPT,whisper);
-        assertEquals("Chicken and Rice",((Text) test.getChildren().get(0)).getText());
-        assertEquals("I'm Bad at Coding!!!", ((Text) test.getChildren().get(1)).getText());
+        Recipe dummyRecipe = budgetChatGPT.generate(whisper.getInfo(), whisper.getInfo());
+        assertEquals("Chicken and Rice", dummyRecipe.getTitle());
+        assertEquals("I'm Bad at Coding!!!", dummyRecipe.getRecipeDetail());
     }
+
+    // Perhaps another test that creates a recipe from mock API and insert into the Recipe List
 }

@@ -1,19 +1,15 @@
 package client;
-import java.util.List;
 
+import java.util.List;
+import java.util.ArrayList;
 import client.CreateRecipeScene.*;
 import client.RecipeDetailScene.*;
 import client.RecipeListScene.*;
-import javafx.beans.value.ObservableListValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.*;
 import javax.sound.sampled.*;
@@ -66,6 +62,24 @@ public class AppController {
         this.createRecipeView.setCreateDummyRecipeButtonAction(this::handleCrvCreateDummyRecipeButtonAction);
     }
 
+    public AppController() {
+        // constructor for testing
+        this.recipeListView = new RecipeListView(true);
+        this.recipeListContainer = recipeListView.getRecipeListContainer();
+    }
+
+    public List<Recipe> getRecipeList() {
+        // use this function to test
+        ObservableList<Node> recipeItemsList = this.recipeListContainer.getChildren();
+        List<Recipe> recipeList = new ArrayList<>();
+        for (Node c : recipeItemsList) {
+            if (c instanceof RecipeListItem) {
+                recipeList.add(((RecipeListItem)c).getRecipe());
+            }
+        }
+        return recipeList;
+    }
+
     private void handleRlvNewRecipeButtonAction(ActionEvent event) {
         this.stage.setScene(createRecipeScene);
     }
@@ -86,15 +100,7 @@ public class AppController {
                 // MAKE A CALL TO MODEL TO ADD A NEW RECIPE
                 // add recipe to list
                 // and set the whole list's listener? really need to do this? Recipe is a reference
-                Recipe newRecipe = recipeDetailView.getRecipe();
-                RecipeListItem recipeListItem = new RecipeListItem(newRecipe);
-                recipeListItem.setOnMouseClicked(e -> {
-                    // the next time to render the detail of this recipe, this recipe would be existing
-                    recipeDetailView.renderExistingRecipe(newRecipe);
-                    stage.setScene(recipeDetailScene);
-                });
-                recipeListContainer.getChildren().add(0, recipeListItem);
-                stage.setScene(recipeListScene);
+                this.addNewRecipeToList(recipeDetailView.getRecipe());
             }
         } else {
             recipeDetailView.switchToEditMode();
@@ -103,35 +109,39 @@ public class AppController {
 
     private void handleRdvBackButtonAction(ActionEvent event) {
         // go back to the recipe list view
-        stage.setScene(recipeListScene);
+        changeToRecipeListScene();
     }
 
     private void handleRdvDeleteButtonAction(ActionEvent event) {
         // if this is a new recipe, deleting is the same as going back to list,
         // not actually adding the recipe to the recipe list
         if (recipeDetailView.isNewRecipe()) {
-            stage.setScene(recipeListScene);
+            changeToRecipeListScene();
             return;
         }
-        
+
         // delete the recipe from the VBox recipeList 
         // if child matches (recipeDetailView.getRecipe())
         Recipe currentRecipe = recipeDetailView.getRecipe();
+        removeRecipeFromRecipeList(currentRecipe);
+        changeToRecipeListScene();
+    }
+
+    public void removeRecipeFromRecipeList(Recipe recipe) {
         int indexOfRecipeToRemove = 0;
         ObservableList<Node> recipeListItems = recipeListContainer.getChildren();
         for (; indexOfRecipeToRemove < recipeListItems.size(); indexOfRecipeToRemove++) {
             if (recipeListItems.get(indexOfRecipeToRemove) instanceof RecipeListItem) {
-                if (((RecipeListItem)recipeListItems.get(indexOfRecipeToRemove)).getRecipe() == currentRecipe) break;
+                if (((RecipeListItem)recipeListItems.get(indexOfRecipeToRemove)).getRecipe() == recipe) break;
             }
         }
         recipeListContainer.getChildren().remove(indexOfRecipeToRemove);
         System.out.println("After deleting a recipe, the size of the recipe list is now " + recipeListContainer.getChildren().size());
-        stage.setScene(recipeListScene);
     }
 
     private void handleCrvCancelButtonAction(ActionEvent event) {
         // go back to the recipe list view
-        stage.setScene(recipeListScene);
+        changeToRecipeListScene();
     }
 
     private void handleCrvStartRecordingButtonAction(ActionEvent event) {
@@ -191,7 +201,9 @@ public class AppController {
             } else {
                 // System.out.println("3");
                 createRecipeView.setRecordedIngredients(text);
-                generateRecipe();
+                Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
+                changeToRecipeDetailScene(newRecipe, true);
+                createRecipeView.reset();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,20 +212,34 @@ public class AppController {
 
     private void handleCrvCreateDummyRecipeButtonAction(ActionEvent event) {
         Recipe newRecipe = chatGPT.generate("", "", true);
-        // System.out.println(newRecipe);
         createRecipeView.reset();
         this.recipeDetailView.renderNewRecipe(newRecipe);
         this.stage.setScene(recipeDetailScene);
     }
 
-    // public void handleCrvGenerateRecipeButtonAction(ActionEvent event) {
-    private void generateRecipe() {
-        // after recipe is generated, switch to recipe detail scene as a new recipe
-        Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
-        System.out.println(newRecipe);
-        createRecipeView.reset();
-        this.recipeDetailView.renderNewRecipe(newRecipe);
+    private void changeToRecipeListScene() {
+        if (stage != null && recipeListScene != null)
+            stage.setScene(recipeListScene);
+    }
+
+    private void changeToRecipeDetailScene(Recipe recipe, boolean isNewRecipe) {
+        if (isNewRecipe) {
+            this.recipeDetailView.renderNewRecipe(recipe);
+        } else {
+            this.recipeDetailView.renderExistingRecipe(recipe);
+        }
         this.stage.setScene(recipeDetailScene);
+    }
+
+    public void addNewRecipeToList(Recipe recipe) {
+        // can use this to 
+        RecipeListItem recipeListItem = new RecipeListItem(recipe);
+        recipeListItem.setOnMouseClicked(e -> {
+            // the next time to render the detail of this recipe, this recipe would be existing
+            this.changeToRecipeDetailScene(recipe, false);
+        });
+        recipeListContainer.getChildren().add(0, recipeListItem);
+        changeToRecipeListScene();
     }
 
     private AudioFormat setUpAudioFormat() {

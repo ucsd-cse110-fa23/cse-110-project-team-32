@@ -25,6 +25,11 @@ public class RecipeListView {
         borderPane.setCenter(recipeListContainer);
     }
 
+    public RecipeListView(boolean test) {
+        // constructor for testing
+        recipeListContainer = new VBox();
+    }
+
     public BorderPane getBorderPane() {
         return this.borderPane;
     }

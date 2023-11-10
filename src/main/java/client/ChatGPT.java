@@ -9,8 +9,6 @@ import java.net.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import client.AddRecipe.API;
-
 public class ChatGPT implements API{
     private String API_ENDPOINT;// = "https://api.openai.com/v1/completions";
     private String API_KEY;// = "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";

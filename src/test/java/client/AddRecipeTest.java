@@ -1,11 +1,4 @@
 package client;
-import client.RecipeList.RecipeList;
-import client.RecipeList.RecipeListView;
-import client.RecipeList.RecipeListHeader;
-import client.RecipeDetail.RecipeDetailView;
-import client.RecipeDetail.RecipeDetail;
-import client.RecipeDetail.RecipeDetailView;
-import client.RecipeDetail.RecipeDetailHeader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -27,6 +20,8 @@ public class AddRecipeTest {
 
     //RecipeList basic test
     @Test void addStoredInRecipeListTest(){
+        // Re-write this test with functions in AppController, see doc.txt :>  -Li
+        /* 
         Recipe recipe = new Recipe("Chicken and Rice", "Dinner", "Its Chicken and Rice man...");
         // RecipeList lst = new RecipeList();
         RecipeList lst = new RecipeList(recipe);
@@ -38,6 +33,18 @@ public class AddRecipeTest {
 
         assertEquals(true, lst.containsRecipe(recipe2));
         assertEquals(false, lst.containsRecipe(recipe3));
+        */
+        AppController appController = new AppController();
+        List<Recipe> recipeList = appController.getRecipeList();
+        assertEquals(recipeList.size(), 0);
+        appController.addNewRecipeToList(new Recipe("recipe 1", "meal type 1", "detail1"));
+        recipeList = appController.getRecipeList();
+        assertEquals(recipeList.size(), 1);
+    }
 
+    @Test
+    public void deleteRecipeFromListTest() {
+        // Implement here :) there is a addNewRecipe and a deleteRecipeFromList function in appController
+        assertEquals(0, 0);
     }
 }
