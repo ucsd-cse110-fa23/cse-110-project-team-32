@@ -19,7 +19,16 @@ public class Recipe {
         return this.recipeDetail;
     }
 
+    public void setRecipeDetail(String recipeDetail) {
+        this.recipeDetail = recipeDetail;
+    }
+
     public String getMealType() {
         return this.mealType;
+    }
+
+    @Override
+    public String toString() {
+        return title + ", " + mealType + '\n' + recipeDetail;
     }
 }

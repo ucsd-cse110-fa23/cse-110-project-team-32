@@ -1,7 +1,9 @@
-package client.AddRecipe;
+package client;
 import java.io.*;
 import java.net.*;
 import org.json.*;
+
+import client.AddRecipe.API;
 public class Whisper implements API{
     private String API_ENDPOINT;// = "https://api.openai.com/v1/audio/transcriptions";
     private String TOKEN;// = "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";
