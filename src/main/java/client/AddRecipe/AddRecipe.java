@@ -1,6 +1,8 @@
 package client.AddRecipe;
 
+import client.ChatGPT;
 import client.Recipe;
+import client.Whisper;
 import client.RecipeList.RecipeList;
 import client.RecipeList.RecipeListView;
 import javafx.scene.control.Button;
