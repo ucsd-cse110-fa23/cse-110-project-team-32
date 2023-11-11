@@ -1,0 +1,5 @@
+Functions you can use to test:
+
+In AppController.java
+public void addNewRecipeToList(Recipe recipe)
+public List<Recipe> getRecipeListItems()

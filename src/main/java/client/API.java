@@ -1,4 +1,4 @@
-package client.AddRecipe;
+package client;
 
 public interface API {
     //Maybe add a getInput method: That gets input

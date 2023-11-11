@@ -1,11 +1,4 @@
 package client;
-import client.RecipeList.RecipeList;
-import client.RecipeList.RecipeListView;
-import client.RecipeList.RecipeListHeader;
-import client.RecipeDetail.RecipeDetailView;
-import client.RecipeDetail.RecipeDetail;
-import client.RecipeDetail.RecipeDetailView;
-import client.RecipeDetail.RecipeDetailHeader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -25,19 +18,54 @@ public class AddRecipeTest {
         assertEquals(recipe.getRecipeDetail(), "Its Chicken and Rice man...");
     }
 
-    //RecipeList basic test
+    //RecipeList basic test 
     @Test void addStoredInRecipeListTest(){
-        Recipe recipe = new Recipe("Chicken and Rice", "Dinner", "Its Chicken and Rice man...");
-        // RecipeList lst = new RecipeList();
-        RecipeList lst = new RecipeList(recipe);
-        lst.addRecipeToList(recipe);
-        assertEquals(recipe, lst.getMostRecentRecipe());
-        Recipe recipe2 = new Recipe("Curry", "Dinner", "I'm hungry for curry");
-        lst.addRecipeToList(recipe2);
-        Recipe recipe3 = new Recipe("Ramen", "Lunch", "Instant Ramen cuz we college students");
-
-        assertEquals(true, lst.containsRecipe(recipe2));
-        assertEquals(false, lst.containsRecipe(recipe3));
-
+        AppController appController = new AppController();
+        List<Recipe> recipeList = appController.getRecipeList();
+        assertEquals(recipeList.size(), 0);
+        appController.addNewRecipeToList(new Recipe("recipe 1", "meal type 1", "detail1"));
+        recipeList = appController.getRecipeList();
+        assertEquals(recipeList.size(), 1);
     }
+
+    //Test if RecipeList's first Item is most Recently added Recipe()
+    @Test void recipeListFirstItemIsAddedRecipe(){
+        AppController appController = new AppController();
+        List<Recipe> recipeList;
+        Recipe r1 = new Recipe("Title1", "MealType1", "Details1");
+        Recipe r2 = new Recipe("Title2", "MealType2", "Details2");
+        Recipe r3 = new Recipe("Title3", "MealType3", "Details3");
+
+        appController.addNewRecipeToList(r1);
+        appController.addNewRecipeToList(r3);
+        recipeList = appController.getRecipeList();
+        assertEquals(r3, recipeList.get(0));
+        appController.addNewRecipeToList(r2);
+        recipeList = appController.getRecipeList();
+        assertEquals(r2, recipeList.get(0));
+    }
+
+    @Test
+    public void deleteRecipeFromListTest() {
+        // Implement here :) there is a addNewRecipe and a deleteRecipeFromList function in appController
+        AppController appController = new AppController();
+        List<Recipe> recipeList;
+        Recipe r1 = new Recipe("Title1", "MealType1", "Details1");
+        Recipe r2 = new Recipe("Title2", "MealType2", "Details2");
+        Recipe r3 = new Recipe("Title3", "MealType3", "Details3");  
+        
+        appController.addNewRecipeToList(r1);
+        appController.addNewRecipeToList(r2);
+        appController.addNewRecipeToList(r3);
+        recipeList =  appController.getRecipeList();
+        assertEquals(r3, recipeList.get(0));
+        appController.removeRecipeFromRecipeList(r3);
+        recipeList =  appController.getRecipeList();
+        assertEquals(r2, recipeList.get(0));
+        appController.removeRecipeFromRecipeList(r1);
+        recipeList = appController.getRecipeList();
+     }
+
+     //TODO: implement Edit Recipe 
+     
 }
