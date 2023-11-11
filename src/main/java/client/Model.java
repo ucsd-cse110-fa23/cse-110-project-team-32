@@ -15,7 +15,7 @@ public class Model {
         userIdGetter = new UserIdGetter();
     }
     // POST PUT and DELETE requests in Recipe Detail Model
-    // argument Strin recipeID only used on DELETE request
+    // argument String recipeID only used on DELETE request, null otherwise
     public String performRequest(String method, Recipe recipe, String recipeID) {
         try {
             String urlString = this.urlStr;
@@ -31,6 +31,7 @@ public class Model {
 
             if (method.equals("POST") || method.equals("PUT")) {
                 OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+                // request body format: "userID;recipeID;title;mealType;recipeDetail"
                 out.write(userIdGetter.getUserID() + ";" + recipe.getRecipeID() + ";" + recipe.getTitle() + ";" + recipe.getMealType() + ";" + recipe.getRecipeDetail());
                 out.flush();
                 out.close();

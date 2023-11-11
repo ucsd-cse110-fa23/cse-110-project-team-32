@@ -78,14 +78,17 @@ public class AppController {
     private void readAllRecipesByUID() {
         String recipeListResponse = this.model.performRequest("GET", null, null);
         System.out.println(recipeListResponse);
-        // for (Recipe r : recipeList) {
-        //     RecipeListItem recipeListItem = new RecipeListItem(r);
-        //     recipeListItem.setOnMouseClicked(e -> {
-        //         // the next time to render the detail of this recipe, this recipe would be existing
-        //         this.changeToRecipeDetailScene(r, false);
-        //     });
-        //     recipeListContainer.getChildren().add(0, recipeListItem);
-        // }
+        String[] stringRecipeList = recipeListResponse.split("#");
+        for (String strRecipe: stringRecipeList) {
+            String[] strRecipeArr = strRecipe.split(";");
+            Recipe recipe = new Recipe(strRecipeArr[0], strRecipeArr[1], strRecipeArr[2], strRecipeArr[3]);
+            RecipeListItem recipeListItem = new RecipeListItem(recipe);
+            recipeListItem.setOnMouseClicked(e -> {
+                // the next time to render the detail of this recipe, this recipe would be existing
+                this.changeToRecipeDetailScene(recipe, false);
+            });
+            recipeListContainer.getChildren().add(0, recipeListItem);
+        }
     }
 
     public List<Recipe> getRecipeList() {
@@ -237,7 +240,7 @@ public class AppController {
     }
 
     private void handleCrvCreateDummyRecipeButtonAction(ActionEvent event) {
-        Recipe newRecipe = chatGPT.generate("", "", true);
+        Recipe newRecipe = chatGPT.generate("lunch", "some ingredients", true);
         changeToRecipeDetailScene(newRecipe, true);
         createRecipeView.reset();
     }
@@ -261,6 +264,9 @@ public class AppController {
     }
 
     public void addNewRecipeToList(Recipe recipe) {
+        // POST to server
+        String response = this.model.performRequest("POST", recipe, null);
+        System.out.println("AppController.java line 266" + response);
         // can use this to 
         RecipeListItem recipeListItem = new RecipeListItem(recipe);
         recipeListItem.setOnMouseClicked(e -> {

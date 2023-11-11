@@ -9,6 +9,7 @@ import java.util.concurrent.*;
 
 
 // compile in root folder: $javac src/main/java/server/Server.java src/main/java/server/RequestHandler.java
+// Or compile in java foler: $javac server/Server.hava server/RequestHandler.java
 // then navigate to src/main/java and run $java server.Server
 public class Server {
   // initialize server port and hostname

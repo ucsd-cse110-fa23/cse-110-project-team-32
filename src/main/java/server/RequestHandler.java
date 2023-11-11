@@ -44,7 +44,7 @@ public class RequestHandler implements HttpHandler {
     }
 
     private String handleGet(HttpExchange httpExchange) {
-        String response = "Invalid GET Request.";
+        String response = "";
         URI uri = httpExchange.getRequestURI();
         String query = uri.getRawQuery();
         // query is in the form: ...?userID=UID
@@ -63,24 +63,25 @@ public class RequestHandler implements HttpHandler {
     }
 
     private String handlePost(HttpExchange httpExchange) {
-        System.out.println("handle post request");
-        return "";
-        /*
         InputStream inStream = httpExchange.getRequestBody();
         Scanner scanner = new Scanner(inStream);
         String postData = scanner.nextLine();
-        String languageKey = postData.substring(0, postData.indexOf(','));
-        String yearValue = postData.substring(postData.indexOf(',')+1);
-        this.data.put(languageKey, yearValue);
+        String userID = postData.substring(0, postData.indexOf(';'));
+        String stringRecipe = postData.substring(postData.indexOf(';')+1);
+        List<String> recipeList = this.data.get(userID);
+        if (recipeList == null) {
+            recipeList = new ArrayList<>();
+        }
+        recipeList.add(stringRecipe);
+        this.data.put(userID, recipeList);
 
-        String response = "Received POST request on lang = " + languageKey + " and year = " + yearValue;
+        String response = "Received POST request on userID = " + userID;
         
         scanner.close();
 
         System.out.println(response);
 
         return response;
-        */
     }
 
     private String handlePut(HttpExchange httpExchange) {
