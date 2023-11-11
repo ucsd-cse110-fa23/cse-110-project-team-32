@@ -1,0 +1,18 @@
+Recipe.java:
+    The Object that started it all. Not a JavaFX object
+    - String title
+    - String mealType
+    - String recipeDetail
+    
+    + String getTitle()
+    + String getRecipeDetail()
+    + String getMealType()
+    + void setRecipeDetail(String recipeDetail)
+        used for the editing feature, triggered when user clicks "Save"
+    
+
+RecipeListItem.java
+    The Object that connects Recipe to the JavaFX application
+    Only displays a title, the title's onClick action is set in AppController.java
+    - Recipe recipe
+    + Recipe getRecipe()

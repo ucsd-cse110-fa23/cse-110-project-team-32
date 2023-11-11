@@ -1,0 +1,61 @@
+File Structure Fri Nov 10 2023:
+/root
+    /gradle
+    /lib
+    /src 
+        /main
+            /java
+                /client
+                    /CreateRecipeScene
+                        CreateRecipeModel.java
+                        CreateRecipeView.java
+                    /RecipeDetailScene
+                        RecipeDetailModel.java
+                        RecipeDetailView.java
+                    /RecipeListScene
+                        RecipeListModel.java
+                        RecipeListView.java
+                    AppController.java
+                    PantryPal.java
+                    Recipe.java
+                    RecipeListItem.java
+
+                    API.java
+                    Whipster.java
+                    ChatGPT.java
+                /server
+        /test
+            /java
+                /client
+                    AddRecipeTest.java
+                    MockAPITest.java
+Entry Point: 
+    PantryPal.java
+
+
+PantryPal.java:
+    This is the entry point of the app. 
+    Initializes the List, Detail, and Create Views and corresponding Models
+    They are all passed into the AppController
+
+RecipeListView.java
+    Creates a BorderPane
+    Header: 
+        "New Recipe" button, onClick executes handleRlvNewRecipeButtonAction function in AppController
+    Center:
+        VBox recipeListContainer, whose only job is to hold RecipeListItem's as children
+            When a recipe is added, recipeListContainer gets another getRecipeListItem
+
+AppController.java
+
+
+
+Testing...:
+In AppController.java
+public void addNewRecipeToList(Recipe recipe)
+public List<Recipe> getRecipeListItems()
+
+MockAPITest.java: integration test mock whisper + mock GPT + create recipe   Alex
+===potential additions===
+EditRecipeTest.java     Bry
+DeleteRecipeTest.java   Ryan
