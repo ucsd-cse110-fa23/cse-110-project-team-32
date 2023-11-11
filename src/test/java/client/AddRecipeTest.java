@@ -41,10 +41,4 @@ public class AddRecipeTest {
         recipeList = appController.getRecipeList();
         assertEquals(recipeList.size(), 1);
     }
-
-    @Test
-    public void deleteRecipeFromListTest() {
-        // Implement here :) there is a addNewRecipe and a deleteRecipeFromList function in appController
-        assertEquals(0, 0);
-    }
 }

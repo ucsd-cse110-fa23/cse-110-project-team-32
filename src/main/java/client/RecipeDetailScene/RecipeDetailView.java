@@ -134,7 +134,7 @@ class RecipeContentHolder extends VBox{
         return editedRecipeDetail.getText();
     }
 
-    public void updateRecipeDetail() {
+    public void updateRecipeDetail() { // parametor String, modify AppController
         this.recipe.setRecipeDetail(editedRecipeDetail.getText());
         recipeDetail.setText(editedRecipeDetail.getText());
     }
@@ -151,5 +151,9 @@ class RecipeContentHolder extends VBox{
 
     public Recipe getRecipe() {
         return recipe;
+    }
+
+    public TextArea getRecipeDetailEditTextArea() {
+        return editedRecipeDetail;
     }
 }

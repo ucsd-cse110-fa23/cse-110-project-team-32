@@ -1,6 +1,7 @@
 package client;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import client.CreateRecipeScene.*;
 import client.RecipeDetailScene.*;
@@ -82,6 +83,7 @@ public class AppController {
 
     private void handleRlvNewRecipeButtonAction(ActionEvent event) {
         this.stage.setScene(createRecipeScene);
+        this.stage.setTitle("Create New Recipe");
     }
 
     private void handleRdvSaveOrEditButtonAction(ActionEvent event) {
@@ -201,7 +203,12 @@ public class AppController {
             } else {
                 // System.out.println("3");
                 createRecipeView.setRecordedIngredients(text);
-                Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
+                Recipe newRecipe = chatGPT.generate(text, text, true);
+                
+                // Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
+                System.out.println("Before sleep");
+                Thread.sleep(1000);
+                System.out.println("After sleep");
                 changeToRecipeDetailScene(newRecipe, true);
                 createRecipeView.reset();
             }
@@ -212,14 +219,16 @@ public class AppController {
 
     private void handleCrvCreateDummyRecipeButtonAction(ActionEvent event) {
         Recipe newRecipe = chatGPT.generate("", "", true);
+        changeToRecipeDetailScene(newRecipe, true);
         createRecipeView.reset();
-        this.recipeDetailView.renderNewRecipe(newRecipe);
-        this.stage.setScene(recipeDetailScene);
     }
 
     private void changeToRecipeListScene() {
-        if (stage != null && recipeListScene != null)
+        if (stage != null && recipeListScene != null) {
             stage.setScene(recipeListScene);
+            stage.setTitle("Your Recipes");
+        }
+            
     }
 
     private void changeToRecipeDetailScene(Recipe recipe, boolean isNewRecipe) {
@@ -229,6 +238,7 @@ public class AppController {
             this.recipeDetailView.renderExistingRecipe(recipe);
         }
         this.stage.setScene(recipeDetailScene);
+        this.stage.setTitle(recipe.getTitle());
     }
 
     public void addNewRecipeToList(Recipe recipe) {

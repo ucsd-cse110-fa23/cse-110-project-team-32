@@ -6,14 +6,12 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class MVCPantryPal extends Application {
+public class PantryPal extends Application {
     private Stage stage;
     private Scene recipeListScene;
     private Scene recipeDetailScene;
     private Scene CreateRecipeScene;
     public static void main(String[] args) {
-        Scanner scanner = new Scanner();
-        System.out.println(scanner.getResourceFiles("/"));
         launch(args);
     }
 
@@ -31,7 +29,7 @@ public class MVCPantryPal extends Application {
                                                     recipeDetailView, new RecipeDetailModel(), recipeDetailScene, 
                                                     createRecipeView, new CreateRecipeModel(), CreateRecipeScene, stage);
         primaryStage.setScene(recipeListScene);
-        primaryStage.setTitle("List Scene");
+        primaryStage.setTitle("Your Recipes");
         primaryStage.show();
     }
 }
