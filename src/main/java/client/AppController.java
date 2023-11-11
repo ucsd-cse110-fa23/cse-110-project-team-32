@@ -17,6 +17,7 @@ import javax.sound.sampled.*;
 
 public class AppController {
     private Stage stage;
+    private Model model;
     private RecipeListView recipeListView; // => Rlv
     private VBox recipeListContainer;
     private RecipeListModel recipeListModel;
@@ -37,7 +38,8 @@ public class AppController {
 
     public AppController(RecipeListView recipeListView, RecipeListModel recipeListModel, Scene recipeListScene,
                       RecipeDetailView recipeDetailView, RecipeDetailModel recipeDetailModel, Scene recipeDetailScene,
-                      CreateRecipeView createRecipeView, CreateRecipeModel createRecipeModel, Scene createRecipeScene, Stage stage) {
+                      CreateRecipeView createRecipeView, CreateRecipeModel createRecipeModel, Scene createRecipeScene, 
+                      Stage stage, Model model) {
         this.recipeListView = recipeListView;
         this.recipeListContainer = this.recipeListView.getRecipeListContainer();
         this.recipeListModel = recipeListModel;
@@ -49,6 +51,10 @@ public class AppController {
         this.createRecipeModel = createRecipeModel;
         this.createRecipeScene = createRecipeScene;
         this.stage = stage;
+        this.model = model;
+
+        this.readAllRecipesByUID();
+
         this.audioFormat = this.setUpAudioFormat();
 
         this.recipeListView.setNewRecipeButtonAction(this::handleRlvNewRecipeButtonAction);
@@ -67,6 +73,19 @@ public class AppController {
         // constructor for testing
         this.recipeListView = new RecipeListView(true);
         this.recipeListContainer = recipeListView.getRecipeListContainer();
+    }
+
+    private void readAllRecipesByUID() {
+        String recipeListResponse = this.model.performRequest("GET", null, null);
+        System.out.println(recipeListResponse);
+        // for (Recipe r : recipeList) {
+        //     RecipeListItem recipeListItem = new RecipeListItem(r);
+        //     recipeListItem.setOnMouseClicked(e -> {
+        //         // the next time to render the detail of this recipe, this recipe would be existing
+        //         this.changeToRecipeDetailScene(r, false);
+        //     });
+        //     recipeListContainer.getChildren().add(0, recipeListItem);
+        // }
     }
 
     public List<Recipe> getRecipeList() {
