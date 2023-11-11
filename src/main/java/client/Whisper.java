@@ -9,6 +9,7 @@ public class Whisper implements API{
     private String FILE_PATH;
     private String text;
 
+    // constructor called by application
     public Whisper(String path) {
         this.FILE_PATH = path;
         API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
@@ -16,6 +17,7 @@ public class Whisper implements API{
         MODEL = "whisper-1";
     }
 
+    // constructor called by tests
     public API initializeAPI(String API_ENDPOINT,String API_TOKEN,String MODEL){
         this.API_ENDPOINT = API_ENDPOINT;
         this.TOKEN = API_TOKEN;
