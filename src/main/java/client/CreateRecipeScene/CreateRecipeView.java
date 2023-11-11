@@ -119,8 +119,6 @@ public class CreateRecipeView {
 
     // Reset view elements
     public void reset() {
-        // System.out.println("I'm the logic for reseting the create recipe form");
-        // Erase and hide all messages, only show the recording buttons
         prompt.setText(mealTypePrompt);
         mealType.setText("");
         mealType.setVisible(false);
@@ -128,7 +126,6 @@ public class CreateRecipeView {
         ingredients.setVisible(false);
         recordingErrorMsg.setText("");
         recordingErrorMsg.setVisible(false);
-        // recordingToolTip.setText("Recording...");
         recordingToolTip.setVisible(false);
     }
 }
