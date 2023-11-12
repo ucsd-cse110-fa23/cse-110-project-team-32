@@ -1,0 +1,33 @@
+- BorderPane borderPane
+    everything in the view is held and rendered here
+- RecipeContentHolder recipeContentHolder;
+    renders the detail of 1 specific Recipe object
+    see later
+
+flags are used in AppController to determine
+different actions of the buttons
+- boolean isNewRecipe
+- boolean isEditing
+
+- Button saveOrEditButton
+    onClick executes handleRdvSaveOrEditButtonAction in AppController
+    if isNewRecipe:
+        Create a new RecipeListItem and connect actions onClick to switch scene to RecipeDetailView
+    if not new recipe:
+        if isEditing: (button should then say "Save")
+            change button text to "Edit"
+            change the recipeDetail TextArea to a Text (disable edit)
+            trigger Recipe.setRecipeDetail
+        if !isEditing: (button should then say "Edit")
+            change button text to "Save"
+            change the recipeDetail Text to TextArea (allow edit)
+
+- Button backButton
+    onClick executes handleRdvBackButtonAction in AppController
+    simply return to RecipeList Scene
+- Button deleteButton
+    onClick executes handleRdvDeleteButtonAction in AppController
+    if isNewRecipe:
+        simply return to RecipeList Scene
+    is !isNewRecipe:
+        then add the New Recipe as RecipeListItem to RecipeListContainer (private field of ListView)
