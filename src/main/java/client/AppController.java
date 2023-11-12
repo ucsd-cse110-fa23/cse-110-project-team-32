@@ -203,12 +203,8 @@ public class AppController {
             } else {
                 // System.out.println("3");
                 createRecipeView.setRecordedIngredients(text);
-                Recipe newRecipe = chatGPT.generate(text, text, true);
                 
-                // Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
-                System.out.println("Before sleep");
-                Thread.sleep(1000);
-                System.out.println("After sleep");
+                Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
                 changeToRecipeDetailScene(newRecipe, true);
                 createRecipeView.reset();
             }
