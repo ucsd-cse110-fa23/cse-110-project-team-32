@@ -1,0 +1,18 @@
+RecipeListView.java
+
+- BorderPane borderPane
+    container, everything is rendered in here
+- VBox recipeListContainer
+    holds all the RecipeListItems
+    the state of its children is being tracked in AppController
+- Button newRecipeButton;
+    onClick action set in AppController
+    switch scene to render CreateRecipeView
+
++ RecipeListView(boolean test)
+    constructor for Testing
++ BorderPane getBorderPane()
++ VBox getRecipeListContainer() 
++ void setNewRecipeButtonAction(EventHandler<ActionEvent> eventHandler)
+    call in AppController to set action for newRecipeButton
+
