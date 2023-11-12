@@ -55,19 +55,27 @@ public class RequestHandler implements HttpHandler {
                 response = "No data found for userID=" + userID;
             } else {
                 for (String r : stringRecipeList) {
-                   response += r + "#";
+                    response += (r + "#");
                 }
             }
         }
+        System.out.println("handleGet response: " + response);
         return response;
     }
 
     private String handlePost(HttpExchange httpExchange) {
         InputStream inStream = httpExchange.getRequestBody();
         Scanner scanner = new Scanner(inStream);
-        String postData = scanner.nextLine();
+        String postData = "";
+        while (scanner.hasNext()) {
+            postData += scanner.nextLine() + "BREAK";
+        }
+        scanner.close();
         String userID = postData.substring(0, postData.indexOf(';'));
         String stringRecipe = postData.substring(postData.indexOf(';')+1);
+
+        System.out.println("handlePost stringRecipe received: " + stringRecipe);
+
         List<String> recipeList = this.data.get(userID);
         if (recipeList == null) {
             recipeList = new ArrayList<>();
@@ -76,8 +84,6 @@ public class RequestHandler implements HttpHandler {
         this.data.put(userID, recipeList);
 
         String response = "Received POST request on userID = " + userID;
-        
-        scanner.close();
 
         System.out.println(response);
 
@@ -85,43 +91,58 @@ public class RequestHandler implements HttpHandler {
     }
 
     private String handlePut(HttpExchange httpExchange) {
-        
-        System.out.println("handle put request");
-        return "";
-        /*
         InputStream inStream = httpExchange.getRequestBody();
         Scanner scanner = new Scanner(inStream);
-        String putData = scanner.nextLine();
-        scanner.close();
-        String languageKey = putData.substring(0, putData.indexOf(','));
-        String languageYear = putData.substring(putData.indexOf(',') + 1);
-
-        String response = "Added entry {" + languageKey + ", " + languageYear + "}";
-
-        if (this.data.containsKey(languageKey)) {
-            response = "Updated entry {" + languageKey + ", " + languageYear + "} (previous year: " + this.data.get(languageKey) + ")";
+        String postData = "";
+        while (scanner.hasNext()) {
+            postData += scanner.nextLine() + "BREAK";
         }
-        this.data.put(languageKey, languageYear);
+        scanner.close();
+        String userID = postData.substring(0, postData.indexOf(';'));
+        String stringRecipe = postData.substring(postData.indexOf(';')+1);
+
+        System.out.println("handlePost stringRecipe received: " + stringRecipe);
+
+        String recipeID = stringRecipe.substring(0, stringRecipe.indexOf(';'));
+        String response = "userID=" + userID + " didn't have a recipe list. One is created for them.";
+        if (this.data.containsKey(userID)) {
+            response = "Updated userID=" + userID + " recipeID=" + recipeID;
+        }
+        List<String> recipeList = this.data.get(userID);
+        if (recipeList == null) {
+            // this case should never happen
+            recipeList = new ArrayList<>();
+            recipeList.add(stringRecipe);
+            return response;
+        }
+        for (int i = 0; i < recipeList.size(); i++) {
+            if (recipeList.get(i).startsWith(recipeID)) {
+                recipeList.set(i, stringRecipe);
+                break;
+            }
+        }
+        this.data.put(userID, recipeList);
         return response;
-        */
     }
 
     private String handleDelete(HttpExchange httpExchange) {
+        // "?userID=" + userIdGetter.getUserID() + "recipeID=" + recipeID;
         
-        System.out.println("handle post request");
-        return "";
-        /*
-        String response = "Invalid DELETE Request";
         URI uri = httpExchange.getRequestURI();
         String query = uri.getRawQuery();
-        String languageKey = query.substring(query.indexOf('=')+1);
+        System.out.println("query: " + query);
+        String dataArr[] = query.split("&");
+        String userID = dataArr[0].split("=")[1];
+        String recipeID = dataArr[1].split("=")[1];
 
-        response = "No data found for " + languageKey;
-        if (this.data.containsKey(languageKey)) {
-            response = "Deleted entry {" + languageKey + ", " + this.data.get(languageKey) + "}";
-            this.data.remove(languageKey);
+        List<String> stringRecipeList = this.data.get(userID);
+        int delInd = 0;
+        for (; delInd < stringRecipeList.size(); delInd++) {
+            if (stringRecipeList.get(delInd).startsWith(recipeID)) break;
         }
-        return response;
-        */
+        stringRecipeList.remove(delInd);
+        this.data.put(userID, stringRecipeList);
+
+        return "removed userID=" + userID + " recipeID=" + recipeID;
     }
 }

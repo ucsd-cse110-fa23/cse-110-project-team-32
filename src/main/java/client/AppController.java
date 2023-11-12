@@ -77,11 +77,16 @@ public class AppController {
 
     private void readAllRecipesByUID() {
         String recipeListResponse = this.model.performRequest("GET", null, null);
-        System.out.println(recipeListResponse);
+        if (recipeListResponse.startsWith("No data found")) {
+            return;
+        }
+        System.out.println("Recipe List Response: " +recipeListResponse);
         String[] stringRecipeList = recipeListResponse.split("#");
         for (String strRecipe: stringRecipeList) {
+            System.out.println("Recipe as String: " + strRecipe);
             String[] strRecipeArr = strRecipe.split(";");
-            Recipe recipe = new Recipe(strRecipeArr[0], strRecipeArr[1], strRecipeArr[2], strRecipeArr[3]);
+            String recipeDetailParagraph = (strRecipeArr[3]).replaceAll("BREAK", "\n");
+            Recipe recipe = new Recipe(strRecipeArr[0], strRecipeArr[1], strRecipeArr[2], recipeDetailParagraph);
             RecipeListItem recipeListItem = new RecipeListItem(recipe);
             recipeListItem.setOnMouseClicked(e -> {
                 // the next time to render the detail of this recipe, this recipe would be existing
@@ -114,7 +119,6 @@ public class AppController {
         // if button save edit, run allow edit logic
         boolean recipeDetailViewIsEditing = recipeDetailView.isEditing();
         boolean recipeDetailViewIsNewRecipe = recipeDetailView.isNewRecipe();
-        // int recipeDetailViewRecipeIndex = recipeDetailView.getRecipeIndex();
 
         if (recipeDetailViewIsEditing) {
             recipeDetailView.updateRecipeDetail();
@@ -132,6 +136,12 @@ public class AppController {
     }
 
     private void handleRdvBackButtonAction(ActionEvent event) {
+        if (recipeDetailView.hasEdited()) {
+            // PUT request to the server to save the changes in the recipe
+            System.out.println(recipeDetailView.getRecipe());
+            String response = this.model.performRequest("PUT", recipeDetailView.getRecipe(), null);
+            System.out.println("AppController.java line 141" + response);
+        }
         // go back to the recipe list view
         changeToRecipeListScene();
     }
@@ -144,6 +154,9 @@ public class AppController {
             return;
         }
 
+        // DELETE request to server
+        String response = model.performRequest("DELETE", null, recipeDetailView.getRecipe().getRecipeID());
+        System.out.println("delete recipe response: " + response);
         // delete the recipe from the VBox recipeList 
         // if child matches (recipeDetailView.getRecipe())
         Recipe currentRecipe = recipeDetailView.getRecipe();
@@ -225,12 +238,10 @@ public class AppController {
             } else {
                 // System.out.println("3");
                 createRecipeView.setRecordedIngredients(text);
-                Recipe newRecipe = chatGPT.generate(text, text, true);
+                // Recipe newRecipe = chatGPT.generate(text, text, true);
                 
-                // Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
-                System.out.println("Before sleep");
-                Thread.sleep(1000);
-                System.out.println("After sleep");
+                Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
+ 
                 changeToRecipeDetailScene(newRecipe, true);
                 createRecipeView.reset();
             }
@@ -266,8 +277,7 @@ public class AppController {
     public void addNewRecipeToList(Recipe recipe) {
         // POST to server
         String response = this.model.performRequest("POST", recipe, null);
-        System.out.println("AppController.java line 266" + response);
-        // can use this to 
+        System.out.println("AppController.java line 266 " + response);
         RecipeListItem recipeListItem = new RecipeListItem(recipe);
         recipeListItem.setOnMouseClicked(e -> {
             // the next time to render the detail of this recipe, this recipe would be existing

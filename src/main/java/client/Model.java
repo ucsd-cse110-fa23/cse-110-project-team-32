@@ -18,11 +18,11 @@ public class Model {
     // argument String recipeID only used on DELETE request, null otherwise
     public String performRequest(String method, Recipe recipe, String recipeID) {
         try {
-            String urlString = this.urlStr;
+            String urlString = urlStr;
             if (method.equals("GET")) {
                 urlString += "?userID=" + userIdGetter.getUserID();
             } else if (method.equals("DELETE")) {
-                urlString += "?userID=" + userIdGetter.getUserID() + "recipeID=" + recipeID;
+                urlString += "?userID=" + userIdGetter.getUserID() + "&recipeID=" + recipeID;
             }
             URL url = new URI(urlString).toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
