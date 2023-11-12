@@ -28,7 +28,6 @@ public class AddRecipeTest {
         assertEquals(recipeList.size(), 1);
     }
     
-
     //Test if RecipeList's first Item is most Recently added Recipe()
     @Test void recipeListFirstItemIsAddedRecipe(){
         AppController appController = new AppController();
