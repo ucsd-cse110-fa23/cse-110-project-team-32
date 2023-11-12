@@ -20,13 +20,10 @@ public class AppController {
     private Model model;
     private RecipeListView recipeListView; // => Rlv
     private VBox recipeListContainer;
-    private RecipeListModel recipeListModel;
     private Scene recipeListScene;
     private RecipeDetailView recipeDetailView; // => Rdv
-    private RecipeDetailModel recipeDetailModel;
     private Scene recipeDetailScene;
     private CreateRecipeView createRecipeView; // => Crv
-    private CreateRecipeModel createRecipeModel;
     private Scene createRecipeScene;
     
     private ChatGPT chatGPT = new ChatGPT();
@@ -36,19 +33,16 @@ public class AppController {
     private TargetDataLine targetDataLine;
     
 
-    public AppController(RecipeListView recipeListView, RecipeListModel recipeListModel, Scene recipeListScene,
-                      RecipeDetailView recipeDetailView, RecipeDetailModel recipeDetailModel, Scene recipeDetailScene,
-                      CreateRecipeView createRecipeView, CreateRecipeModel createRecipeModel, Scene createRecipeScene, 
+    public AppController(RecipeListView recipeListView, Scene recipeListScene,
+                      RecipeDetailView recipeDetailView, Scene recipeDetailScene,
+                      CreateRecipeView createRecipeView, Scene createRecipeScene, 
                       Stage stage, Model model) {
         this.recipeListView = recipeListView;
         this.recipeListContainer = this.recipeListView.getRecipeListContainer();
-        this.recipeListModel = recipeListModel;
         this.recipeListScene = recipeListScene;
         this.recipeDetailView = recipeDetailView;
-        this.recipeDetailModel = recipeDetailModel;
         this.recipeDetailScene = recipeDetailScene;
         this.createRecipeView = createRecipeView;
-        this.createRecipeModel = createRecipeModel;
         this.createRecipeScene = createRecipeScene;
         this.stage = stage;
         this.model = model;
@@ -76,17 +70,9 @@ public class AppController {
     }
 
     private void readAllRecipesByUID() {
-        String recipeListResponse = this.model.performRequest("GET", null, null);
-        if (recipeListResponse.startsWith("No data found")) {
-            return;
-        }
-        System.out.println("Recipe List Response: " +recipeListResponse);
-        String[] stringRecipeList = recipeListResponse.split("#");
-        for (String strRecipe: stringRecipeList) {
-            System.out.println("Recipe as String: " + strRecipe);
-            String[] strRecipeArr = strRecipe.split(";");
-            String recipeDetailParagraph = (strRecipeArr[3]).replaceAll("BREAK", "\n");
-            Recipe recipe = new Recipe(strRecipeArr[0], strRecipeArr[1], strRecipeArr[2], recipeDetailParagraph);
+        List<Recipe> recipeList = this.model.performGetRecipeListRequest();
+        System.out.println("Recipe List:" + recipeList);
+        for (Recipe recipe : recipeList) {
             RecipeListItem recipeListItem = new RecipeListItem(recipe);
             recipeListItem.setOnMouseClicked(e -> {
                 // the next time to render the detail of this recipe, this recipe would be existing
@@ -139,8 +125,7 @@ public class AppController {
         if (recipeDetailView.hasEdited()) {
             // PUT request to the server to save the changes in the recipe
             System.out.println(recipeDetailView.getRecipe());
-            String response = this.model.performRequest("PUT", recipeDetailView.getRecipe(), null);
-            System.out.println("AppController.java line 141" + response);
+            this.model.performUpdateRecipeRequest(recipeDetailView.getRecipe());
         }
         // go back to the recipe list view
         changeToRecipeListScene();
@@ -153,13 +138,12 @@ public class AppController {
             changeToRecipeListScene();
             return;
         }
-
+        Recipe currentRecipe = recipeDetailView.getRecipe();
         // DELETE request to server
-        String response = model.performRequest("DELETE", null, recipeDetailView.getRecipe().getRecipeID());
-        System.out.println("delete recipe response: " + response);
+        model.performDeleteRequest(currentRecipe);
+
         // delete the recipe from the VBox recipeList 
         // if child matches (recipeDetailView.getRecipe())
-        Recipe currentRecipe = recipeDetailView.getRecipe();
         removeRecipeFromRecipeList(currentRecipe);
         changeToRecipeListScene();
     }
@@ -276,8 +260,7 @@ public class AppController {
 
     public void addNewRecipeToList(Recipe recipe) {
         // POST to server
-        String response = this.model.performRequest("POST", recipe, null);
-        System.out.println("AppController.java line 266 " + response);
+        this.model.performPostRecipeRequest(recipe);
         RecipeListItem recipeListItem = new RecipeListItem(recipe);
         recipeListItem.setOnMouseClicked(e -> {
             // the next time to render the detail of this recipe, this recipe would be existing

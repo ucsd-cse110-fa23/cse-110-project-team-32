@@ -46,7 +46,7 @@ public class CreateRecipeView {
         borderPane.setCenter(center);
 
         createDummyRecipeButton = new Button("Create Dummy Recipe");
-        borderPane.setBottom(createDummyRecipeButton);
+        // borderPane.setBottom(createDummyRecipeButton);
     }
 
     public void setCreateDummyRecipeButtonAction (EventHandler<ActionEvent> eventHandler) {

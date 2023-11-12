@@ -28,9 +28,9 @@ public class PantryPal extends Application {
         this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(), 500, 500);
         this.CreateRecipeScene = new Scene(createRecipeView.getBorderPane(), 500, 500);
 
-        AppController controller = new AppController(recipeListView, new RecipeListModel(), recipeListScene, 
-                                                    recipeDetailView, new RecipeDetailModel(), recipeDetailScene, 
-                                                    createRecipeView, new CreateRecipeModel(), CreateRecipeScene, 
+        AppController controller = new AppController(recipeListView, recipeListScene, 
+                                                    recipeDetailView, recipeDetailScene, 
+                                                    createRecipeView, CreateRecipeScene, 
                                                     stage, model);
         primaryStage.setScene(recipeListScene);
         primaryStage.setTitle("Your Recipes");

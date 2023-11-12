@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 
-// compile in root folder: $javac src/main/java/server/Server.java src/main/java/server/RequestHandler.java
-// Or compile in java foler: $javac server/Server.hava server/RequestHandler.java
-// then navigate to src/main/java and run $java server.Server
+// start server in Run and Debug
 public class Server {
   // initialize server port and hostname
   private static final int SERVER_PORT = 8100;
@@ -28,7 +26,7 @@ public class Server {
       new InetSocketAddress(SERVER_HOSTNAME, SERVER_PORT),
     0
     );
-    RequestHandler requestHandler = new RequestHandler(data);
+    RequestHandler requestHandler = new RequestHandler();
     server.createContext("/", requestHandler);
     server.setExecutor(threadPoolExecutor);
     server.start();

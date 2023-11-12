@@ -1,7 +1,8 @@
 package client;
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Recipe {
+public class Recipe implements Serializable {
     private String title;
     private String mealType; 
     private String recipeDetail;

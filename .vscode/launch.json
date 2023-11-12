@@ -18,5 +18,11 @@
             "mainClass": "client.PantryPal",
             "vmArgs": "--module-path '/Users/fangzhongli/Desktop/UCSD/Fall_2023/CSE_110/javafx-sdk-21/lib' --add-modules javafx.controls,javafx.fxml"
         },
+        {
+            "type": "java",
+            "name": "Server",
+            "request": "launch",
+            "mainClass": "server.Server",
+        },
     ]
 }
