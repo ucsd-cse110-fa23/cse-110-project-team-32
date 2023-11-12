@@ -129,5 +129,6 @@ public class MockAPITest {
     Recipe r2 = gpt.generate(mealType, ingredients);
 
     app.addNewRecipeToList(r2);
+    
     }
 }
