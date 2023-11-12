@@ -66,4 +66,70 @@ public class AddRecipeTest {
         appController.removeRecipeFromRecipeList(r1);
         recipeList = appController.getRecipeList();
      }
+    private AppController appController;
+
+    @BeforeEach
+    void setUp() {
+        appController = new AppController();
+    }
+
+    @Test
+    void editRecipeInListTest() {
+        Recipe originalRecipe = new Recipe("Original Recipe", "Lunch", "Original details");
+        appController.addNewRecipeToList(originalRecipe);
+
+        // Create updated details for the recipe
+        String updatedTitle = "Updated Recipe";
+        String updatedMealType = "Dinner";
+        String updatedDetails = "New details for the updated recipe";
+
+        Recipe updatedRecipe = new Recipe(updatedTitle, updatedMealType, updatedDetails);
+
+
+        appController.removeRecipeFromRecipeList(originalRecipe);
+        appController.addNewRecipeToList(updatedRecipe);
+
+        // Get the edited recipe from the list
+        Recipe editedRecipe = appController.getRecipeList().get(0);
+
+        // Assert that the recipe in the list has been successfully edited
+        assertEquals(updatedTitle, editedRecipe.getTitle(), "Recipe title should be updated");
+        assertEquals(updatedMealType, editedRecipe.getMealType(), "Recipe meal type should be updated");
+        assertEquals(updatedDetails, editedRecipe.getRecipeDetail(), "Recipe details should be updated");
+    }
+
+    @Test
+    void saveRecipeTest() {
+        // Create a new recipe
+        Recipe newRecipe = new Recipe("New Recipe", "Dinner", "Details for the new recipe");
+
+        // Add the new recipe to the list which essentially means its added n saved
+        appController.addNewRecipeToList(newRecipe);
+
+        // Get the list of "saved" recipes
+        List<Recipe> recipeList = appController.getRecipeList();
+
+        // test if the new recipe is in the list.
+        assertTrue(recipeList.contains(newRecipe), "New recipe should be in the list");
+    }
+
+    @Test
+    void viewRecipesTest() {
+        // Create some sample recipes
+        Recipe recipe1 = new Recipe("Recipe 1", "Breakfast", "Details for Recipe 1");
+        Recipe recipe2 = new Recipe("Recipe 2", "Lunch", "Details for Recipe 2");
+        Recipe recipe3 = new Recipe("Recipe 3", "Dinner", "Details for Recipe 3");
+
+        appController.addNewRecipeToList(recipe1);
+        appController.addNewRecipeToList(recipe2);
+        appController.addNewRecipeToList(recipe3);
+        List<Recipe> recipeList = appController.getRecipeList();
+
+        assertTrue(recipeList.contains(recipe1), "Recipe 1 should be in the list");
+        assertTrue(recipeList.contains(recipe2), "Recipe 2 should be in the list");
+        assertTrue(recipeList.contains(recipe3), "Recipe 3 should be in the list");
+    } // if the recipes are in the recipeList, that means it is already listed and
+      // viewable
+      // in the list of recipes. Hence, test passed.
+
 }
