@@ -2,14 +2,30 @@ package client;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.application.Platform;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import client.CreateRecipeScene.CreateRecipeModel;
+import client.CreateRecipeScene.CreateRecipeView;
+import client.RecipeDetailScene.RecipeDetailModel;
+import client.RecipeDetailScene.RecipeDetailView;
+import client.RecipeListScene.RecipeListModel;
+import client.RecipeListScene.RecipeListView;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.lang.reflect.Method;
 import java.util.*;
+
 
 public class AddRecipeTest {
     @Test
@@ -140,5 +156,6 @@ public class AddRecipeTest {
     } // if the recipes are in the recipeList, that means it is already listed and
       // viewable
       // in the list of recipes. Hence, test passed.
+
 
 }

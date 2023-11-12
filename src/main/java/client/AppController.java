@@ -75,6 +75,11 @@ public class AppController {
         this.recipeListContainer = recipeListView.getRecipeListContainer();
     }
 
+    public Stage getStage() {
+        // for testing purposes
+        return stage;
+    }
+
     public List<Recipe> getRecipeList() {
         // use this function to test
         ObservableList<Node> recipeItemsList = this.recipeListContainer.getChildren();
