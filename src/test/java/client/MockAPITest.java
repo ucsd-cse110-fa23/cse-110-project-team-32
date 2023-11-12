@@ -1,10 +1,13 @@
 package client;
 import org.junit.jupiter.api.Test;
 
+import client.RecipeDetailScene.RecipeDetailView;
 import javafx.scene.text.Text;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
+import javafx.scene.control.TextArea;
+
 
 class mockChatGPT implements API{
     String API;
@@ -79,6 +82,7 @@ class mockVoiceRecorder implements API{
 
 }
 public class MockAPITest {
+
     @Test void testChatGPT(){
         mockChatGPT budgetChatGPT = new mockChatGPT();
         budgetChatGPT.setInput("Create a dinner recipe with Chicken, Rice");
@@ -93,16 +97,23 @@ public class MockAPITest {
         assertEquals("Breakfast", whisper.translateVoiceToText());
     }
 
+    @Test void testVoiceRecorder(){
+        mockVoiceRecorder vReg = new mockVoiceRecorder();
+        vReg.setInput("recording.wav");
+        assertEquals("recording.wav", vReg.getOutput());
+    }
     @Test void addRecipeWithMockAPI(){
         mockChatGPT budgetChatGPT = new mockChatGPT();
         budgetChatGPT.setInput("Create a dinner recipe with Chicken, Rice");
         mockWhisper whisper = new mockWhisper("lol.mp3");
         Recipe dummyRecipe = budgetChatGPT.generate(whisper.getOutput(), whisper.getOutput());
         assertEquals("Chicken and Rice", dummyRecipe.getTitle());
-        assertEquals("Breakfast", dummyRecipe.getRecipeDetail());
+        assertEquals("Bread, Sausages, and Eggs", dummyRecipe.getRecipeDetail()); //TODO: Fix
     }
 
-    @Test void EndToEndTest1(){
+    @Test
+    
+    public void EndToEndTest1(){
     AppController app = new AppController();
     List<Recipe> currRecipes;
     mockChatGPT gpt = new mockChatGPT();
@@ -122,13 +133,25 @@ public class MockAPITest {
     app.addNewRecipeToList(r1);
     //Checks for Recipe Title
     currRecipes = app.getRecipeList();
-    assertEquals("Chicken and Rice", r1.getTitle());
-    assertEquals("Breakfast",r1.getMealType());
-    assertEquals("Bread, Sausages, and Eggs", r1.getRecipeDetail());
-    
+    assertEquals("Chicken and Rice", currRecipes.get(0).getTitle());
+    assertEquals("Breakfast", currRecipes.get(0).getMealType());
+    assertEquals("Bread, Sausages, and Eggs", currRecipes.get(0).getRecipeDetail());
+    //Nows Lets edit this recipe:
+    // RecipeDetailView rdv = new RecipeDetailView();
+    r1.setRecipeDetail("Bacon, Cheese, Rice");
+    assertEquals("Bacon, Cheese, Rice", currRecipes.get(0).getRecipeDetail());
     Recipe r2 = gpt.generate(mealType, ingredients);
-
     app.addNewRecipeToList(r2);
+    currRecipes = app.getRecipeList();
+    assertEquals("Bread, Sausages, and Eggs", currRecipes.get(0).getRecipeDetail());
+    app.removeRecipeFromRecipeList(r2);
+    currRecipes = app.getRecipeList();
+    assertEquals("Bacon, Cheese, Rice", currRecipes.get(0).getRecipeDetail());
+    app.removeRecipeFromRecipeList(r1);
+    currRecipes = app.getRecipeList();
+    assertEquals(0, currRecipes.size());
+    // Recipe Detail View
+
     
     }
 }
