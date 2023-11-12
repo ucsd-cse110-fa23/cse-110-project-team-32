@@ -19,6 +19,7 @@ public class RecipeDetailView {
     // flags
     private boolean isNewRecipe;
     private boolean isEditing;
+    private boolean hasEdited;
 
     // button group
     private Button saveOrEditButton = new Button();
@@ -56,9 +57,14 @@ public class RecipeDetailView {
         return isNewRecipe;
     }
 
+    public boolean hasEdited() {
+        return hasEdited;
+    }
+
     public void renderNewRecipe(Recipe recipe) {
         isNewRecipe = true;
         isEditing = true;
+        hasEdited = true;
         saveOrEditButton.setText("Save");
         recipeContentHolder.renderAnotherRecipe(recipe, isEditing);
     }
@@ -66,6 +72,7 @@ public class RecipeDetailView {
     public void renderExistingRecipe(Recipe recipe) {
         isNewRecipe = false;
         isEditing = false;
+        hasEdited = false;
         saveOrEditButton.setText("Edit");
         recipeContentHolder.renderAnotherRecipe(recipe, isEditing);
     }
@@ -95,6 +102,7 @@ public class RecipeDetailView {
 
     public void switchToViewOnlyMode() {
         isEditing = false;
+        hasEdited = true;
         saveOrEditButton.setText("Edit");
         recipeContentHolder.switchToViewOnlyMode();
     }
@@ -134,7 +142,7 @@ class RecipeContentHolder extends VBox{
         return editedRecipeDetail.getText();
     }
 
-    public void updateRecipeDetail() { // parametor String, modify AppController
+    public void updateRecipeDetail() {
         this.recipe.setRecipeDetail(editedRecipeDetail.getText());
         recipeDetail.setText(editedRecipeDetail.getText());
     }
