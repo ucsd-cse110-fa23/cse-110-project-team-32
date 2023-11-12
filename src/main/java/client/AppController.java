@@ -125,7 +125,10 @@ public class AppController {
         if (recipeDetailView.hasEdited()) {
             // PUT request to the server to save the changes in the recipe
             System.out.println(recipeDetailView.getRecipe());
-            this.model.performUpdateRecipeRequest(recipeDetailView.getRecipe());
+            if (model != null) {
+                // model == null in test mode
+                this.model.performUpdateRecipeRequest(recipeDetailView.getRecipe());
+            }
         }
         // go back to the recipe list view
         changeToRecipeListScene();
@@ -140,7 +143,11 @@ public class AppController {
         }
         Recipe currentRecipe = recipeDetailView.getRecipe();
         // DELETE request to server
-        model.performDeleteRequest(currentRecipe);
+        if (model != null) {
+            // model == null in test mode
+            model.performDeleteRequest(currentRecipe);
+        }
+        
 
         // delete the recipe from the VBox recipeList 
         // if child matches (recipeDetailView.getRecipe())
@@ -260,7 +267,11 @@ public class AppController {
 
     public void addNewRecipeToList(Recipe recipe) {
         // POST to server
-        this.model.performPostRecipeRequest(recipe);
+        if (model != null) {
+            // model == null in test mode
+            this.model.performPostRecipeRequest(recipe);
+        }
+        
         RecipeListItem recipeListItem = new RecipeListItem(recipe);
         recipeListItem.setOnMouseClicked(e -> {
             // the next time to render the detail of this recipe, this recipe would be existing
