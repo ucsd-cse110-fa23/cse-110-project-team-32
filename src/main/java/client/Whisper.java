@@ -89,21 +89,21 @@ public class Whisper implements API{
         return generatedText;
     }
     // Helper method to handle an error response
-    private String handleErrorResponse(HttpURLConnection connection)
-            throws IOException, JSONException {
-        BufferedReader errorReader = new BufferedReader(
-                new InputStreamReader(connection.getErrorStream())
-        );
-        String errorLine;
-        StringBuilder errorResponse = new StringBuilder();
-        while ((errorLine = errorReader.readLine()) != null) {
-            errorResponse.append(errorLine);
-        }
-        errorReader.close();
-        String errorResult = errorResponse.toString();
-        // System.out.println("Error Result: " + errorResult);
-        return "Error Result! Please try again :> ";
-    }
+//     private String handleErrorResponse(HttpURLConnection connection)
+//             throws IOException, JSONException {
+//         BufferedReader errorReader = new BufferedReader(
+//                 new InputStreamReader(connection.getErrorStream())
+//         );
+//         String errorLine;
+//         StringBuilder errorResponse = new StringBuilder();
+//         while ((errorLine = errorReader.readLine()) != null) {
+//             errorResponse.append(errorLine);
+//         }
+//         errorReader.close();
+//         String errorResult = errorResponse.toString();
+//         // System.out.println("Error Result: " + errorResult);
+//         return "Error Result! Please try again :> ";
+//     }
 
     public String translateVoiceToText() throws IOException, URISyntaxException {
         // Create file object from file path
