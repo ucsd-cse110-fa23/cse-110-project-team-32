@@ -7,33 +7,25 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class PantryPal extends Application {
-    private Stage stage;
-    private Scene recipeListScene;
-    private Scene recipeDetailScene;
-    private Scene CreateRecipeScene;
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        this.stage = primaryStage;
         RecipeListView recipeListView = new RecipeListView();
         RecipeDetailView recipeDetailView = new RecipeDetailView();
         CreateRecipeView createRecipeView = new CreateRecipeView();
-        Model model = new Model();
+        
+        RecipeDetailModel recipeDetailModel = new RecipeDetailModel();
+        RecipeListModel recipeListModel = new RecipeListModel();
+        CreateRecipeModel createRecipeModel = new CreateRecipeModel();
 
+        AppController appController = new AppController(recipeListView, recipeDetailView, createRecipeView, primaryStage);
+        RecipeDetailController rdController = new RecipeDetailController(recipeDetailView, recipeDetailModel, appController);
+        RecipeListController rlController = new RecipeListController(recipeListView, recipeListModel, appController);
+        CreateRecipeController rcController = new CreateRecipeController(createRecipeView, createRecipeModel, appController);
 
-        this.recipeListScene = new Scene(recipeListView.getBorderPane(), 500, 500);
-        this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(), 500, 500);
-        this.CreateRecipeScene = new Scene(createRecipeView.getBorderPane(), 500, 500);
-
-        AppController controller = new AppController(recipeListView, recipeListScene, 
-                                                    recipeDetailView, recipeDetailScene, 
-                                                    createRecipeView, CreateRecipeScene, 
-                                                    stage, model);
-        primaryStage.setScene(recipeListScene);
-        primaryStage.setTitle("Your Recipes");
         primaryStage.show();
     }
 }
