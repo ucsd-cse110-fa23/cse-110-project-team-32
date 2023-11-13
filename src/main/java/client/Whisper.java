@@ -10,24 +10,28 @@ public class Whisper implements API{
     private String text;
 
     // constructor called by application
-    public Whisper(String path) {
+    public Whisper(String path){
         this.FILE_PATH = path;
         API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
         TOKEN = "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";
         MODEL = "whisper-1";
     }
 
-    // constructor called by tests
-    public API initializeAPI(String API_ENDPOINT,String API_TOKEN,String MODEL){
-        this.API_ENDPOINT = API_ENDPOINT;
-        this.TOKEN = API_TOKEN;
-        this.MODEL = MODEL;
-        return this;
+    public void setInput(String input){
+        this.FILE_PATH = input;
     }
 
-    public String getInfo(){
-        return text;
+    public String getOutput(){
+        try {
+                return translateVoiceToText();
+        } catch (IOException e) {
+                e.printStackTrace();
+        } catch (URISyntaxException e) {
+                e.printStackTrace();
+        }
+        return null;
     }
+
     // Helper method to write a parameter to the output stream in multipart form data format
     private static void writeParameterToOutputStream(
             OutputStream outputStream,

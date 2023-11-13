@@ -20,7 +20,7 @@ public class AddRecipeTest {
         assertEquals(recipe.getRecipeDetail(), "Its Chicken and Rice man...");
     }
 
-    // RecipeList basic test
+    // RecipeList basic test 
     @Test
     void addStoredInRecipeListTest() {
         AppController appController = new AppController();
@@ -34,6 +34,7 @@ public class AddRecipeTest {
     // Test if RecipeList's first Item is most Recently added Recipe()
     @Test
     void recipeListFirstItemIsAddedRecipe() {
+
         AppController appController = new AppController();
         List<Recipe> recipeList;
         Recipe r1 = new Recipe("Title1", "MealType1", "Details1");
@@ -57,8 +58,8 @@ public class AddRecipeTest {
         List<Recipe> recipeList;
         Recipe r1 = new Recipe("Title1", "MealType1", "Details1");
         Recipe r2 = new Recipe("Title2", "MealType2", "Details2");
-        Recipe r3 = new Recipe("Title3", "MealType3", "Details3");
-
+        Recipe r3 = new Recipe("Title3", "MealType3", "Details3");  
+        
         appController.addNewRecipeToList(r1);
         appController.addNewRecipeToList(r2);
         appController.addNewRecipeToList(r3);
@@ -69,7 +70,7 @@ public class AddRecipeTest {
         assertEquals(r2, recipeList.get(0));
         appController.removeRecipeFromRecipeList(r1);
         recipeList = appController.getRecipeList();
-    }
+     }
 
     private AppController appController;
 
