@@ -50,7 +50,7 @@ public class CreateRecipeView {
 
         // Bottom elements initialization (create recipe)
         createDummyRecipeButton = new Button("Create Dummy Recipe");
-        borderPane.setBottom(createDummyRecipeButton);
+        // borderPane.setBottom(createDummyRecipeButton);
     }
 
     // setter method for creating a recipe 

@@ -30,6 +30,8 @@ dependencies {
     implementation 'com.google.guava:guava:32.1.1-jre'
 
     implementation files('lib/json-20230227.jar')
+
+    implementation 'org.mongodb:mongodb-driver-sync:4.11.0'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

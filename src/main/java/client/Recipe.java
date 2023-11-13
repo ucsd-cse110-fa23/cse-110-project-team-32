@@ -1,14 +1,29 @@
 package client;
+import java.io.Serializable;
+import java.util.UUID;
 
-public class Recipe {
+public class Recipe implements Serializable {
     private String title;
     private String mealType; 
     private String recipeDetail;
+    private String recipeID;
 
     public Recipe(String title, String mealType, String recipe) {
         this.title = title;
         this.recipeDetail = recipe;
         this.mealType = mealType;
+        this.recipeID = "recipe_" + UUID.randomUUID().toString();
+    }
+
+    public Recipe(String recipeID, String title, String mealType, String recipe) {
+        this.title = title;
+        this.recipeDetail = recipe;
+        this.mealType = mealType;
+        this.recipeID = recipeID;
+    }
+
+    public String getRecipeID() {
+        return recipeID;
     }
 
     public String getTitle() {
@@ -29,6 +44,6 @@ public class Recipe {
 
     @Override
     public String toString() {
-        return title + ", " + mealType + '\n' + recipeDetail;
+        return recipeID + ", " + title + ", " + mealType + '\n' + recipeDetail;
     }
 }

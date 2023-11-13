@@ -19,17 +19,14 @@ import javax.sound.sampled.*;
 public class AppController {
     // Main stage of app
     private Stage stage;
-
+    private Model model;
     // All other references in views
     private RecipeListView recipeListView; // => Rlv
     private VBox recipeListContainer;
-    private RecipeListModel recipeListModel;
     private Scene recipeListScene;
     private RecipeDetailView recipeDetailView; // => Rdv
-    private RecipeDetailModel recipeDetailModel;
     private Scene recipeDetailScene;
     private CreateRecipeView createRecipeView; // => Crv
-    private CreateRecipeModel createRecipeModel;
     private Scene createRecipeScene;
     
     // Audio recording components
@@ -40,20 +37,22 @@ public class AppController {
     private TargetDataLine targetDataLine;
     
     // Constructor for the main application of the controller
-    public AppController(RecipeListView recipeListView, RecipeListModel recipeListModel, Scene recipeListScene,
-                      RecipeDetailView recipeDetailView, RecipeDetailModel recipeDetailModel, Scene recipeDetailScene,
-                      CreateRecipeView createRecipeView, CreateRecipeModel createRecipeModel, Scene createRecipeScene, Stage stage) {
+    public AppController(RecipeListView recipeListView, Scene recipeListScene,
+                      RecipeDetailView recipeDetailView, Scene recipeDetailScene,
+                      CreateRecipeView createRecipeView, Scene createRecipeScene, 
+                      Stage stage, Model model) {
         this.recipeListView = recipeListView;
         this.recipeListContainer = this.recipeListView.getRecipeListContainer();
-        this.recipeListModel = recipeListModel;
         this.recipeListScene = recipeListScene;
         this.recipeDetailView = recipeDetailView;
-        this.recipeDetailModel = recipeDetailModel;
         this.recipeDetailScene = recipeDetailScene;
         this.createRecipeView = createRecipeView;
-        this.createRecipeModel = createRecipeModel;
         this.createRecipeScene = createRecipeScene;
         this.stage = stage;
+        this.model = model;
+
+        this.readAllRecipesByUID();
+
         this.audioFormat = this.setUpAudioFormat();
 
         // Set up event handlers for various buttons in different views
@@ -76,6 +75,19 @@ public class AppController {
     }
 
     
+
+    private void readAllRecipesByUID() {
+        List<Recipe> recipeList = this.model.performGetRecipeListRequest();
+        System.out.println("Recipe List:" + recipeList);
+        for (Recipe recipe : recipeList) {
+            RecipeListItem recipeListItem = new RecipeListItem(recipe);
+            recipeListItem.setOnMouseClicked(e -> {
+                // the next time to render the detail of this recipe, this recipe would be existing
+                this.changeToRecipeDetailScene(recipe, false);
+            });
+            recipeListContainer.getChildren().add(0, recipeListItem);
+        }
+    }
 
     public List<Recipe> getRecipeList() {
         // use this function to test
@@ -100,7 +112,6 @@ public class AppController {
         // if button save edit, run allow edit logic
         boolean recipeDetailViewIsEditing = recipeDetailView.isEditing();
         boolean recipeDetailViewIsNewRecipe = recipeDetailView.isNewRecipe();
-        // int recipeDetailViewRecipeIndex = recipeDetailView.getRecipeIndex();
 
         if (recipeDetailViewIsEditing) {
             recipeDetailView.updateRecipeDetail();
@@ -118,6 +129,14 @@ public class AppController {
     }
 
     private void handleRdvBackButtonAction(ActionEvent event) {
+        if (recipeDetailView.hasEdited()) {
+            // PUT request to the server to save the changes in the recipe
+            System.out.println(recipeDetailView.getRecipe());
+            if (model != null) {
+                // model == null in test mode
+                this.model.performUpdateRecipeRequest(recipeDetailView.getRecipe());
+            }
+        }
         // go back to the recipe list view
         changeToRecipeListScene();
     }
@@ -129,10 +148,16 @@ public class AppController {
             changeToRecipeListScene();
             return;
         }
+        Recipe currentRecipe = recipeDetailView.getRecipe();
+        // DELETE request to server
+        if (model != null) {
+            // model == null in test mode
+            model.performDeleteRequest(currentRecipe);
+        }
+        
 
         // delete the recipe from the VBox recipeList 
         // if child matches (recipeDetailView.getRecipe())
-        Recipe currentRecipe = recipeDetailView.getRecipe();
         removeRecipeFromRecipeList(currentRecipe);
         changeToRecipeListScene();
     }
@@ -214,6 +239,7 @@ public class AppController {
             } else {
                 // System.out.println("3");
                 createRecipeView.setRecordedIngredients(text);
+                
                 Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
                 changeToRecipeDetailScene(newRecipe, true);
                 createRecipeView.reset();
@@ -225,7 +251,7 @@ public class AppController {
 
     // Setter for action when create recipe button is clicked
     private void handleCrvCreateDummyRecipeButtonAction(ActionEvent event) {
-        Recipe newRecipe = chatGPT.generate("", "", true);
+        Recipe newRecipe = chatGPT.generate("lunch", "some ingredients", true);
         changeToRecipeDetailScene(newRecipe, true);
         createRecipeView.reset();
     }
@@ -255,7 +281,12 @@ public class AppController {
 
     // Adds new recipe to recipe list view
     public void addNewRecipeToList(Recipe recipe) {
-        // can use this to 
+        // POST to server
+        if (model != null) {
+            // model == null in test mode
+            this.model.performPostRecipeRequest(recipe);
+        }
+        
         RecipeListItem recipeListItem = new RecipeListItem(recipe);
         recipeListItem.setOnMouseClicked(e -> {
             // the next time to render the detail of this recipe, this recipe would be existing
