@@ -59,17 +59,19 @@ public class MongoDbOps {
             MongoCollection<Document> recipeCollection = sampleTrainingDB.getCollection(collection);
 
             Document user = recipeCollection.find(new Document("userID", userID)).first();
-            // System.out.println(user.toJson(prettyPrint));
+            System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
             if (user == null) {
                 return null;
             }   
             JSONObject userJson = new JSONObject(user);
             JSONArray dataJsonArray = userJson.getJSONArray("recipes");
+            System.out.println(dataJsonArray);
             String response = "";
             for (int i=0; i < dataJsonArray.length(); i++) {
                 JSONObject o = dataJsonArray.getJSONObject(i);
                 response += o.getString("recipeID") + ";" + o.getString("title") + ";" + o.getString("mealType") + ";" + o.getString("recipeDetail") + "#";
             }
+            // System.out.println("Mongo's response: " + response);
             return response;
         } catch (Exception e) {
             e.printStackTrace();

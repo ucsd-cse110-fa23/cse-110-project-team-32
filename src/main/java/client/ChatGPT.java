@@ -37,7 +37,8 @@ public class ChatGPT implements API{
         int maxTokens = 300;
         String prompt = "Give me a simple " + mealType + 
                         " recipe with the ingredients " + ingredients + 
-                        ". Please give the result in the form of: <Title>, # Ingredients: <Line broken ingredient list>, Instructions: <Line broken instruction list>";
+                        ". Please give the result in the form of: <Title>, # Ingredients: <Line broken ingredient list>, Instructions: <Line broken instruction list>" +
+                        "do not include any chars over a byte long in size";
 
         System.out.println(maxTokens + ", " + prompt);
 
