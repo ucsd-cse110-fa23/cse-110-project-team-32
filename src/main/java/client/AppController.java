@@ -15,9 +15,12 @@ import javafx.stage.Stage;
 import java.io.*;
 import javax.sound.sampled.*;
 
+// Controller class for managing interactions between views and models in the app
 public class AppController {
+    // Main stage of app
     private Stage stage;
     private Model model;
+    // All other references in views
     private RecipeListView recipeListView; // => Rlv
     private VBox recipeListContainer;
     private Scene recipeListScene;
@@ -26,13 +29,14 @@ public class AppController {
     private CreateRecipeView createRecipeView; // => Crv
     private Scene createRecipeScene;
     
+    // Audio recording components
     private ChatGPT chatGPT = new ChatGPT();
     private static final String audioFilePath = "recording.wav";
     private Whisper whisper = new Whisper(audioFilePath);
     private AudioFormat audioFormat;
     private TargetDataLine targetDataLine;
     
-
+    // Constructor for the main application of the controller
     public AppController(RecipeListView recipeListView, Scene recipeListScene,
                       RecipeDetailView recipeDetailView, Scene recipeDetailScene,
                       CreateRecipeView createRecipeView, Scene createRecipeScene, 
@@ -51,6 +55,7 @@ public class AppController {
 
         this.audioFormat = this.setUpAudioFormat();
 
+        // Set up event handlers for various buttons in different views
         this.recipeListView.setNewRecipeButtonAction(this::handleRlvNewRecipeButtonAction);
 
         this.recipeDetailView.setSaveOrEditButtonAction(this::handleRdvSaveOrEditButtonAction);
@@ -93,7 +98,7 @@ public class AppController {
         }
         return recipeList;
     }
-
+    // Handler for new recipe button in recipe list view
     private void handleRlvNewRecipeButtonAction(ActionEvent event) {
         this.stage.setScene(createRecipeScene);
         this.stage.setTitle("Create New Recipe");
@@ -155,6 +160,7 @@ public class AppController {
         changeToRecipeListScene();
     }
 
+    // Removes recipe from recipe list
     public void removeRecipeFromRecipeList(Recipe recipe) {
         int indexOfRecipeToRemove = 0;
         ObservableList<Node> recipeListItems = recipeListContainer.getChildren();
@@ -172,6 +178,7 @@ public class AppController {
         changeToRecipeListScene();
     }
 
+    // Setter for action when audio recording start button is clicked
     private void handleCrvStartRecordingButtonAction(ActionEvent event) {
         Thread t = new Thread(new Runnable() {
             @Override
@@ -206,6 +213,7 @@ public class AppController {
         t.start();
     }
 
+    // Setter for action when audio recording stop button is clicked
     private void handleCrvStopRecordingButtonAction(ActionEvent event) {
         targetDataLine.stop();
         targetDataLine.close();
@@ -229,10 +237,8 @@ public class AppController {
             } else {
                 // System.out.println("3");
                 createRecipeView.setRecordedIngredients(text);
-                // Recipe newRecipe = chatGPT.generate(text, text, true);
                 
                 Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
- 
                 changeToRecipeDetailScene(newRecipe, true);
                 createRecipeView.reset();
             }
@@ -241,30 +247,37 @@ public class AppController {
         }
     }
 
+    // Setter for action when create recipe button is clicked
     private void handleCrvCreateDummyRecipeButtonAction(ActionEvent event) {
         Recipe newRecipe = chatGPT.generate("lunch", "some ingredients", true);
         changeToRecipeDetailScene(newRecipe, true);
         createRecipeView.reset();
     }
 
+    // Changes scene to recipe list view scence
     private void changeToRecipeListScene() {
+        // Sanity check
         if (stage != null && recipeListScene != null) {
+            // Set scene
             stage.setScene(recipeListScene);
             stage.setTitle("Your Recipes");
         }
             
     }
 
+    // Changes scene to recipe detail view based on the recipe selected
     private void changeToRecipeDetailScene(Recipe recipe, boolean isNewRecipe) {
+        // Check if recipe is new
         if (isNewRecipe) {
             this.recipeDetailView.renderNewRecipe(recipe);
-        } else {
+        } else { // render existing recipe
             this.recipeDetailView.renderExistingRecipe(recipe);
         }
         this.stage.setScene(recipeDetailScene);
         this.stage.setTitle(recipe.getTitle());
     }
 
+    // Adds new recipe to recipe list view
     public void addNewRecipeToList(Recipe recipe) {
         // POST to server
         if (model != null) {
