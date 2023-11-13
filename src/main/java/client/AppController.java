@@ -313,6 +313,11 @@ public class AppController {
             signed,
             bigEndian);
     }
+
+    public Stage getStage() {
+        // for testing purposes
+        return stage;
+    }
 }
 
 
