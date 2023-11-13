@@ -2,7 +2,6 @@ package client.CreateRecipeScene;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -50,7 +49,7 @@ public class CreateRecipeView {
 
         // Bottom elements initialization (create recipe)
         createDummyRecipeButton = new Button("Create Dummy Recipe");
-        // borderPane.setBottom(createDummyRecipeButton);
+        borderPane.setBottom(createDummyRecipeButton);
     }
 
     // setter method for creating a recipe 

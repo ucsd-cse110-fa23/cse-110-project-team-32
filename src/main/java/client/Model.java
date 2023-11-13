@@ -2,15 +2,12 @@ package client;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URI;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Model {
     private static final String urlStr = "http://localhost:8100/";
@@ -19,38 +16,39 @@ public class Model {
     public Model() {
         userIdGetter = new UserIdGetter();
     }
+
     // POST PUT and DELETE requests in Recipe Detail Model
     // argument String recipeID only used on DELETE request, null otherwise
-    public String performRequest(String method, Recipe recipe, String recipeID) {
-        try {
-            String urlString = urlStr;
-            if (method.equals("GET")) {
-                urlString += "?userID=" + userIdGetter.getUserID();
-            } else if (method.equals("DELETE")) {
-                urlString += "?userID=" + userIdGetter.getUserID() + "&recipeID=" + recipeID;
-            }
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(method);
-            conn.setDoOutput(true);
+    // public String performRequest(String method, Recipe recipe, String recipeID) {
+    //     try {
+    //         String urlString = urlStr;
+    //         if (method.equals("GET")) {
+    //             urlString += "?userID=" + userIdGetter.getUserID();
+    //         } else if (method.equals("DELETE")) {
+    //             urlString += "?userID=" + userIdGetter.getUserID() + "&recipeID=" + recipeID;
+    //         }
+    //         URL url = new URI(urlString).toURL();
+    //         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    //         conn.setRequestMethod(method);
+    //         conn.setDoOutput(true);
 
-            if (method.equals("POST") || method.equals("PUT")) {
-                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-                // request body format: "userID;recipeID;title;mealType;recipeDetail"
-                out.write(userIdGetter.getUserID() + ";" + recipe.getRecipeID() + ";" + recipe.getTitle() + ";" + recipe.getMealType() + ";" + recipe.getRecipeDetail());
-                out.flush();
-                out.close();
-            }
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String response = in.readLine();
-            in.close();
-            System.out.println("Model.java line 42, HTTP response: " + response);
-            return response;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
-        }
-    }
+    //         if (method.equals("POST") || method.equals("PUT")) {
+    //             OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+    //             // request body format: "userID;recipeID;title;mealType;recipeDetail"
+    //             out.write(userIdGetter.getUserID() + ";" + recipe.getRecipeID() + ";" + recipe.getTitle() + ";" + recipe.getMealType() + ";" + recipe.getRecipeDetail());
+    //             out.flush();
+    //             out.close();
+    //         }
+    //         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    //         String response = in.readLine();
+    //         in.close();
+    //         System.out.println("Model.java line 42, HTTP response: " + response);
+    //         return response;
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return "Error: " + e.getMessage();
+    //     }
+    // }
 
     public List<Recipe> performGetRecipeListRequest() {
         try {
@@ -60,12 +58,13 @@ public class Model {
             conn.setRequestMethod("GET");
             conn.setDoOutput(true);
             conn.setDoInput(true);
+
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String response = in.readLine();
             in.close();
 
             List<Recipe> recipeList = new ArrayList<>();
-            if (response.equals("")) return recipeList;
+            if (response == null || response.equals("")) return recipeList;
 
             String[] stringRecipeList = response.split("#");
             for (String recipeString : stringRecipeList) {
@@ -95,7 +94,7 @@ public class Model {
         
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String response = in.readLine();
-            // System.out.println("Post request response: " + response);
+            System.out.println("Post request response: " + response);
             in.close();
         } catch (Exception e) {
             e.printStackTrace();
