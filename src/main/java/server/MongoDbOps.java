@@ -6,31 +6,18 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 
-import client.Recipe;
-
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-// import com.mongodb.client.MongoCollection;
-// import com.mongodb.client.MongoCursor;
-// import com.mongodb.client.MongoDatabase;
-// import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
-// import org.bson.conversions.Bson;
-// import org.bson.json.JsonWriterSettings;
-// import org.bson.types.ObjectId;
-// import com.mongodb.client.model.UpdateOptions;
 import org.bson.types.ObjectId;
-import org.checkerframework.checker.signature.qual.Identifier;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 
 import static com.mongodb.client.model.Filters.eq;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.*;
 
 // import java.io.BufferedReader;
@@ -59,17 +46,19 @@ public class MongoDbOps {
             MongoCollection<Document> recipeCollection = sampleTrainingDB.getCollection(collection);
 
             Document user = recipeCollection.find(new Document("userID", userID)).first();
-            // System.out.println(user.toJson(prettyPrint));
+            System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
             if (user == null) {
                 return null;
             }   
             JSONObject userJson = new JSONObject(user);
             JSONArray dataJsonArray = userJson.getJSONArray("recipes");
+            System.out.println(dataJsonArray);
             String response = "";
             for (int i=0; i < dataJsonArray.length(); i++) {
                 JSONObject o = dataJsonArray.getJSONObject(i);
                 response += o.getString("recipeID") + ";" + o.getString("title") + ";" + o.getString("mealType") + ";" + o.getString("recipeDetail") + "#";
             }
+            // System.out.println("Mongo's response: " + response);
             return response;
         } catch (Exception e) {
             e.printStackTrace();

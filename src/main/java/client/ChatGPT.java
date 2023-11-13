@@ -1,8 +1,6 @@
 package client;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -37,7 +35,8 @@ public class ChatGPT implements API{
         int maxTokens = 300;
         String prompt = "Give me a simple " + mealType + 
                         " recipe with the ingredients " + ingredients + 
-                        ". Please give the result in the form of: <Title>, # Ingredients: <Line broken ingredient list>, Instructions: <Line broken instruction list>";
+                        ". Please give the result in the form of: <Title>, # Ingredients: <Line broken ingredient list>, Instructions: <Line broken instruction list>" +
+                        "do not include any chars over a byte long in size";
 
         System.out.println(maxTokens + ", " + prompt);
 

@@ -40,6 +40,7 @@ public class RequestHandler implements HttpHandler {
             httpExchange.sendResponseHeaders(isRequestValid ? 200 : 404, response.length());
             OutputStream outStream = httpExchange.getResponseBody();
             outStream.write(response.getBytes());
+            outStream.flush();
             outStream.close();
         }
     }
@@ -52,7 +53,9 @@ public class RequestHandler implements HttpHandler {
             throw new Exception("Invalid Get Request");
         }
         String userID = query.substring(query.indexOf('=')+1);
-        return mongoDbOps.getRecipesByUserID(userID);
+        String mongoResponse = mongoDbOps.getRecipesByUserID(userID);
+        // System.out.println("Request Handler's response: " + mongoResponse);
+        return mongoResponse;
     }
 
     private String handlePost(HttpExchange httpExchange) {
