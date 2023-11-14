@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.*;
@@ -36,9 +37,12 @@ public class AppController {
         this.recipeDetailView = recipeDetailView;
         this.createRecipeView = createRecipeView;
 
-        this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth, windowHeight);
-        this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(), windowWidth, windowHeight);
-        this.createRecipeScene = new Scene(createRecipeView.getBorderPane(), windowWidth, windowHeight);
+        this.recipeListScene = new Scene(new ScrollPane(recipeListView.getBorderPane()), windowWidth, windowHeight);
+        this.recipeDetailScene = new Scene(new ScrollPane(recipeDetailView.getBorderPane()), windowWidth, windowHeight);
+        this.createRecipeScene = new Scene(new ScrollPane(createRecipeView.getBorderPane()), windowWidth, windowHeight);
+        // this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth, windowHeight);
+        // this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(), windowWidth, windowHeight);
+        // this.createRecipeScene = new Scene(createRecipeView.getBorderPane(), windowWidth, windowHeight);
         
         this.stage = stage;
 

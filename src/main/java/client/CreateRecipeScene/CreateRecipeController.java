@@ -1,7 +1,5 @@
 package client.CreateRecipeScene;
 
-import javafx.event.EventHandler;
-
 import java.io.File;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -12,9 +10,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
 
 import client.AppController;
-import client.ChatGPT;
 import client.Recipe;
-import client.Whisper;
 import javafx.event.ActionEvent;
 
 public class CreateRecipeController {
@@ -23,10 +19,7 @@ public class CreateRecipeController {
     AppController appController;
     private AudioFormat audioFormat;
     private TargetDataLine targetDataLine;
-    
-    private ChatGPT chatGPT = new ChatGPT();
     private static final String audioFilePath = "recording.wav";
-    private Whisper whisper = new Whisper(audioFilePath);
 
     public CreateRecipeController(CreateRecipeView createRecipeView, CreateRecipeModel createRecipeModel, AppController appController) {
         this.createRecipeView = createRecipeView;
@@ -102,9 +95,15 @@ public class CreateRecipeController {
         targetDataLine.close();
         String text = "";
         try {
-            text = whisper.translateVoiceToText().toLowerCase();
-            text = text.charAt(text.length()-1) == '.' ? text.substring(0, text.indexOf('.')) : text;
-            System.out.println("Whisper output: |" + text + "|");
+            text = createRecipeModel.translateByWhisper(audioFilePath);
+            if (text != null && text == "YIKES! You are not connected to the server!!") {
+                createRecipeView.setRecordingErrorMsg(text);
+                return;
+            }
+            if (text == null || text.length() == 0) {
+                createRecipeView.setRecordingErrorMsg("Oops... I didn't hear what you said. Please record again :>");
+                return;
+            }
 
             if (createRecipeView.getMealType() == null || createRecipeView.getMealType().equals("")) {
                 // System.out.println("0");
@@ -121,7 +120,7 @@ public class CreateRecipeController {
                 // System.out.println("3");
                 createRecipeView.setRecordedIngredients(text);
                 
-                Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
+                Recipe newRecipe = createRecipeModel.generateByChatGPT(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
                 appController.changeToRecipeDetailScene(newRecipe, true);
                 createRecipeView.reset();
             }
@@ -131,8 +130,9 @@ public class CreateRecipeController {
     }
 
     private void handleCreateDummyRecipeButtonAction(ActionEvent event) {
-        Recipe newRecipe = chatGPT.generate("lunch", "some ingredients", true);
-        appController.changeToRecipeDetailScene(newRecipe, true);
+        Recipe dummy = createRecipeModel.generateByChatGPT("lunch", "chicken thighs", true);
+        // Recipe dummy = new Recipe("Dummy Recipe Title", "Dummy Recipe Meal Type", "Dummy Recipe Detail");
+        appController.changeToRecipeDetailScene(dummy, true);
         createRecipeView.reset();
     }
 }

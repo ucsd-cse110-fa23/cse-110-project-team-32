@@ -50,33 +50,33 @@ public class Model {
     //     }
     // }
 
-    public List<Recipe> performGetRecipeListRequest() {
-        try {
-            String urlString = urlStr + "?userID=" + userIdGetter.getUserID();
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
+    // public List<Recipe> performGetRecipeListRequest() {
+    //     try {
+    //         String urlString = urlStr + "?userID=" + userIdGetter.getUserID();
+    //         URL url = new URI(urlString).toURL();
+    //         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    //         conn.setRequestMethod("GET");
+    //         conn.setDoOutput(true);
+    //         conn.setDoInput(true);
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String response = in.readLine();
-            in.close();
+    //         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    //         String response = in.readLine();
+    //         in.close();
 
-            List<Recipe> recipeList = new ArrayList<>();
-            if (response == null || response.equals("")) return recipeList;
+    //         List<Recipe> recipeList = new ArrayList<>();
+    //         if (response == null || response.equals("")) return recipeList;
 
-            String[] stringRecipeList = response.split("#");
-            for (String recipeString : stringRecipeList) {
-                String[] recipeComponents = recipeString.split(";");
-                recipeList.add(new Recipe(recipeComponents[0], recipeComponents[1], recipeComponents[2],recipeComponents[3].replace("\\n", "\n")));
-            }
-            return recipeList;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
-    }
+    //         String[] stringRecipeList = response.split("#");
+    //         for (String recipeString : stringRecipeList) {
+    //             String[] recipeComponents = recipeString.split(";");
+    //             recipeList.add(new Recipe(recipeComponents[0], recipeComponents[1], recipeComponents[2],recipeComponents[3].replace("\\n", "\n")));
+    //         }
+    //         return recipeList;
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    //     return new ArrayList<>();
+    // }
 
     // public void performPostRecipeRequest(Recipe newRecipe) {
     //     try {

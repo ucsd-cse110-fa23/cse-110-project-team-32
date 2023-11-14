@@ -58,11 +58,12 @@ public class RequestHandler implements HttpHandler {
         return mongoResponse;
     }
 
-    private String handlePost(HttpExchange httpExchange) {
+    private String handlePost(HttpExchange httpExchange) throws IOException {
         InputStream inStream = httpExchange.getRequestBody();
         Scanner scanner = new Scanner(inStream);
         String postData = scanner.nextLine();
         scanner.close();
+        inStream.close();
         String[] dataComponents = postData.split(";");
         String userID = dataComponents[0];
         String recipeID = dataComponents[1];
@@ -77,11 +78,12 @@ public class RequestHandler implements HttpHandler {
         }
     }
 
-    private String handlePutRecipe(HttpExchange httpExchange) {
+    private String handlePutRecipe(HttpExchange httpExchange) throws IOException {
         InputStream inStream = httpExchange.getRequestBody();
         Scanner scanner = new Scanner(inStream);
         String postData = scanner.nextLine();
         scanner.close();
+        inStream.close();
         String[] dataComponents = postData.split(";");
         String userID = dataComponents[0];
         String recipeID = dataComponents[1];
@@ -94,11 +96,12 @@ public class RequestHandler implements HttpHandler {
         }
     }
 
-    private String handleDelete(HttpExchange httpExchange) throws Exception {
+    private String handleDelete(HttpExchange httpExchange) throws IOException {
         InputStream inStream = httpExchange.getRequestBody();
         Scanner scanner = new Scanner(inStream);
         String postData = scanner.nextLine();
         scanner.close();
+        inStream.close();
         String[] dataComponents = postData.split(";");
         String userID = dataComponents[0];
         String recipeID = dataComponents[1];

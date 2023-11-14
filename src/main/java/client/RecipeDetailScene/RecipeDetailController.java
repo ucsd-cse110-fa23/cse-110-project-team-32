@@ -19,7 +19,6 @@ public class RecipeDetailController {
     }
 
     public void handleSaveOrEditButtonAction(ActionEvent event) {
-        System.out.println("I'm called in RecipeDetailController");
         // if button says save and isNewRecipe, then run save recipe logic and exit to list view
         // if button says save but not new recipe, then just save recipe without changing scene
         // if button save edit, run allow edit logic
@@ -40,6 +39,15 @@ public class RecipeDetailController {
                     // model == null in test mode
                     model.performPostRecipeRequest(newRecipe);
                 }
+            } else {
+                if (view.hasEdited()) {
+                    // PUT request to the server to save the changes in the recipe
+                    Recipe editedRecipe = view.getRecipe();
+                    if (model != null) {
+                        // model == null in test mode
+                        model.performUpdateRecipeRequest(editedRecipe);
+                    }
+                }
             }
         } else {
             view.switchToEditMode();
@@ -47,14 +55,6 @@ public class RecipeDetailController {
     }
 
     public void handleBackButtonAction(ActionEvent event) {
-        if (view.hasEdited()) {
-            // PUT request to the server to save the changes in the recipe
-            Recipe editedRecipe = view.getRecipe();
-            if (model != null) {
-                // model == null in test mode
-                model.performUpdateRecipeRequest(editedRecipe);
-            }
-        }
         // go back to the recipe list view
         appController.changeToRecipeListScene();
     }

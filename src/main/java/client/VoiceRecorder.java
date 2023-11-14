@@ -11,6 +11,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import server.ChatGPT;
+import server.Whisper;
+
 import java.io.*;
 import javax.sound.sampled.*;
 import javafx.event.ActionEvent;
