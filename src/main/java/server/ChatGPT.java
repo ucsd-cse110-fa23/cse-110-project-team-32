@@ -1,4 +1,4 @@
-package client;
+package server;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -6,6 +6,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import client.API;
+import client.Recipe;
 
 public class ChatGPT implements API {
     private String API_ENDPOINT;// = "https://api.openai.com/v1/completions";
@@ -25,7 +28,8 @@ public class ChatGPT implements API {
         return "Give me a simple " + mealType + 
                         " recipe with the ingredients " + ingredients + 
                         ". Please give the result in the form of: <Title>, # Ingredients: <Line broken ingredient list>, Instructions: <Line broken instruction list>" +
-                        "do not include any chars over a byte long in size";}
+                        "do not include any chars over a byte long in size";
+    }
 
     public void setInput(String input){
         this.prompt = input;

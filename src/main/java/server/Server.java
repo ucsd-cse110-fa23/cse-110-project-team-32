@@ -14,20 +14,21 @@ public class Server {
   private static final int SERVER_PORT = 8100;
   private static final String SERVER_HOSTNAME = "localhost";
 
-
   public static void main(String[] args) throws IOException {
     // create a thread pool to handle requests
     ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
-    // create a map to store data
-    Map<String, List<String>> data = new HashMap<>();
 
     // create a server
     HttpServer server = HttpServer.create(
       new InetSocketAddress(SERVER_HOSTNAME, SERVER_PORT),
     0
     );
-    RequestHandler requestHandler = new RequestHandler();
-    server.createContext("/", requestHandler);
+    HttpHandler whisperReqHandler = new WhisperReqHandler();
+    server.createContext("/whisper", whisperReqHandler);
+    HttpHandler chatGptReqHandler = new ChatGptReqHandler();
+    server.createContext("/chatgpt", chatGptReqHandler);
+    HttpHandler recipeReqhandler = new RequestHandler();
+    server.createContext("/", recipeReqhandler);
     server.setExecutor(threadPoolExecutor);
     server.start();
     System.out.println("Server started on port " + SERVER_PORT);

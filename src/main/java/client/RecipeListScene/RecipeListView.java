@@ -3,6 +3,8 @@ package client.RecipeListScene;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,10 +29,12 @@ public class RecipeListView {
         buttonGroup.getChildren().add(newRecipeButton);
         // set button group up top
         borderPane.setTop(buttonGroup);
-
         // creates container for recipe list
         recipeListContainer = new VBox();
         // set container to be in the center for layout
+        // ScrollPane scrollableList = new ScrollPane(recipeListContainer);
+        // scrollableList.setFitToWidth(true);
+        // scrollableList.setFitToHeight(true);
         borderPane.setCenter(recipeListContainer);
     }
 

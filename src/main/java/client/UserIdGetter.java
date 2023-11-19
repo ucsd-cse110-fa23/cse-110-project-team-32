@@ -20,7 +20,6 @@ public class UserIdGetter {
         }
 
         userId = storedUUID;
-        System.out.println("User ID: " + userId);
     }
 
     public String getUserID() {

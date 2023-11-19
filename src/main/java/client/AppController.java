@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.*;
@@ -18,7 +19,6 @@ import javax.sound.sampled.*;
 public class AppController {
     // Main stage of app
     private Stage stage;
-    private Model model;
     // All other references in views
     private RecipeListView recipeListView; // => Rlv
     private VBox recipeListContainer;
@@ -28,44 +28,26 @@ public class AppController {
     private CreateRecipeView createRecipeView; // => Crv
     private Scene createRecipeScene;
     
-    // Audio recording components
-    private ChatGPT chatGPT = new ChatGPT();
-    private static final String audioFilePath = "recording.wav";
-    private Whisper whisper = new Whisper(audioFilePath);
-    private AudioFormat audioFormat;
-    private TargetDataLine targetDataLine;
-    
-    // Constructor for the main application of the controller
-    public AppController(RecipeListView recipeListView, Scene recipeListScene,
-                      RecipeDetailView recipeDetailView, Scene recipeDetailScene,
-                      CreateRecipeView createRecipeView, Scene createRecipeScene, 
-                      Stage stage, Model model) {
+    private static final Double windowWidth = 500D;
+    private static final Double windowHeight = 500D;
+
+    public AppController(RecipeListView recipeListView, RecipeDetailView recipeDetailView, CreateRecipeView createRecipeView, Stage stage) {
         this.recipeListView = recipeListView;
         this.recipeListContainer = this.recipeListView.getRecipeListContainer();
-        this.recipeListScene = recipeListScene;
         this.recipeDetailView = recipeDetailView;
-        this.recipeDetailScene = recipeDetailScene;
         this.createRecipeView = createRecipeView;
-        this.createRecipeScene = createRecipeScene;
+
+        this.recipeListScene = new Scene(new ScrollPane(recipeListView.getBorderPane()), windowWidth, windowHeight);
+        this.recipeDetailScene = new Scene(new ScrollPane(recipeDetailView.getBorderPane()), windowWidth, windowHeight);
+        this.createRecipeScene = new Scene(new ScrollPane(createRecipeView.getBorderPane()), windowWidth, windowHeight);
+        // this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth, windowHeight);
+        // this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(), windowWidth, windowHeight);
+        // this.createRecipeScene = new Scene(createRecipeView.getBorderPane(), windowWidth, windowHeight);
+        
         this.stage = stage;
-        this.model = model;
 
-        this.readAllRecipesByUID();
-
-        this.audioFormat = this.setUpAudioFormat();
-
-        // Set up event handlers for various buttons in different views
-        this.recipeListView.setNewRecipeButtonAction(this::handleRlvNewRecipeButtonAction);
-
-        this.recipeDetailView.setSaveOrEditButtonAction(this::handleRdvSaveOrEditButtonAction);
-        this.recipeDetailView.setBackButtonAction(this::handleRdvBackButtonAction);
-        this.recipeDetailView.setDeleteButtonAction(this::handleRdvDeleteButtonAction);
-
-        this.createRecipeView.setCancelButtonAction(this::handleCrvCancelButtonAction);
-        this.createRecipeView.setStartRecordingButtonAction(this::handleCrvStartRecordingButtonAction);
-        this.createRecipeView.setStopRecordingButtonAction(this::handleCrvStopRecordingButtonAction);
-        this.createRecipeView.setCreateDummyRecipeButtonAction(this::handleCrvCreateDummyRecipeButtonAction);
-    }
+        init();
+       }
 
     public AppController() {
         // constructor for testing
@@ -73,11 +55,11 @@ public class AppController {
         this.recipeListContainer = recipeListView.getRecipeListContainer();
     }
 
-    
+    private void init() {
+        changeToRecipeListScene();
+    }
 
-    private void readAllRecipesByUID() {
-        List<Recipe> recipeList = this.model.performGetRecipeListRequest();
-        System.out.println("Recipe List:" + recipeList);
+    public void initRecipeList(List<Recipe> recipeList) {
         for (Recipe recipe : recipeList) {
             RecipeListItem recipeListItem = new RecipeListItem(recipe);
             recipeListItem.setOnMouseClicked(e -> {
@@ -99,66 +81,10 @@ public class AppController {
         }
         return recipeList;
     }
-    // Handler for new recipe button in recipe list view
-    private void handleRlvNewRecipeButtonAction(ActionEvent event) {
+
+    public void changeToCreateRecipeScene() {
         this.stage.setScene(createRecipeScene);
         this.stage.setTitle("Create New Recipe");
-    }
-
-    private void handleRdvSaveOrEditButtonAction(ActionEvent event) {
-        // if button says save and isNewRecipe, then run save recipe logic and exit to list view
-        // if button says save but not new recipe, then just save recipe without changing scene
-        // if button save edit, run allow edit logic
-        boolean recipeDetailViewIsEditing = recipeDetailView.isEditing();
-        boolean recipeDetailViewIsNewRecipe = recipeDetailView.isNewRecipe();
-
-        if (recipeDetailViewIsEditing) {
-            recipeDetailView.updateRecipeDetail();
-            recipeDetailView.switchToViewOnlyMode();
-
-            if (recipeDetailViewIsNewRecipe) {
-                // MAKE A CALL TO MODEL TO ADD A NEW RECIPE
-                // add recipe to list
-                // and set the whole list's listener? really need to do this? Recipe is a reference
-                this.addNewRecipeToList(recipeDetailView.getRecipe());
-            }
-        } else {
-            recipeDetailView.switchToEditMode();
-        }
-    }
-
-    private void handleRdvBackButtonAction(ActionEvent event) {
-        if (recipeDetailView.hasEdited()) {
-            // PUT request to the server to save the changes in the recipe
-            System.out.println(recipeDetailView.getRecipe());
-            if (model != null) {
-                // model == null in test mode
-                this.model.performUpdateRecipeRequest(recipeDetailView.getRecipe());
-            }
-        }
-        // go back to the recipe list view
-        changeToRecipeListScene();
-    }
-
-    private void handleRdvDeleteButtonAction(ActionEvent event) {
-        // if this is a new recipe, deleting is the same as going back to list,
-        // not actually adding the recipe to the recipe list
-        if (recipeDetailView.isNewRecipe()) {
-            changeToRecipeListScene();
-            return;
-        }
-        Recipe currentRecipe = recipeDetailView.getRecipe();
-        // DELETE request to server
-        if (model != null) {
-            // model == null in test mode
-            model.performDeleteRequest(currentRecipe);
-        }
-        
-
-        // delete the recipe from the VBox recipeList 
-        // if child matches (recipeDetailView.getRecipe())
-        removeRecipeFromRecipeList(currentRecipe);
-        changeToRecipeListScene();
     }
 
     // Removes recipe from recipe list
@@ -174,89 +100,8 @@ public class AppController {
         System.out.println("After deleting a recipe, the size of the recipe list is now " + recipeListContainer.getChildren().size());
     }
 
-    private void handleCrvCancelButtonAction(ActionEvent event) {
-        // go back to the recipe list view
-        changeToRecipeListScene();
-    }
-
-    // Setter for action when audio recording start button is clicked
-    private void handleCrvStartRecordingButtonAction(ActionEvent event) {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // the format of the TargetDataLine
-                    DataLine.Info dataLineInfo = new DataLine.Info(
-                        TargetDataLine.class,
-                        audioFormat);
-                    // the TargetDataLine used to capture audio data from the microphone
-                    targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
-                    targetDataLine.open(audioFormat);
-                    targetDataLine.start();
-                    createRecipeView.toggleDisplayToolTip(true);
-
-                    // the AudioInputStream that will be used to write the audio data to a file
-                    AudioInputStream audioInputStream = new AudioInputStream(
-                        targetDataLine);
-
-                    // the file that will contain the audio data
-                    File audioFile = new File(audioFilePath);
-                    AudioSystem.write(
-                        audioInputStream,
-                        AudioFileFormat.Type.WAVE,
-                        audioFile);
-                    createRecipeView.toggleDisplayToolTip(false);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        t.start();
-    }
-
-    // Setter for action when audio recording stop button is clicked
-    private void handleCrvStopRecordingButtonAction(ActionEvent event) {
-        targetDataLine.stop();
-        targetDataLine.close();
-        String text = "";
-        try {
-            text = whisper.translateVoiceToText().toLowerCase();
-            text = text.charAt(text.length()-1) == '.' ? text.substring(0, text.indexOf('.')) : text;
-            System.out.println("Whisper output: |" + text + "|");
-
-            if (createRecipeView.getMealType() == null || createRecipeView.getMealType().equals("")) {
-                // System.out.println("0");
-                if (!text.equals("breakfast") && !text.equals("lunch") && !text.equals("dinner")) {
-                    // System.out.println("1");
-                    createRecipeView.setRecordingErrorMsg("Oops... I couldn't recognize the meal type you said. Please try again :>");
-                } else {
-                    // System.out.println("2");
-                    // System.out.println("recorded: " + text);
-                    createRecipeView.switchPrompt();
-                    createRecipeView.setRecordedMealType(text);
-                }
-            } else {
-                // System.out.println("3");
-                createRecipeView.setRecordedIngredients(text);
-                
-                Recipe newRecipe = chatGPT.generate(createRecipeView.getMealType(), createRecipeView.getIngredients(), false);
-                changeToRecipeDetailScene(newRecipe, true);
-                createRecipeView.reset();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Setter for action when create recipe button is clicked
-    private void handleCrvCreateDummyRecipeButtonAction(ActionEvent event) {
-        Recipe newRecipe = chatGPT.generate("lunch", "some ingredients", true);
-        changeToRecipeDetailScene(newRecipe, true);
-        createRecipeView.reset();
-    }
-
     // Changes scene to recipe list view scence
-    private void changeToRecipeListScene() {
+    public void changeToRecipeListScene() {
         // Sanity check
         if (stage != null && recipeListScene != null) {
             // Set scene
@@ -267,7 +112,7 @@ public class AppController {
     }
 
     // Changes scene to recipe detail view based on the recipe selected
-    private void changeToRecipeDetailScene(Recipe recipe, boolean isNewRecipe) {
+    public void changeToRecipeDetailScene(Recipe recipe, boolean isNewRecipe) {
         // Check if recipe is new
         if (isNewRecipe) {
             this.recipeDetailView.renderNewRecipe(recipe);
@@ -280,12 +125,6 @@ public class AppController {
 
     // Adds new recipe to recipe list view
     public void addNewRecipeToList(Recipe recipe) {
-        // POST to server
-        if (model != null) {
-            // model == null in test mode
-            this.model.performPostRecipeRequest(recipe);
-        }
-        
         RecipeListItem recipeListItem = new RecipeListItem(recipe);
         recipeListItem.setOnMouseClicked(e -> {
             // the next time to render the detail of this recipe, this recipe would be existing
@@ -293,26 +132,6 @@ public class AppController {
         });
         recipeListContainer.getChildren().add(0, recipeListItem);
         changeToRecipeListScene();
-    }
-
-    private AudioFormat setUpAudioFormat() {
-        // the number of samples of audio per second.
-        // 44100 represents the typical sample rate for CD-quality audio.
-        float sampleRate = 44100;
-        // the number of bits in each sample of a sound that has been digitized.
-        int sampleSizeInBits = 16;
-        // the number of audio channels in this format (1 for mono, 2 for stereo).
-        int channels = 1;
-        // whether the data is signed or unsigned.
-        boolean signed = true;
-        // whether the audio data is stored in big-endian or little-endian order.
-        boolean bigEndian = false;
-        return new AudioFormat(
-            sampleRate,
-            sampleSizeInBits,
-            channels,
-            signed,
-            bigEndian);
     }
 
     public Stage getStage() {

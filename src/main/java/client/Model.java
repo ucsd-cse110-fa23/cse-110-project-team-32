@@ -50,100 +50,100 @@ public class Model {
     //     }
     // }
 
-    public List<Recipe> performGetRecipeListRequest() {
-        try {
-            String urlString = urlStr + "?userID=" + userIdGetter.getUserID();
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
+    // public List<Recipe> performGetRecipeListRequest() {
+    //     try {
+    //         String urlString = urlStr + "?userID=" + userIdGetter.getUserID();
+    //         URL url = new URI(urlString).toURL();
+    //         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    //         conn.setRequestMethod("GET");
+    //         conn.setDoOutput(true);
+    //         conn.setDoInput(true);
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String response = in.readLine();
-            in.close();
+    //         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    //         String response = in.readLine();
+    //         in.close();
 
-            List<Recipe> recipeList = new ArrayList<>();
-            if (response == null || response.equals("")) return recipeList;
+    //         List<Recipe> recipeList = new ArrayList<>();
+    //         if (response == null || response.equals("")) return recipeList;
 
-            String[] stringRecipeList = response.split("#");
-            for (String recipeString : stringRecipeList) {
-                String[] recipeComponents = recipeString.split(";");
-                recipeList.add(new Recipe(recipeComponents[0], recipeComponents[1], recipeComponents[2],recipeComponents[3].replace("\\n", "\n")));
-            }
-            return recipeList;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
-    }
+    //         String[] stringRecipeList = response.split("#");
+    //         for (String recipeString : stringRecipeList) {
+    //             String[] recipeComponents = recipeString.split(";");
+    //             recipeList.add(new Recipe(recipeComponents[0], recipeComponents[1], recipeComponents[2],recipeComponents[3].replace("\\n", "\n")));
+    //         }
+    //         return recipeList;
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    //     return new ArrayList<>();
+    // }
 
-    public void performPostRecipeRequest(Recipe newRecipe) {
-        try {
-            URL url = new URI(urlStr).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
+    // public void performPostRecipeRequest(Recipe newRecipe) {
+    //     try {
+    //         URL url = new URI(urlStr).toURL();
+    //         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    //         conn.setRequestMethod("POST");
+    //         conn.setDoOutput(true);
+    //         conn.setDoInput(true);
 
-            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-            // request body format: "userID;recipeID;title;mealType;recipeDetail"
-            out.write(userIdGetter.getUserID() + ";" + newRecipe.getRecipeID() +  newRecipe.getRecipeID() + ";" + newRecipe.getTitle() + ";" + newRecipe.getMealType() + ";" + newRecipe.getRecipeDetail().replace("\n", "\\n"));
-            out.flush();
-            out.close();
+    //         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+    //         // request body format: "userID;recipeID;title;mealType;recipeDetail"
+    //         out.write(userIdGetter.getUserID() + ";" + newRecipe.getRecipeID() +  newRecipe.getRecipeID() + ";" + newRecipe.getTitle() + ";" + newRecipe.getMealType() + ";" + newRecipe.getRecipeDetail().replace("\n", "\\n"));
+    //         out.flush();
+    //         out.close();
         
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String response = in.readLine();
-            System.out.println("Post request response: " + response);
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    //         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    //         String response = in.readLine();
+    //         System.out.println("Post request response: " + response);
+    //         in.close();
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
-    public void performUpdateRecipeRequest(Recipe updateRecipe) {
-        try {
-            URL url = new URI(urlStr).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("PUT");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
+    // public void performUpdateRecipeRequest(Recipe updateRecipe) {
+    //     try {
+    //         URL url = new URI(urlStr).toURL();
+    //         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    //         conn.setRequestMethod("PUT");
+    //         conn.setDoOutput(true);
+    //         conn.setDoInput(true);
 
-            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-            // request body format: "userID;recipeID;recipeDetail"
-            out.write(userIdGetter.getUserID() + ";" + updateRecipe.getRecipeID() + ";" + updateRecipe.getRecipeDetail().replace("\n", "\\n"));
-            out.flush();
-            out.close();
+    //         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+    //         // request body format: "userID;recipeID;recipeDetail"
+    //         out.write(userIdGetter.getUserID() + ";" + updateRecipe.getRecipeID() + ";" + updateRecipe.getRecipeDetail().replace("\n", "\\n"));
+    //         out.flush();
+    //         out.close();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String response = in.readLine();
-            System.out.println("Put request response: " + response);
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    } 
+    //         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    //         String response = in.readLine();
+    //         System.out.println("Put request response: " + response);
+    //         in.close();
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // } 
 
-    public void performDeleteRequest(Recipe recipeToDelete) {
-        try {
-            URL url = new URI(urlStr).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("DELETE");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
+    // public void performDeleteRequest(Recipe recipeToDelete) {
+    //     try {
+    //         URL url = new URI(urlStr).toURL();
+    //         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    //         conn.setRequestMethod("DELETE");
+    //         conn.setDoOutput(true);
+    //         conn.setDoInput(true);
 
-            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-            // request body format: "userID;recipeID;recipeDetail"
-            out.write(userIdGetter.getUserID() + ";" + recipeToDelete.getRecipeID() + ";" + recipeToDelete.getTitle() + ";" + recipeToDelete.getMealType() + ";" + recipeToDelete.getRecipeDetail().replace("\n", "\\n"));
-            out.flush();
-            out.close();
+    //         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+    //         // request body format: "userID;recipeID;recipeDetail"
+    //         out.write(userIdGetter.getUserID() + ";" + recipeToDelete.getRecipeID() + ";" + recipeToDelete.getTitle() + ";" + recipeToDelete.getMealType() + ";" + recipeToDelete.getRecipeDetail().replace("\n", "\\n"));
+    //         out.flush();
+    //         out.close();
             
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream())); 
-            String response = in.readLine();
-            in.close();
-            System.out.println("Delete request response: " + response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    //         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream())); 
+    //         String response = in.readLine();
+    //         in.close();
+    //         System.out.println("Delete request response: " + response);
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 }
