@@ -23,10 +23,16 @@ public class Server {
       new InetSocketAddress(SERVER_HOSTNAME, SERVER_PORT),
     0
     );
+    //
+    HttpHandler authReqHandler = new AuthReqHandler();
+    server.createContext("/auth", authReqHandler);
+    //
     HttpHandler whisperReqHandler = new WhisperReqHandler();
     server.createContext("/whisper", whisperReqHandler);
+    //
     HttpHandler chatGptReqHandler = new ChatGptReqHandler();
     server.createContext("/chatgpt", chatGptReqHandler);
+    //
     HttpHandler recipeReqhandler = new RequestHandler();
     server.createContext("/", recipeReqhandler);
     server.setExecutor(threadPoolExecutor);
