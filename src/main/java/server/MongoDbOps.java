@@ -33,13 +33,18 @@ public class MongoDbOps {
     "mongodb+srv://fangzhongli0:dm3DeEs1C7UGwbOn@cluster0.zd5oxwj.mongodb.net/?retryWrites=true&w=majority";
   private static final String database = "pantryPal";
   private static final String collection = "recipesByUserId";
-  private static final String USER_COLLECTION = "userByUserId";
   private JsonWriterSettings prettyPrint = JsonWriterSettings
     .builder()
     .indent(true)
     .build();
 
-  public MongoDbOps() {}
+  public static final MongoDbOps MONGO_DB_OPS = new MongoDbOps();
+
+  private MongoDbOps() {}
+
+  public static MongoDbOps getInstance() {
+    return MONGO_DB_OPS;
+  }
 
   public String getUserPasswordByUsername(String username) {
     /* 
@@ -51,9 +56,7 @@ public class MongoDbOps {
         */
     try (MongoClient mongoClient = MongoClients.create(uri)) {
       MongoDatabase db = mongoClient.getDatabase(database);
-      MongoCollection<Document> userByUserID = db.getCollection(
-        USER_COLLECTION
-      );
+      MongoCollection<Document> userByUserID = db.getCollection(collection);
 
       Document user = userByUserID
         .find(new Document("username", username))
@@ -73,23 +76,33 @@ public class MongoDbOps {
     return null;
   }
 
-  public String getRecipesByUserID(String userID) {
+  public String getRecipesByUserID(String username) {
+    /*
+        given a String username, 
+        return all the recipes in the recipeIDs array in the user table
+
+        username should be in the user table, if not return null
+        get the recipeID array
+        for each recipeID, get the recipe from recipe table
+        ; separate each recipe field,
+        # separate 2 recipes
+    */
     try (MongoClient mongoClient = MongoClients.create(uri)) {
-      MongoDatabase sampleTrainingDB = mongoClient.getDatabase(database);
-      MongoCollection<Document> recipeCollection = sampleTrainingDB.getCollection(
-        collection
-      );
+      MongoDatabase db = mongoClient.getDatabase(database);
+      MongoCollection<Document> recipeCollection = db.getCollection(collection);
 
       Document user = recipeCollection
-        .find(new Document("userID", userID))
+        .find(new Document("username", username))
         .first();
-      System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
       if (user == null) {
         return null;
       }
+      System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
+
       JSONObject userJson = new JSONObject(user);
       JSONArray dataJsonArray = userJson.getJSONArray("recipes");
       System.out.println(dataJsonArray);
+
       String response = "";
       for (int i = 0; i < dataJsonArray.length(); i++) {
         JSONObject o = dataJsonArray.getJSONObject(i);

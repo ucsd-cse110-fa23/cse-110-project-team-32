@@ -16,8 +16,8 @@ import org.json.JSONObject;
 
 class AuthReqHandler implements HttpHandler {
 
-  private MongoDbOps mongoDbOps = new MongoDbOps();
-  private Helper helper = new Helper();
+  private final MongoDbOps MONGO_DB_OPS = MongoDbOps.getInstance();
+  private final Helper HELPER = Helper.getInstance();
 
   @Override
   public void handle(HttpExchange httpExchange) throws IOException {
@@ -51,12 +51,12 @@ class AuthReqHandler implements HttpHandler {
 
   public String handlePost(HttpExchange httpExchange) throws IOException {
     // read the request body
-    String reqBody = helper.readReqBody(httpExchange);
+    String reqBody = HELPER.readReqBody(httpExchange);
     int parserInd = reqBody.indexOf("#");
     String username = reqBody.substring(0, parserInd).split("=")[1];
     String password = reqBody.substring(parserInd + 1).split("=")[1];
     if (password.isEmpty()) return "false";
-    String dbPassword = mongoDbOps.getUserPasswordByUsername(username);
+    String dbPassword = MONGO_DB_OPS.getUserPasswordByUsername(username);
     if (!password.equals(dbPassword)) return "false";
     return "true";
   }
