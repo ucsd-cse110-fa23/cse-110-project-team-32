@@ -34,7 +34,6 @@ public class RootReqHandler implements HttpHandler {
   }
 
   private String handleGet(HttpExchange httpExchange) throws Exception {
-    System.out.println("2");
     URI uri = httpExchange.getRequestURI();
     // query is in the form: username=<username>
 

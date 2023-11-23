@@ -30,6 +30,9 @@ public class Server {
     HttpHandler authReqHandler = new AuthReqHandler();
     server.createContext("/auth", authReqHandler);
     //
+    HttpHandler recipeReqHandler = new RecipeReqHandler();
+    server.createContext("/recipe", recipeReqHandler);
+    //
     HttpHandler rootReqHandler = new RootReqHandler();
     server.createContext("/", rootReqHandler);
     HttpHandler whisperReqHandler = new WhisperReqHandler();

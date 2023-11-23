@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.json.JsonObject;
 import org.bson.json.JsonWriterSettings;
 import org.bson.json.JsonWriterSettings;
 import org.bson.types.ObjectId;
@@ -122,6 +123,82 @@ public class MongoDbOps {
       e.printStackTrace();
     }
     return "";
+  }
+
+  public String getRecipeByUsernameAndRecipeID(
+    String username,
+    String recipeID
+  ) {
+    /*
+        given a username and a recipe ID,
+        return the information of that specific recipe
+        if recipe does not exist, retur null;
+     */
+    try (MongoClient mongoClient = MongoClients.create(uri)) {
+      MongoDatabase db = mongoClient.getDatabase(database);
+      MongoCollection<Document> recipeCollection = db.getCollection(collection);
+
+      Document user = recipeCollection
+        .find(new Document("username", username))
+        .first();
+      if (user == null) {
+        return null;
+      }
+      System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
+
+      JSONObject userJson = new JSONObject(user);
+      JSONArray dataJsonArray = userJson.getJSONArray("recipes");
+      System.out.println(dataJsonArray);
+
+      JSONObject recipe = null;
+      for (int i = 0; i < dataJsonArray.length(); i++) {
+        JSONObject o = dataJsonArray.getJSONObject(i);
+        if (o.getString("recipeID").equals(recipeID)) {
+          recipe = o;
+          break;
+        }
+      }
+      if (recipe == null) return null;
+      return (
+        recipe.getString("recipeID") +
+        ";" +
+        recipe.getString("title") +
+        ";" +
+        recipe.getString("mealType") +
+        ";" +
+        recipe.getString("recipeDetail")
+      );
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public boolean createUser(String username, String password) {
+    try (MongoClient mongoClient = MongoClients.create(uri)) {
+      MongoDatabase sampleTrainingDB = mongoClient.getDatabase(database);
+      MongoCollection<Document> recipeCollection = sampleTrainingDB.getCollection(
+        collection
+      );
+      // if userID doesn't exist in table (user's first recipe)
+      // create a user with a recipe
+      Document user = recipeCollection.find(eq("username", username)).first();
+      if (user == null) {
+        user = new Document("_id", new ObjectId());
+        List<Document> recipes = new ArrayList<>();
+        user
+          .append("username", username)
+          .append("password", password)
+          .append("recipes", recipes);
+        recipeCollection.insertOne(user);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
   }
 
   public boolean createRecipeByUserId(
