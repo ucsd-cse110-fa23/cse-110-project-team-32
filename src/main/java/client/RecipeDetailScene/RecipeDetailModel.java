@@ -1,6 +1,6 @@
 package client.RecipeDetailScene;
 
-import client.HttpResponse.CrudRecipeResponse;
+import client.HttpResponse.ModifyRecipeResponse;
 import client.HttpResponse.ServerResponse;
 import client.Recipe;
 import client.UserSettings;
@@ -16,10 +16,10 @@ public class RecipeDetailModel {
   private static final String urlStr = "http://localhost:8100/";
   private final UserSettings USER_SETTINGS = new UserSettings();
 
-  public ServerResponse performPostRecipeRequest(Recipe newRecipe) {
-    CrudRecipeResponse res = new CrudRecipeResponse();
+  public ServerResponse<Boolean> performPostRecipeRequest(Recipe newRecipe) {
+    ServerResponse<Boolean> res = new ModifyRecipeResponse();
     try {
-      URL url = new URI(urlStr).toURL();
+      URL url = new URI(urlStr + "recipe/").toURL();
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("POST");
       conn.setDoOutput(true);
@@ -62,10 +62,12 @@ public class RecipeDetailModel {
     }
   }
 
-  public ServerResponse performUpdateRecipeRequest(Recipe updateRecipe) {
-    CrudRecipeResponse res = new CrudRecipeResponse();
+  public ServerResponse<Boolean> performUpdateRecipeRequest(
+    Recipe updateRecipe
+  ) {
+    ServerResponse<Boolean> res = new ModifyRecipeResponse();
     try {
-      URL url = new URI(urlStr).toURL();
+      URL url = new URI(urlStr + "recipe/").toURL();
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("PUT");
       conn.setDoOutput(true);
@@ -103,10 +105,10 @@ public class RecipeDetailModel {
     }
   }
 
-  public ServerResponse performDeleteRequest(Recipe recipeToDelete) {
-    CrudRecipeResponse res = new CrudRecipeResponse();
+  public ServerResponse<Boolean> performDeleteRequest(Recipe recipeToDelete) {
+    ServerResponse<Boolean> res = new ModifyRecipeResponse();
     try {
-      URL url = new URI(urlStr).toURL();
+      URL url = new URI(urlStr + "recipe/").toURL();
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("DELETE");
       conn.setDoOutput(true);

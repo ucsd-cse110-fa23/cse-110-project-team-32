@@ -1,5 +1,7 @@
 package client.RecipeListScene;
 
+import client.HttpResponse.RecipeListResponse;
+import client.HttpResponse.ServerResponse;
 import client.Recipe;
 import client.UserSettings;
 import java.io.BufferedReader;
@@ -18,7 +20,8 @@ public class RecipeListModel {
 
   public RecipeListModel() {}
 
-  public List<Recipe> performGetRecipeListRequest() {
+  public ServerResponse<List<Recipe>> performGetRecipeListRequest() {
+    ServerResponse<List<Recipe>> res = new RecipeListResponse();
     try {
       // String urlString = urlStr + "?userID=" + userIdGetter.getUserID();
       String urlString = urlStr + "?username=" + USER_SETTINGS.getUsername();
@@ -28,31 +31,23 @@ public class RecipeListModel {
       conn.setDoOutput(true);
       conn.setDoInput(true);
 
+      int responseCode = conn.getResponseCode();
       BufferedReader in = new BufferedReader(
         new InputStreamReader(conn.getInputStream())
       );
       String response = in.readLine();
       in.close();
 
-      List<Recipe> recipeList = new ArrayList<>();
-      if (response == null || response.equals("")) return recipeList;
-
-      String[] stringRecipeList = response.split("#");
-      for (String recipeString : stringRecipeList) {
-        String[] recipeComponents = recipeString.split(";");
-        recipeList.add(
-          new Recipe(
-            recipeComponents[0],
-            recipeComponents[1],
-            recipeComponents[2],
-            recipeComponents[3].replace("\\n", "\n")
-          )
-        );
+      if (responseCode == 200) {
+        res.setValidResponse(response);
+      } else {
+        res.setErrorResponse(responseCode, response);
       }
-      return recipeList;
+      return res;
     } catch (Exception e) {
       e.printStackTrace();
+      res.setErrorResponse(501, "Oops... The Server is Down!");
+      return res;
     }
-    return new ArrayList<>();
   }
 }

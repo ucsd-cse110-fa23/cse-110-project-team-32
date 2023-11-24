@@ -1,5 +1,6 @@
 package server;
 
+import com.google.common.net.HttpHeaders;
 import com.sun.net.httpserver.*;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -33,9 +34,12 @@ public class Server {
     HttpHandler recipeReqHandler = new RecipeReqHandler();
     server.createContext("/recipe", recipeReqHandler);
     //
-    // HttpHandler whisperReqHandler = new WhisperReqHandler();
-    // server.createContext("/translate", whisperReqHandler);
-    // //
+    HttpHandler whisperReqHandler = new WhisperReqHandler();
+    server.createContext("/translate", whisperReqHandler);
+    //
+    HttpHandler chatGptReqHandler = new ChatGptReqHandler();
+    server.createContext("/genrecipe", chatGptReqHandler);
+
     HttpHandler rootReqHandler = new RootReqHandler();
     server.createContext("/", rootReqHandler);
 

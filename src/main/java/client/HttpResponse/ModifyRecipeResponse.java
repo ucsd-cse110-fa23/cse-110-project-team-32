@@ -1,14 +1,12 @@
 package client.HttpResponse;
 
-public class WhisperResponse implements ServerResponse<String> {
+public class ModifyRecipeResponse implements ServerResponse<Boolean> {
 
   private String errorMsg;
   private int statusCode;
-  private String whisperResponseString;
 
-  public WhisperResponse() {
+  public ModifyRecipeResponse() {
     errorMsg = null;
-    whisperResponseString = null;
   }
 
   @Override
@@ -22,14 +20,13 @@ public class WhisperResponse implements ServerResponse<String> {
   }
 
   @Override
-  public String getResponse() {
-    return this.whisperResponseString;
+  public Boolean getResponse() {
+    return statusCode == 200;
   }
 
   @Override
   public void setValidResponse(String res) {
     statusCode = 200;
-    whisperResponseString = res;
     errorMsg = null;
   }
 
@@ -37,13 +34,11 @@ public class WhisperResponse implements ServerResponse<String> {
   public void setErrorResponse(int statusCode, String err) {
     this.statusCode = statusCode;
     this.errorMsg = err;
-    whisperResponseString = null;
   }
 
   @Override
   public void setServerDownResponse() {
     this.statusCode = 503;
     this.errorMsg = "The server is Down!";
-    whisperResponseString = null;
   }
 }

@@ -1,11 +1,11 @@
 package client.HttpResponse;
 
-public interface ServerResponse {
+public interface ServerResponse<E> {
   public int getStatusCode();
 
   public String getErrorMsg();
 
-  public Object getResponse();
+  public E getResponse();
 
   public void setValidResponse(String res);
 

@@ -1,5 +1,6 @@
 package client.CreateRecipeScene;
 
+import client.HttpResponse.CreateRecipeResponse;
 import client.HttpResponse.ServerResponse;
 import client.HttpResponse.WhisperResponse;
 import client.Recipe;
@@ -26,13 +27,13 @@ public class CreateRecipeModel {
 
   public CreateRecipeModel() {}
 
-  public String translateByWhisper(String filePath) {
-    ServerResponse res = new WhisperResponse();
+  public ServerResponse<String> translateByWhisper(String filePath) {
+    ServerResponse<String> res = new WhisperResponse();
     try {
       // Create file object from file path
       File file = new File(filePath);
       // Set up HTTP connection
-      URL url = new URI(URL + "whisper").toURL();
+      URL url = new URI(URL + "translate").toURL();
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("POST");
       connection.setDoOutput(true);
@@ -58,14 +59,12 @@ public class CreateRecipeModel {
       } else {
         res.setErrorResponse(responseCode, responseStr.toString());
       }
-      //   return res;
-      return responseStr.toString();
+      return res;
     } catch (ConnectException connectionException) {
       System.out.println("[CreateRecipeModel.java] line 57");
       connectionException.printStackTrace();
       res.setServerDownResponse();
-      //   return res;
-      return "Server is Down";
+      return res;
     } catch (Exception e) {
       System.out.println("[CreateRecipeModel.java] line 82");
       e.printStackTrace();
@@ -73,8 +72,7 @@ public class CreateRecipeModel {
         0,
         "[CreateRecipeModel.java line 71] This error is not handled properly"
       );
-      //   return res;
-      return "";
+      return res;
     }
   }
 
@@ -102,10 +100,14 @@ public class CreateRecipeModel {
     fileInputStream.close();
   }
 
-  public Recipe generateByChatGPT(String mealType, String ingredients) {
+  public ServerResponse<Recipe> generateByChatGPT(
+    String mealType,
+    String ingredients
+  ) {
+    ServerResponse<Recipe> res = new CreateRecipeResponse();
     try {
       // Set up HTTP connection
-      URL url = new URI(URL + "chatgpt").toURL();
+      URL url = new URI(URL + "genrecipe").toURL();
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("POST");
       connection.setDoOutput(true);
@@ -127,16 +129,13 @@ public class CreateRecipeModel {
       }
       in.close();
 
-      // parse the response string
-      String generatedText = response.toString();
-      // System.out.println("[CreateRecipeModel.java ] line 117, server returns to model chatGPT output: " + generatedText);
-      String[] colonSeparatedResultArray = generatedText.split("#");
-      String title = colonSeparatedResultArray[0].strip();
-      title = title.substring(0, title.length() - 1); // remove the ending comma
-      String recipeDetail = colonSeparatedResultArray[1].strip();
-
-      Recipe createdRecipe = new Recipe(title, mealType, recipeDetail);
-      return createdRecipe;
+      String responseText = mealType + "#" + response.toString();
+      if (responseCode == 200) {
+        res.setValidResponse(responseText);
+      } else {
+        res.setErrorResponse(responseCode, responseText);
+      }
+      return res;
     } catch (Exception e) {
       System.out.println("[CreateRecipeModel.java] line 126");
       e.printStackTrace();
@@ -150,7 +149,7 @@ public class CreateRecipeModel {
       mealType +
       " recipe with the ingredients " +
       ingredients +
-      ". In the form of: <Title>, character: '#' Ingredients: <Line broken ingredient list>, Instructions: <Line broken instruction list>" +
+      ". In the form of: <Title> followed by a single '#', Ingredients: <Line broken ingredient list>, Instructions: <Line broken instruction list>" +
       ", do not include any chars over a byte long in size, and replace bullet points by '-'"
     );
   }
@@ -161,10 +160,10 @@ public class CreateRecipeModel {
     boolean isDummyRecipe
   ) {
     if (isDummyRecipe) {
-      return generateByChatGPT(mealType, ingredients);
+      return generateByChatGPT(mealType, ingredients).getResponse();
       // return new Recipe("Title", "Meal Type", "Ingredients");
     } else {
-      return generateByChatGPT(mealType, ingredients);
+      return generateByChatGPT(mealType, ingredients).getResponse();
     }
   }
 }

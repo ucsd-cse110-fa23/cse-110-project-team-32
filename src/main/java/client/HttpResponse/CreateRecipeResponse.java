@@ -1,11 +1,14 @@
 package client.HttpResponse;
 
-public class CrudRecipeResponse implements ServerResponse {
+import client.Recipe;
+
+public class CreateRecipeResponse implements ServerResponse<Recipe> {
 
   private String errorMsg;
   private int statusCode;
+  private Recipe recipe;
 
-  public CrudRecipeResponse() {
+  public CreateRecipeResponse() {
     errorMsg = null;
   }
 
@@ -20,14 +23,20 @@ public class CrudRecipeResponse implements ServerResponse {
   }
 
   @Override
-  public Object getResponse() {
-    return null;
+  public Recipe getResponse() {
+    return recipe;
   }
 
   @Override
   public void setValidResponse(String res) {
     statusCode = 200;
     errorMsg = null;
+    String[] hashSeparatedResultArray = res.split("#");
+    String mealType = hashSeparatedResultArray[0].strip();
+    String title = hashSeparatedResultArray[1].strip();
+    String recipeDetail = hashSeparatedResultArray[2].strip();
+
+    recipe = new Recipe(title, mealType, recipeDetail);
   }
 
   @Override

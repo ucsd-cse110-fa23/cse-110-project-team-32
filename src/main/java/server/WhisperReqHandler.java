@@ -26,30 +26,28 @@ public class WhisperReqHandler implements HttpHandler {
   private static final String TOKEN =
     "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";
   private static final String MODEL = "whisper-1";
+  private int statusCode = 200;
 
   public WhisperReqHandler() {}
 
   public void handle(HttpExchange httpExchange) throws IOException {
     String response = "Request Received";
+    statusCode = 200;
     String method = httpExchange.getRequestMethod();
-    boolean isRequestValid = true;
     try {
-      if (method.equals("POST")) {
+      if (method.equals(Constants.POST)) {
         response = handlePost(httpExchange);
       } else {
-        isRequestValid = false;
-        throw new Exception("Invalid Request Method");
+        statusCode = 404;
+        response = Constants.INVALID_REQ_TO_ROUTE + " /translate";
       }
     } catch (Exception e) {
       System.out.println("There Is An Error In Request Received.");
-      isRequestValid = false;
+      statusCode = 503;
       response = e.toString();
       e.printStackTrace();
     } finally {
-      httpExchange.sendResponseHeaders(
-        isRequestValid ? 200 : 404,
-        response.length()
-      );
+      httpExchange.sendResponseHeaders(statusCode, response.length());
       OutputStream outStream = httpExchange.getResponseBody();
       outStream.write(response.getBytes());
       outStream.flush();
