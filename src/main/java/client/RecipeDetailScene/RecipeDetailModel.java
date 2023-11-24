@@ -1,5 +1,7 @@
 package client.RecipeDetailScene;
 
+import client.HttpResponse.CrudRecipeResponse;
+import client.HttpResponse.ServerResponse;
 import client.Recipe;
 import client.UserSettings;
 import java.io.BufferedReader;
@@ -14,7 +16,8 @@ public class RecipeDetailModel {
   private static final String urlStr = "http://localhost:8100/";
   private final UserSettings USER_SETTINGS = new UserSettings();
 
-  public void performPostRecipeRequest(Recipe newRecipe) {
+  public ServerResponse performPostRecipeRequest(Recipe newRecipe) {
+    CrudRecipeResponse res = new CrudRecipeResponse();
     try {
       URL url = new URI(urlStr).toURL();
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -39,18 +42,28 @@ public class RecipeDetailModel {
       out.flush();
       out.close();
 
+      int responseCode = conn.getResponseCode();
       BufferedReader in = new BufferedReader(
         new InputStreamReader(conn.getInputStream())
       );
       String response = in.readLine();
       System.out.println("Post request response: " + response);
       in.close();
+      if (responseCode == 200) {
+        res.setValidResponse("");
+      } else {
+        res.setErrorResponse(responseCode, response);
+      }
+      return res;
     } catch (Exception e) {
       e.printStackTrace();
+      res.setErrorResponse(503, "Oops... The Server is Down!");
+      return res;
     }
   }
 
-  public void performUpdateRecipeRequest(Recipe updateRecipe) {
+  public ServerResponse performUpdateRecipeRequest(Recipe updateRecipe) {
+    CrudRecipeResponse res = new CrudRecipeResponse();
     try {
       URL url = new URI(urlStr).toURL();
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -70,18 +83,28 @@ public class RecipeDetailModel {
       out.flush();
       out.close();
 
+      int responseCode = conn.getResponseCode();
       BufferedReader in = new BufferedReader(
         new InputStreamReader(conn.getInputStream())
       );
       String response = in.readLine();
       System.out.println("Put request response: " + response);
       in.close();
+      if (responseCode == 200) {
+        res.setValidResponse("");
+      } else {
+        res.setErrorResponse(responseCode, response);
+      }
+      return res;
     } catch (Exception e) {
       e.printStackTrace();
+      res.setErrorResponse(503, "Oops... The Server is Down!");
+      return res;
     }
   }
 
-  public void performDeleteRequest(Recipe recipeToDelete) {
+  public ServerResponse performDeleteRequest(Recipe recipeToDelete) {
+    CrudRecipeResponse res = new CrudRecipeResponse();
     try {
       URL url = new URI(urlStr).toURL();
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -105,14 +128,23 @@ public class RecipeDetailModel {
       out.flush();
       out.close();
 
+      int responseCode = conn.getResponseCode();
       BufferedReader in = new BufferedReader(
         new InputStreamReader(conn.getInputStream())
       );
       String response = in.readLine();
-      in.close();
       System.out.println("Delete request response: " + response);
+      in.close();
+      if (responseCode == 200) {
+        res.setValidResponse("");
+      } else {
+        res.setErrorResponse(responseCode, response);
+      }
+      return res;
     } catch (Exception e) {
       e.printStackTrace();
+      res.setErrorResponse(503, "Oops... The Server is Down!");
+      return res;
     }
   }
 }

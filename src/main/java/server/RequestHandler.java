@@ -94,7 +94,7 @@ public class RequestHandler implements HttpHandler {
     String userID = dataComponents[0];
     String recipeID = dataComponents[1];
     String recipeDetail = dataComponents[2];
-    boolean isSuccessful = MONGO_DB_OPS.updateRecipeByUserId(
+    boolean isSuccessful = MONGO_DB_OPS.updateRecipeByUsername(
       userID,
       recipeID,
       recipeDetail

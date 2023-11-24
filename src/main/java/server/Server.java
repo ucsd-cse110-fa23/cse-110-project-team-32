@@ -33,16 +33,12 @@ public class Server {
     HttpHandler recipeReqHandler = new RecipeReqHandler();
     server.createContext("/recipe", recipeReqHandler);
     //
+    // HttpHandler whisperReqHandler = new WhisperReqHandler();
+    // server.createContext("/translate", whisperReqHandler);
+    // //
     HttpHandler rootReqHandler = new RootReqHandler();
     server.createContext("/", rootReqHandler);
-    HttpHandler whisperReqHandler = new WhisperReqHandler();
-    server.createContext("/whisper", whisperReqHandler);
-    //
-    HttpHandler chatGptReqHandler = new ChatGptReqHandler();
-    server.createContext("/chatgpt", chatGptReqHandler);
-    //
-    // HttpHandler recipeReqhandler = new RequestHandler();
-    // server.createContext("/", recipeReqhandler);
+
     server.setExecutor(threadPoolExecutor);
     server.start();
     System.out.println("Server started on port " + SERVER_PORT);

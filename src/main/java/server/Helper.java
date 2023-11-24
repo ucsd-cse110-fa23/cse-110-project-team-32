@@ -23,8 +23,9 @@ public class Helper {
     String inputLine;
     StringBuilder reqBody = new StringBuilder();
     while ((inputLine = in.readLine()) != null) {
-      reqBody.append('\n' + inputLine);
+      reqBody.append(inputLine + '\n');
     }
+    reqBody.deleteCharAt(reqBody.length() - 1);
     in.close();
     return reqBody.toString();
   }

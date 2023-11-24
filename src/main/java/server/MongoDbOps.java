@@ -215,7 +215,7 @@ public class MongoDbOps {
       );
       // if userID doesn't exist in table (user's first recipe)
       // create a user with a recipe
-      Document user = recipeCollection.find(eq("userID", userID)).first();
+      Document user = recipeCollection.find(eq("username", userID)).first();
       Document newRecipe = new Document("recipeID", recipeID)
         .append("title", title)
         .append("mealType", mealType)
@@ -224,11 +224,11 @@ public class MongoDbOps {
         user = new Document("_id", new ObjectId());
         List<Document> recipes = new ArrayList<>();
         recipes.add(newRecipe);
-        user.append("userID", userID).append("recipes", recipes);
+        user.append("username", userID).append("recipes", recipes);
         recipeCollection.insertOne(user);
       } else {
         // user already exists, so just append a recipe entry in the recipes list
-        Bson filter = Filters.eq("userID", userID);
+        Bson filter = Filters.eq("username", userID);
         Bson update = Updates.push("recipes", newRecipe);
         Document oldVersion = recipeCollection.findOneAndUpdate(filter, update);
       }
@@ -239,24 +239,25 @@ public class MongoDbOps {
     return true;
   }
 
-  public boolean updateRecipeByUserId(
-    String userID,
+  public boolean updateRecipeByUsername(
+    String username,
     String recipeID,
     String recipeDetail
   ) {
-    // System.out.println("updated recipe detail: " + recipeDetail);
+    System.out.println("updated recipe detail: " + recipeDetail);
     try (MongoClient mongoClient = MongoClients.create(uri)) {
       MongoDatabase sampleTrainingDB = mongoClient.getDatabase(database);
       MongoCollection<Document> recipeCollection = sampleTrainingDB.getCollection(
         collection
       );
 
-      Bson filter = eq("userID", userID);
+      Bson filter = eq("username", username);
       List<Bson> arrayFilter = new ArrayList<>();
       arrayFilter.add(eq("ele.recipeID", recipeID));
       UpdateOptions options = new UpdateOptions().arrayFilters(arrayFilter);
       Bson update = set("recipes.$[ele].recipeDetail", recipeDetail);
       UpdateResult result = recipeCollection.updateOne(filter, update, options);
+      System.out.println("result: " + result);
       return true;
     } catch (Exception e) {
       e.printStackTrace();
@@ -265,7 +266,7 @@ public class MongoDbOps {
   }
 
   public boolean deleteRecipeByUserIdRecipeId(
-    String userID,
+    String username,
     String recipeID,
     String title,
     String mealType,
@@ -278,7 +279,7 @@ public class MongoDbOps {
       MongoCollection<Document> recipeCollection = sampleTrainingDB.getCollection(
         collection
       );
-      Bson filter = Filters.eq("userID", userID);
+      Bson filter = Filters.eq("username", username);
       Bson delete = Updates.pull(
         "recipes",
         new Document("recipeID", recipeID)

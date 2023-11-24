@@ -14,7 +14,10 @@ public final class Constants {
     "ERROR: Invalid Get Request to Route";
   public static final String INVALID_POST_TO_ROUTE =
     "ERROR: Invalid Post Request to Route";
-
+  public static final String INVALID_PUT_TO_ROUTE =
+    "ERROR: Invalid Put Request to Route";
+  public static final String INVALID_DELETE_TO_ROUTE =
+    "ERROR: Invalid Delete Request to Route";
   public static final String USER_EXISTS = "ERROR: Username Already Exists";
 
   private Constants() {}

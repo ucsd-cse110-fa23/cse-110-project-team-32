@@ -27,7 +27,7 @@ class AuthReqHandler implements HttpHandler {
     // should only handle POST request
     String method = httpExchange.getRequestMethod();
     String response = "";
-
+    statusCode = 200;
     try {
       if (method.equals(Constants.GET)) {
         response = handleGet(httpExchange);
