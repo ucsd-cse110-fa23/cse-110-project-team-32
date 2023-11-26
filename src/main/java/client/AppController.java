@@ -3,8 +3,10 @@ package client;
 import java.util.List;
 import java.util.ArrayList;
 import client.CreateRecipeScene.*;
+import client.LogInScence.LogInView;
 import client.RecipeDetailScene.*;
 import client.RecipeListScene.*;
+import client.CreateAccountScene.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -27,26 +29,37 @@ public class AppController {
     private Scene recipeDetailScene;
     private CreateRecipeView createRecipeView; // => Crv
     private Scene createRecipeScene;
+    private CreateAccountView createAccountView; // => Cav
+    private Scene createAccountScene;
+    private LogInView logInView;
+    private Scene logInScence;
+    
     
     private static final Double windowWidth = 500D;
     private static final Double windowHeight = 500D;
 
-    public AppController(RecipeListView recipeListView, RecipeDetailView recipeDetailView, CreateRecipeView createRecipeView, Stage stage) {
+    public AppController(RecipeListView recipeListView, RecipeDetailView recipeDetailView, CreateRecipeView createRecipeView, 
+    CreateAccountView createAccountView,LogInView logInView, Stage stage) {
         this.recipeListView = recipeListView;
         this.recipeListContainer = this.recipeListView.getRecipeListContainer();
         this.recipeDetailView = recipeDetailView;
         this.createRecipeView = createRecipeView;
+        this.createAccountView = createAccountView;
+        this.logInView = logInView;
 
         this.recipeListScene = new Scene(new ScrollPane(recipeListView.getBorderPane()), windowWidth, windowHeight);
         this.recipeDetailScene = new Scene(new ScrollPane(recipeDetailView.getBorderPane()), windowWidth, windowHeight);
         this.createRecipeScene = new Scene(new ScrollPane(createRecipeView.getBorderPane()), windowWidth, windowHeight);
+        this.createAccountScene = new Scene(new ScrollPane(createAccountView.getBorderPane()), windowWidth, windowHeight);
+        this.logInScence = new Scene(new ScrollPane(logInView.getBorderPane()), windowWidth, windowHeight);
         // this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth, windowHeight);
         // this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(), windowWidth, windowHeight);
         // this.createRecipeScene = new Scene(createRecipeView.getBorderPane(), windowWidth, windowHeight);
         
         this.stage = stage;
-
-        init();
+        this.stage.setScene(logInScence);
+        this.stage.setTitle("Log In");
+        // init();
        }
 
     public AppController() {
