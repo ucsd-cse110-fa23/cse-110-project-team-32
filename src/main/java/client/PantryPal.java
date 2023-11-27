@@ -5,7 +5,6 @@ import client.CreateRecipeScene.*;
 import client.CreateAccountScene.*;
 import client.LogInScence.*;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class PantryPal extends Application {

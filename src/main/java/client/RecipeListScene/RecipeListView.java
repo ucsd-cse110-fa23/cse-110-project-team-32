@@ -25,6 +25,7 @@ public class RecipeListView {
         HBox buttonGroup = new HBox();
         // create button
         newRecipeButton = new Button("New Recipe");
+        newRecipeButton.getStyleClass().add("textBox");
         // add button to button group
         buttonGroup.getChildren().add(newRecipeButton);
         // set button group up top
