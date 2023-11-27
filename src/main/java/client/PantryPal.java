@@ -2,8 +2,8 @@ package client;
 import client.RecipeListScene.*;
 import client.RecipeDetailScene.*;
 import client.CreateRecipeScene.*;
+import client.LogInScene.*;
 import client.CreateAccountScene.*;
-import client.LogInScence.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -23,15 +23,15 @@ public class PantryPal extends Application {
         RecipeDetailModel recipeDetailModel = new RecipeDetailModel();
         RecipeListModel recipeListModel = new RecipeListModel();
         CreateRecipeModel createRecipeModel = new CreateRecipeModel();
-        //TODO: add createAccountModel
-        //TODO: add logInModel
+        CreateAccountModel createAccountModel = new CreateAccountModel();
+        LogInModel logInModel = new LogInModel();
 
         AppController appController = new AppController(recipeListView, recipeDetailView, createRecipeView, createAccView, logInView, primaryStage);
         RecipeDetailController rdController = new RecipeDetailController(recipeDetailView, recipeDetailModel, appController);
         RecipeListController rlController = new RecipeListController(recipeListView, recipeListModel, appController);
         CreateRecipeController rcController = new CreateRecipeController(createRecipeView, createRecipeModel, appController);
-        //TODO: add createAccountController
-        //TODO: add logInController
+        CreateAccountController caController = new CreateAccountController(createAccView, createAccountModel, appController); 
+        LogInController linController = new LogInController(logInView, logInModel, appController);
 
         primaryStage.show();
     }

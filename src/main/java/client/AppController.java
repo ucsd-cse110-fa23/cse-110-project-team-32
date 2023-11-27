@@ -3,7 +3,7 @@ package client;
 import java.util.List;
 import java.util.ArrayList;
 import client.CreateRecipeScene.*;
-import client.LogInScence.LogInView;
+import client.LogInScene.LogInView;
 import client.RecipeDetailScene.*;
 import client.RecipeListScene.*;
 import client.CreateAccountScene.*;
@@ -32,7 +32,7 @@ public class AppController {
     private CreateAccountView createAccountView; // => Cav
     private Scene createAccountScene;
     private LogInView logInView;
-    private Scene logInScence;
+    private Scene logInScene;
     
     
     private static final Double windowWidth = 500D;
@@ -51,13 +51,13 @@ public class AppController {
         this.recipeDetailScene = new Scene(new ScrollPane(recipeDetailView.getBorderPane()), windowWidth, windowHeight);
         this.createRecipeScene = new Scene(new ScrollPane(createRecipeView.getBorderPane()), windowWidth, windowHeight);
         this.createAccountScene = new Scene(new ScrollPane(createAccountView.getBorderPane()), windowWidth, windowHeight);
-        this.logInScence = new Scene(new ScrollPane(logInView.getBorderPane()), windowWidth, windowHeight);
+        this.logInScene = new Scene(new ScrollPane(logInView.getBorderPane()), windowWidth, windowHeight);
         // this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth, windowHeight);
         // this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(), windowWidth, windowHeight);
         // this.createRecipeScene = new Scene(createRecipeView.getBorderPane(), windowWidth, windowHeight);
         
         this.stage = stage;
-        this.stage.setScene(logInScence);
+        this.stage.setScene(logInScene);
         this.stage.setTitle("Log In");
         // init();
        }
@@ -113,7 +113,7 @@ public class AppController {
         System.out.println("After deleting a recipe, the size of the recipe list is now " + recipeListContainer.getChildren().size());
     }
 
-    // Changes scene to recipe list view scence
+    // Changes scene to recipe list view scene
     public void changeToRecipeListScene() {
         // Sanity check
         if (stage != null && recipeListScene != null) {
@@ -151,6 +151,25 @@ public class AppController {
         // for testing purposes
         return stage;
     }
+
+    public void changeToCreateAccountScene() {
+        // Sanity check
+        if (stage != null && createAccountScene != null) {
+            // Set scene
+            stage.setScene(createAccountScene);
+            stage.setTitle("Create Account");
+        }
+    }
+
+    public void changeToLogInScene() {
+        // Sanity check
+        if (stage != null && logInScene != null) {
+            // Set scene
+            stage.setScene(logInScene);
+            stage.setTitle("Log In");
+        }
+    }
+
 }
 
 

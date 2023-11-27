@@ -1,4 +1,4 @@
-package client.LogInScence;
+package client.LogInScene;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -20,6 +20,8 @@ public class LogInView {
     private VBox accountDetails;
     private HBox buttonList;
     private CheckBox rememberMe;
+    private Boolean checked;
+    private Text error;
     //Remember me checkbox
 
     public LogInView(){
@@ -32,10 +34,13 @@ public class LogInView {
         password.setPromptText("password");
         rememberMe = new CheckBox("Remember Me");
         rememberMe.setAllowIndeterminate(false); //Only care if CheckBox is selected or unselected
-        accountDetails = new VBox(username, password, rememberMe);
+        error = new Text("Incorrect Username or Password");
+        accountDetails = new VBox(username, password, rememberMe, error);
         borderPane.setCenter(accountDetails);
         logInButton = new Button("Log In");
         createAccButton = new Button("Create Account");
+        error.setVisible(false);
+
 
         buttonList = new HBox(createAccButton,logInButton);
         borderPane.setBottom(buttonList);
@@ -63,13 +68,20 @@ public class LogInView {
         this.logInButton.setOnAction(eventHandler);
     }
 
-    public void isChecked(){
+    public Boolean isChecked(){
         if(rememberMe.isSelected()){
             //TODO: set auto log-in method?
+            checked = true;
             System.out.println("Box is Checked!");
+            return checked;
         }
         else{
-            return; 
+            checked = false;
+            return checked; 
         }
+    }
+
+    public void showError() {
+        error.setVisible(true);
     }
 }

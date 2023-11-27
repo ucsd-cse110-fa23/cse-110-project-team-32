@@ -18,6 +18,7 @@ public class CreateAccountView {
     private TextField password;
     private VBox accountDetails;
     private HBox buttonList;
+    private Text error;
 
     public CreateAccountView(){
         borderPane = new BorderPane();
@@ -27,12 +28,14 @@ public class CreateAccountView {
         username.setPromptText("username");
         password = new TextField();
         password.setPromptText("password");
-        accountDetails = new VBox(username, password);
+        error = new Text("Username already taken");
+        accountDetails = new VBox(username, password, error);
         borderPane.setCenter(accountDetails);
         createAccButton = new Button("Create Account");
         logInButton = new Button("Log In");
         buttonList = new HBox(createAccButton,logInButton);
         borderPane.setBottom(buttonList);
+        error.setVisible(false);
     }
 
     // getter method for borderpane
@@ -54,5 +57,9 @@ public class CreateAccountView {
 
     public void setLogInButtonOnAction(EventHandler<ActionEvent> eventHandler){
         this.logInButton.setOnAction(eventHandler);
+    }
+
+    public void showError() {
+        error.setVisible(true);
     }
 }
