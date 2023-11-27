@@ -7,6 +7,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 // View class for recipe list
@@ -17,17 +19,28 @@ public class RecipeListView {
     private VBox recipeListContainer;
     // Button to add new recipe
     private Button newRecipeButton;
+    // Button to log out
+    private Button logOutButton;
 
     // Constructor
     public RecipeListView() {
         borderPane = new BorderPane();
-        // creates horizontal box for the button
-        HBox buttonGroup = new HBox();
-        // create button
+        // create buttons
         newRecipeButton = new Button("New Recipe");
         newRecipeButton.getStyleClass().add("textBox");
-        // add button to button group
-        buttonGroup.getChildren().add(newRecipeButton);
+        logOutButton = new Button("Log Out");
+
+        Region r = new Region();
+        HBox.setHgrow(r, Priority.ALWAYS);
+
+        // creates horizontal box for the buttons and adds buttons to button group
+        HBox buttonGroup = new HBox(newRecipeButton, r, logOutButton);
+        buttonGroup.setPrefSize(500D,20);
+        
+        // // add button to button group
+        // buttonGroup.getChildren().add(newRecipeButton);
+        // buttonGroup.getChildren().add(logOutButton);
+
         // set button group up top
         borderPane.setTop(buttonGroup);
         // creates container for recipe list
@@ -37,6 +50,8 @@ public class RecipeListView {
         // scrollableList.setFitToWidth(true);
         // scrollableList.setFitToHeight(true);
         borderPane.setCenter(recipeListContainer);
+
+        
     }
 
 
@@ -59,5 +74,10 @@ public class RecipeListView {
     // Setter for action when new recipe button is clicked (set to an event)
     public void setNewRecipeButtonAction(EventHandler<ActionEvent> eventHandler) {
         this.newRecipeButton.setOnAction(eventHandler);
+    }
+
+    // setter method for "Log Out" button
+    public void setLogOutButtonAction(EventHandler<ActionEvent> eventHandler){
+        this.logOutButton.setOnAction(eventHandler);
     }
 }

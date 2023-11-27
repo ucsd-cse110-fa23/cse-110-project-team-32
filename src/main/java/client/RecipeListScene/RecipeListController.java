@@ -21,8 +21,9 @@ public class RecipeListController {
     this.recipeListModel = recipeListModel;
     this.appController = appController;
 
+    recipeListView.setLogOutButtonAction(this::handlelogOutButton);
     recipeListView.setNewRecipeButtonAction(this::handleNewRecipeButtonAction);
-    readAllRecipesByUID();
+    // readAllRecipesByUID();
   }
 
   private void readAllRecipesByUID() {
@@ -38,5 +39,9 @@ public class RecipeListController {
 
   private void handleNewRecipeButtonAction(ActionEvent event) {
     appController.changeToCreateRecipeScene();
+  }
+
+  private void handlelogOutButton(ActionEvent event){
+    appController.changeToLogInScene();
   }
 }

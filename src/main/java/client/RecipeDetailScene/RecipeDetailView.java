@@ -25,7 +25,7 @@ public class RecipeDetailView {
     private Button saveOrEditButton = new Button();
     private Button backButton = new Button("Back");
     private Button deleteButton = new Button("Delete");
-
+    private Button logOutButton = new Button("Log Out");
 
     public RecipeDetailView() {
         borderPane = new BorderPane();
@@ -36,7 +36,7 @@ public class RecipeDetailView {
         // deleteButton.setStyle(Styles.defaultButtonStyle);
         HBox buttonGroup = new HBox();
         buttonGroup.setSpacing(15);
-        buttonGroup.getChildren().addAll(saveOrEditButton, backButton, deleteButton);
+        buttonGroup.getChildren().addAll(saveOrEditButton, backButton, deleteButton, logOutButton);
         buttonGroup.setPrefSize(500, 60); // Size of the header
         buttonGroup.setAlignment(Pos.CENTER);
         borderPane.setTop(buttonGroup);
@@ -87,6 +87,11 @@ public class RecipeDetailView {
 
     public void setDeleteButtonAction(EventHandler<ActionEvent> eventHandler) {
         this.deleteButton.setOnAction(eventHandler);
+    }
+
+    // setter method for "Log Out" button
+    public void setLogOutButtonAction(EventHandler<ActionEvent> eventHandler){
+        this.logOutButton.setOnAction(eventHandler);
     }
 
     public void updateRecipeDetail() {
