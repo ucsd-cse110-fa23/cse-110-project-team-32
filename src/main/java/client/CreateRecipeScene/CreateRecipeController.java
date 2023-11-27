@@ -53,6 +53,7 @@ public class CreateRecipeController {
     }
 
     private void handleCancelButtonAction(ActionEvent event) {
+        createRecipeView.reset();
         appController.changeToRecipeListScene();
     }
 
