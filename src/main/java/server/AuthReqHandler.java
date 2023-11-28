@@ -20,7 +20,7 @@ class AuthReqHandler implements HttpHandler {
 
   private final MongoDbOps MONGO_DB_OPS = MongoDbOps.getInstance();
   private final Helper HELPER = Helper.getInstance();
-  private int statusCode = 200;
+  private int statusCode = 200; //How do get status code from CreateAccModel?
 
   @Override
   public void handle(HttpExchange httpExchange) throws IOException {
@@ -56,8 +56,8 @@ class AuthReqHandler implements HttpHandler {
     // decode request
     try {
       URI uri = httpExchange.getRequestURI();
-      String query = uri.getRawQuery();
-      String[] usernameAndPassword = query.split("&");
+      String query = uri.getRawQuery(); 
+      String[] usernameAndPassword = query.split("&"); //?=Java, ?=
       String username = usernameAndPassword[0].split("=")[1];
       String password = usernameAndPassword[1].split("=")[1];
       if (
@@ -69,12 +69,18 @@ class AuthReqHandler implements HttpHandler {
         statusCode = 404;
         return Constants.INVALID_GET_TO_ROUTE + "/auth";
       }
+      // if(MONGO_DB_OPS.getRecipesByUserID(username) == null){
+      //   return Constants.USER_EXISTS;
+      // }
+
       String mongoPassword = MONGO_DB_OPS.getUserPasswordByUsername(username);
       if (mongoPassword.equals(password)) {
         return Constants.TRUE;
       } else {
         return Constants.FALSE;
       }
+
+
     } catch (Exception e) {
       statusCode = 404;
       return Constants.INVALID_GET_TO_ROUTE + "/auth";
@@ -102,4 +108,5 @@ class AuthReqHandler implements HttpHandler {
       return Constants.INVALID_POST_TO_ROUTE + "/auth";
     }
   }
+
 }

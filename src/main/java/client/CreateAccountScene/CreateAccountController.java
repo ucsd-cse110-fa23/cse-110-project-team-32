@@ -29,14 +29,24 @@ public class CreateAccountController {
     private void handleCreateButtonAction(ActionEvent event) {
         String user = createAccountView.getUsername();
         String pass = createAccountView.getPassword();
-        if (createAccountModel.checkValidUsername(user) == false) {
-            createAccountModel.storeAccountDetails(user, pass);
+        if(createAccountModel.performStoreDetails(user, pass).getStatusCode()==503
+        || createAccountModel.performStoreDetails(user, pass).getStatusCode()==501
+        ){
+            createAccountView.showError();
+        }
+        else{
             appController.changeToRecipeListScene();
         }
-        else {
-            createAccountView.showError();
-            System.out.println("Invalid Username");
-        }
+
+
+        // if (createAccountModel.checkValidUsername(user) == false) {
+        //     createAccountModel.performStoreDetails(user, pass);
+        //     appController.changeToRecipeListScene();
+        // }
+        // else {
+        //     createAccountView.showError();
+        //     System.out.println("Invalid Username");
+        // }
     }
 
 
