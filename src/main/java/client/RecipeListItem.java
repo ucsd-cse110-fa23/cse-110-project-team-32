@@ -8,10 +8,18 @@ public class RecipeListItem extends HBox {
 
     public RecipeListItem(Recipe recipe) {
         this.recipe = recipe;
-        this.getChildren().add(new Text(recipe.getTitle()));
+
+        Text titleText = new Text(recipe.getTitle());
+        Text mealTypeText = new Text(" - " + recipe.getMealType());
+
+        this.getChildren().addAll(titleText, mealTypeText);
     }
 
     public Recipe getRecipe() {
         return recipe;
+    }
+
+    public String getMealType() {
+        return recipe.getMealType();
     }
 }
