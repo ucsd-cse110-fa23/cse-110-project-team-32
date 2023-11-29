@@ -124,6 +124,43 @@ public class AppController {
             
     }
 
+    public void handleFilter(String mealType) {
+        List<Recipe> allRecipes = getRecipeList();
+        List<Recipe> filteredRecipes = new ArrayList<>();
+    
+        if (mealType != null) {
+            for (Recipe recipe : allRecipes) {
+                if (mealType.equalsIgnoreCase(recipe.getMealType())) {
+                    filteredRecipes.add(recipe);
+                }
+            }
+        } else {
+            filteredRecipes.addAll(allRecipes); // Display all recipes if no meal type selected
+        }
+    
+        updateRecipeListView(filteredRecipes);
+    }
+
+    public void updateRecipeListView(List<Recipe> recipes) {
+        for (Node node : recipeListContainer.getChildren()) {
+            if (node instanceof RecipeListItem) {
+                RecipeListItem recipeListItem = (RecipeListItem) node;
+                Recipe recipe = recipeListItem.getRecipe();
+                boolean showRecipe = recipes.contains(recipe);
+                recipeListItem.setVisible(showRecipe);
+                recipeListItem.setManaged(showRecipe);
+                if (showRecipe) {
+                    recipeListItem.setOnMouseClicked(e -> {
+                        this.changeToRecipeDetailScene(recipe, false);
+                    });
+                } else {
+                    recipeListItem.setOnMouseClicked(null);
+                }
+            }
+        }
+    }
+    
+
     // Changes scene to recipe detail view based on the recipe selected
     public void changeToRecipeDetailScene(Recipe recipe, boolean isNewRecipe) {
         // Check if recipe is new
