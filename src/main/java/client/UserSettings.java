@@ -21,14 +21,6 @@ public class UserSettings {
       this.autoLogin = settingsItems[0].split("=")[1].equals("true");
       this.username = settingsItems[1].split("=")[1];
     }
-<<<<<<< Updated upstream
-=======
-
-    String[] settingsItems = settings.split("&");
-    this.autoLogin = settingsItems[0].split("=")[1].equals("true");
-    this.username = settingsItems[1].split("=")[1];
-    // this.password = settingsItems[2].split("=")[1];
->>>>>>> Stashed changes
   }
 
   public String getUsername() {
