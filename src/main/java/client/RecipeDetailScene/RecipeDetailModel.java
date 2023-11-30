@@ -14,7 +14,7 @@ import java.net.URL;
 public class RecipeDetailModel {
 
   private static final String urlStr = "http://localhost:8100/";
-  private final UserSettings USER_SETTINGS = new UserSettings();
+  private final UserSettings USER_SETTINGS = UserSettings.getInstance();
 
   public ServerResponse<Boolean> performPostRecipeRequest(Recipe newRecipe) {
     ServerResponse<Boolean> res = new ModifyRecipeResponse();

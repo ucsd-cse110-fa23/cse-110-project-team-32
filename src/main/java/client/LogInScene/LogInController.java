@@ -2,6 +2,7 @@ package client.LogInScene;
 
 import client.AppController;
 import client.HttpResponse.ServerResponse;
+import client.UserSettings;
 import javafx.event.ActionEvent;
 
 public class LogInController {
@@ -9,6 +10,7 @@ public class LogInController {
   LogInView logInView;
   LogInModel logInModel;
   AppController appController;
+  private final UserSettings USER_SETTINGS = UserSettings.getInstance();
 
   public LogInController(
     LogInView logInView,
@@ -21,6 +23,29 @@ public class LogInController {
 
     logInView.setLogInButtonOnAction(this::handleLogInButtonAction);
     logInView.setCreateButtonOnAction(this::handleCreateButtonAction);
+
+    init();
+  }
+
+  private void init() {
+    // ping server, if server is ready, determine if auto login was selected
+    ServerResponse<Boolean> res = this.logInModel.pingServer();
+    System.out.println(res);
+    if (!res.getResponse()) {
+      logInView.showError(res.getErrorMsg()); // possibly res.errorMsg
+      return;
+    }
+
+    // if selected, init the recipe list for user
+    if (USER_SETTINGS.isAutoLoginOn()) {
+      initRecipeList();
+    }
+    // if not, stay here
+  }
+
+  private void initRecipeList() {
+    appController.loadRecipeList();
+    appController.changeToRecipeListScene();
   }
 
   // Log In button event
@@ -39,10 +64,13 @@ public class LogInController {
     ServerResponse<Boolean> authRes = logInModel.checkUserPass(user, pass);
     System.out.println(authRes);
     if (authRes.getResponse()) {
-      appController.loadRecipeList();
-      appController.changeToRecipeListScene();
+      USER_SETTINGS.writeSettingsToFile(
+        logInView.autoLoginChecked(),
+        logInView.getUsername()
+      );
+      initRecipeList();
     } else {
-      logInView.showError("Incorrect username/password.");
+      logInView.showError("Incorrect username/password."); // possibly res.errorMsg
       System.out.println("Invalid Username");
     }
   }

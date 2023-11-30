@@ -66,20 +66,21 @@ public class LogInView {
   }
 
   public void setLogInButtonOnAction(EventHandler<ActionEvent> eventHandler) {
-    isChecked();
+    // isChecked();
     this.logInButton.setOnAction(eventHandler);
   }
 
-  public Boolean isChecked() {
-    if (rememberMe.isSelected()) {
-      //TODO: set auto log-in method?
-      checked = true;
-      System.out.println("Box is Checked!");
-      return checked;
-    } else {
-      checked = false;
-      return checked;
-    }
+  public Boolean autoLoginChecked() {
+    return rememberMe.isSelected();
+    // if (rememberMe.isSelected()) {
+    //   //TODO: set auto log-in method?
+    //   checked = true;
+    //   System.out.println("Box is Checked!");
+    //   return checked;
+    // } else {
+    //   checked = false;
+    //   return checked;
+    // }
   }
 
   public void showError(String err) {

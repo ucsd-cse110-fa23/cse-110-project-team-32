@@ -16,7 +16,7 @@ public class RecipeListModel {
 
   private static final String urlStr = "http://localhost:8100/";
   // private final UserIdGetter userIdGetter = new UserIdGetter();
-  private final UserSettings USER_SETTINGS = new UserSettings();
+  private final UserSettings USER_SETTINGS = UserSettings.getInstance();
 
   public RecipeListModel() {}
 

@@ -64,6 +64,11 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
   public String toString() {
     String temp =
       "Create Recipe Response: \nStatus Code: %d \nError Msg: %s \nLoaded Recipes: %s";
-    return String.format(temp, statusCode, errorMsg, recipeList);
+    return String.format(
+      temp,
+      statusCode,
+      errorMsg,
+      recipeList.isEmpty() ? "Empty Recipe List" : "Non-empty Recipe List"
+    );
   }
 }

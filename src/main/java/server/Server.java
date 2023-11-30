@@ -24,6 +24,9 @@ public class Server {
       0
     );
     //
+    HttpHandler pingHandler = new PingHandler();
+    server.createContext("/ping", pingHandler);
+    //
     HttpHandler authReqHandler = new AuthReqHandler();
     server.createContext("/auth", authReqHandler);
     //
