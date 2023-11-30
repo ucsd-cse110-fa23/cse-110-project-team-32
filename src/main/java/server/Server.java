@@ -1,12 +1,8 @@
 package server;
 
-import com.google.common.net.HttpHeaders;
 import com.sun.net.httpserver.*;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.*;
 
 // start server in Run and Debug

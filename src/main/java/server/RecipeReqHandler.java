@@ -1,10 +1,8 @@
 package server;
 
-import com.google.common.net.HttpHeaders;
 import com.sun.net.httpserver.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class RecipeReqHandler implements HttpHandler {
 

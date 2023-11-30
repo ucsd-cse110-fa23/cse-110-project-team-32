@@ -1,6 +1,5 @@
 package server;
 
-import client.Recipe;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.BufferedReader;
