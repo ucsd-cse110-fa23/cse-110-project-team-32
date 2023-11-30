@@ -2,7 +2,7 @@ package client.HttpResponse;
 
 public class AuthResponse implements ServerResponse<Boolean> {
 
-  private String errorMsg = "No Error";
+  private String errorMsg;
   private int statusCode;
 
   public AuthResponse() {

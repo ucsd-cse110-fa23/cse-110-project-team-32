@@ -58,4 +58,24 @@ public class UserSettings {
       e.printStackTrace();
     }
   }
+
+  public void writeSettingsToFile(Boolean authLoginChecked) {
+    // if no user ever logged in (user_settings.txt file dont exist),
+    // dont try to write settings to that file
+    if (this.username == null) return;
+
+    String template = "autoLogin=%s&username=%s";
+    String newSettings = String.format(
+      template,
+      authLoginChecked,
+      this.username
+    );
+    try (
+      BufferedWriter writer = new BufferedWriter(new FileWriter(SETTINGS_FILE));
+    ) {
+      writer.write(newSettings);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }

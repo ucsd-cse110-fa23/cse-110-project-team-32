@@ -35,7 +35,7 @@ public class LogInView {
     username.setPromptText("username");
     password = new TextField();
     password.setPromptText("password");
-    rememberMe = new CheckBox("Remember Me");
+    rememberMe = new CheckBox("Auto Login");
     rememberMe.setAllowIndeterminate(false); //Only care if CheckBox is selected or unselected
     error = new Text("Incorrect Username or Password");
     accountDetails = new VBox(username, password, rememberMe, error);
@@ -53,6 +53,26 @@ public class LogInView {
     return this.borderPane;
   }
 
+  public TextField getUsernameField() {
+    return this.username;
+  }
+
+  public TextField getPasswordField() {
+    return this.password;
+  }
+
+  public Button getSignupButton() {
+    return this.createAccButton;
+  }
+
+  public Button getLoginButton() {
+    return this.logInButton;
+  }
+
+  public CheckBox getAutoLoginCheckBox() {
+    return this.rememberMe;
+  }
+
   public String getUsername() {
     return username.getText();
   }
@@ -66,21 +86,17 @@ public class LogInView {
   }
 
   public void setLogInButtonOnAction(EventHandler<ActionEvent> eventHandler) {
-    // isChecked();
     this.logInButton.setOnAction(eventHandler);
+  }
+
+  public void setAutoLoginCheckBoxAction(
+    EventHandler<ActionEvent> eventHandler
+  ) {
+    this.rememberMe.setOnAction(eventHandler);
   }
 
   public Boolean autoLoginChecked() {
     return rememberMe.isSelected();
-    // if (rememberMe.isSelected()) {
-    //   //TODO: set auto log-in method?
-    //   checked = true;
-    //   System.out.println("Box is Checked!");
-    //   return checked;
-    // } else {
-    //   checked = false;
-    //   return checked;
-    // }
   }
 
   public void showError(String err) {

@@ -119,21 +119,29 @@ public class CreateRecipeModel {
       outputStream.close();
 
       int responseCode = connection.getResponseCode();
-      BufferedReader in = new BufferedReader(
-        new InputStreamReader(connection.getInputStream())
-      );
-      String inputLine;
-      StringBuilder response = new StringBuilder();
-      while ((inputLine = in.readLine()) != null) {
-        response.append(inputLine).append("\n");
-      }
-      in.close();
-
-      String responseText = mealType + "#" + response.toString();
       if (responseCode == 200) {
+        BufferedReader in = new BufferedReader(
+          new InputStreamReader(connection.getInputStream())
+        );
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+          response.append(inputLine).append("\n");
+        }
+        in.close();
+        String responseText = mealType + "#" + response.toString();
         res.setValidResponse(responseText);
       } else {
-        res.setErrorResponse(responseCode, responseText);
+        BufferedReader in = new BufferedReader(
+          new InputStreamReader(connection.getErrorStream())
+        );
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+          response.append(inputLine).append("\n");
+        }
+        in.close();
+        res.setErrorResponse(responseCode, response.toString());
       }
       return res;
     } catch (Exception e) {

@@ -23,7 +23,7 @@ public class LogInController {
 
     logInView.setLogInButtonOnAction(this::handleLogInButtonAction);
     logInView.setCreateButtonOnAction(this::handleCreateButtonAction);
-
+    logInView.setAutoLoginCheckBoxAction(this::handleAutoLoginCheckboxAction);
     init();
   }
 
@@ -33,6 +33,7 @@ public class LogInController {
     System.out.println(res);
     if (!res.getResponse()) {
       logInView.showError(res.getErrorMsg()); // possibly res.errorMsg
+      disableLoginUI();
       return;
     }
 
@@ -40,12 +41,24 @@ public class LogInController {
     if (USER_SETTINGS.isAutoLoginOn()) {
       initRecipeList();
     }
-    // if not, stay here
+    // if not, stay here, display saved username if there is one
+    String savedUsername = USER_SETTINGS.getUsername();
+    if (savedUsername != null) {
+      logInView.getUsernameField().setText(savedUsername);
+    }
   }
 
   private void initRecipeList() {
     appController.loadRecipeList();
     appController.changeToRecipeListScene();
+  }
+
+  private void disableLoginUI() {
+    logInView.getUsernameField().setDisable(true);
+    logInView.getPasswordField().setDisable(true);
+    logInView.getSignupButton().setDisable(true);
+    logInView.getLoginButton().setDisable(true);
+    logInView.getAutoLoginCheckBox().setDisable(true);
   }
 
   // Log In button event
@@ -70,13 +83,17 @@ public class LogInController {
       );
       initRecipeList();
     } else {
-      logInView.showError("Incorrect username/password."); // possibly res.errorMsg
-      System.out.println("Invalid Username");
+      logInView.showError(authRes.getErrorMsg()); // possibly res.errorMsg
     }
   }
 
   // Create Account Button event
   private void handleCreateButtonAction(ActionEvent event) {
     appController.changeToCreateAccountScene();
+  }
+
+  private void handleAutoLoginCheckboxAction(ActionEvent event) {
+    String savedUsername = USER_SETTINGS.getUsername();
+    USER_SETTINGS.writeSettingsToFile(logInView.autoLoginChecked());
   }
 }

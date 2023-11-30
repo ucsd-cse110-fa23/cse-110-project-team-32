@@ -115,9 +115,9 @@ public class RecipeReqHandler implements HttpHandler {
       );
       if (isSuccessful) {
         return "Succesfully created recipe: " + recipeID;
-      } else {
-        return "Failed to create recipe: " + recipeID;
       }
+      statusCode = 501;
+      return "Failed to create recipe: " + recipeID;
     } catch (IOException ioExcep) {
       System.out.println("IO Exception");
       ioExcep.printStackTrace();

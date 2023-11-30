@@ -59,14 +59,20 @@ public class LogInModel {
       conn.setDoOutput(true);
 
       int responseCode = conn.getResponseCode();
-      BufferedReader in = new BufferedReader(
-        new InputStreamReader(conn.getInputStream())
-      );
-      String response = in.readLine();
-      in.close();
+      String response = "No response";
       if (responseCode == 200) {
+        BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream())
+        );
+        response = in.readLine();
+        in.close();
         res.setValidResponse("");
       } else {
+        BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getErrorStream())
+        );
+        response = in.readLine();
+        in.close();
         res.setErrorResponse(responseCode, response);
       }
       return res;
@@ -75,20 +81,5 @@ public class LogInModel {
       res.setErrorResponse(503, "Oops... The Server is Down!");
       return res;
     }
-  }
-
-  public Boolean checkRememberMe(Boolean checked) {
-    // TODO: Use "checked" variable in LogInView to check if box is checked
-    autoLogIn = checked;
-    return autoLogIn;
-  }
-
-  public void autoLogIn() {
-    autoLogIn = true;
-    // TODO:
-  }
-
-  public void serverStatusCheck() {
-    //TODO
   }
 }

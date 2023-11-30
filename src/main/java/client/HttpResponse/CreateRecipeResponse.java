@@ -43,6 +43,7 @@ public class CreateRecipeResponse implements ServerResponse<Recipe> {
   public void setErrorResponse(int statusCode, String err) {
     this.statusCode = statusCode;
     this.errorMsg = err;
+    this.recipe = null;
   }
 
   @Override

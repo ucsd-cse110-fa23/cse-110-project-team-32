@@ -63,7 +63,8 @@ class AuthReqHandler implements HttpHandler {
       if (mongoPassword.equals(password)) {
         return Constants.TRUE;
       } else {
-        return Constants.FALSE;
+        statusCode = 501;
+        return "Incorrect Username/Password!";
       }
     } catch (Exception e) {
       statusCode = 404;

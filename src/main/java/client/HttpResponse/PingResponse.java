@@ -1,7 +1,5 @@
 package client.HttpResponse;
 
-import client.Recipe;
-
 public class PingResponse implements ServerResponse<Boolean> {
 
   private String errorMsg;
