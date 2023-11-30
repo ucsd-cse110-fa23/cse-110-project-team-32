@@ -41,4 +41,10 @@ public class ModifyRecipeResponse implements ServerResponse<Boolean> {
     this.statusCode = 503;
     this.errorMsg = "The server is Down!";
   }
+
+  @Override
+  public String toString() {
+    String temp = "Modify Recipe Response: \nStatus Code: %d \nError Msg: %s";
+    return String.format(temp, statusCode, errorMsg);
+  }
 }

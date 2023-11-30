@@ -46,4 +46,11 @@ public class WhisperResponse implements ServerResponse<String> {
     this.errorMsg = "The server is Down!";
     whisperResponseString = null;
   }
+
+  @Override
+  public String toString() {
+    String temp =
+      "Whisper Response: \nStatus Code: %d \nError Msg: %s \nTranslated Message: %s";
+    return String.format(temp, statusCode, errorMsg, whisperResponseString);
+  }
 }

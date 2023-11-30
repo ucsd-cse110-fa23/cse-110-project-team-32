@@ -22,10 +22,9 @@ public class RecipeListController {
     this.appController = appController;
 
     recipeListView.setNewRecipeButtonAction(this::handleNewRecipeButtonAction);
-    readAllRecipesByUID();
   }
 
-  private void readAllRecipesByUID() {
+  public void readAllRecipesByUID() {
     ServerResponse<List<Recipe>> res = recipeListModel.performGetRecipeListRequest();
     if (res.getStatusCode() != 200) {
       // display error msg, if server down, redirect to log in and display error there

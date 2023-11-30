@@ -20,24 +20,18 @@ public class LogInModel {
   ) {
     ServerResponse<Boolean> res = new AuthResponse();
     try {
-      URL url = new URI(URL + "auth/").toURL();
+      String query = "?username=" + username + "&password=" + password;
+      URL url = new URI(URL + "auth" + query).toURL();
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("POST");
-      conn.setDoOutput(true);
-      conn.setDoInput(true);
 
-      OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-      // request body format: "userID;recipeID;title;mealType;recipeDetail"
-      out.write(username + ";" + password);
-      out.flush();
-      out.close();
+      conn.setRequestMethod("GET");
+      conn.setDoOutput(true);
 
       int responseCode = conn.getResponseCode();
       BufferedReader in = new BufferedReader(
         new InputStreamReader(conn.getInputStream())
       );
       String response = in.readLine();
-      System.out.println("Post request response: " + response);
       in.close();
       if (responseCode == 200) {
         res.setValidResponse("");

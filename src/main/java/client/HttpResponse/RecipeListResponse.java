@@ -59,4 +59,11 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
     this.statusCode = 503;
     this.errorMsg = "The server is Down!";
   }
+
+  @Override
+  public String toString() {
+    String temp =
+      "Create Recipe Response: \nStatus Code: %d \nError Msg: %s \nLoaded Recipes: %s";
+    return String.format(temp, statusCode, errorMsg, recipeList);
+  }
 }
