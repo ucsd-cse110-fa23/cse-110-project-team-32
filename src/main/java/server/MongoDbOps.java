@@ -106,8 +106,12 @@ public class MongoDbOps {
           ";" +
           o.getString("mealType") +
           ";" +
-          o.getString("recipeDetail") +
-          "#";
+          o.getString("recipeDetail");
+        if (o.has("imgURL")) {
+          response += ";" + o.getString("imgURL") + "#";
+        } else {
+          response += "#";
+        }
       }
       // System.out.println("Mongo's response: " + response);
       return response;

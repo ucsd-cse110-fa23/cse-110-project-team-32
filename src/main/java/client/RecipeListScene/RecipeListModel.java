@@ -46,7 +46,7 @@ public class RecipeListModel {
       return res;
     } catch (Exception e) {
       e.printStackTrace();
-      res.setErrorResponse(501, "Oops... The Server is Down!");
+      res.setServerDownResponse();
       return res;
     }
   }

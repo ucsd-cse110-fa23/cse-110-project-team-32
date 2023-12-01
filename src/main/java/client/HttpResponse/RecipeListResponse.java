@@ -36,6 +36,7 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
     errorMsg = null;
     String[] stringRecipeList = res.split("#");
     for (String recipeString : stringRecipeList) {
+      System.out.println(recipeString);
       String[] recipeComponents = recipeString.split(";");
       recipeList.add(
         new Recipe(
@@ -43,7 +44,7 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
           recipeComponents[1],
           recipeComponents[2],
           recipeComponents[3].replace("\\n", "\n"),
-          "dummyURL for now"
+          recipeComponents.length == 5 ? recipeComponents[4] : null
         )
       );
     }

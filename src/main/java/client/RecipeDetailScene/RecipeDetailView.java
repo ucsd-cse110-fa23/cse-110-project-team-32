@@ -135,6 +135,8 @@ class RecipeContentHolder extends VBox {
     editedRecipeDetail
       .managedProperty()
       .bind(editedRecipeDetail.visibleProperty());
+    imageView.setFitWidth(100);
+    imageView.setFitHeight(100);
     this.getChildren()
       .addAll(title, mealType, imageView, recipeDetail, editedRecipeDetail);
   }

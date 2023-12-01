@@ -34,7 +34,7 @@ public class RootReqHandler implements HttpHandler {
     }
   }
 
-  private String handleGet(HttpExchange httpExchange) throws Exception {
+  private String handleGet(HttpExchange httpExchange) {
     URI uri = httpExchange.getRequestURI();
     // query is in the form: username=<username>
 
@@ -43,13 +43,13 @@ public class RootReqHandler implements HttpHandler {
     System.out.println("Getting recipes of username: " + username);
     if (username == null || username.isEmpty()) {
       statusCode = 501;
-      throw new Exception(Constants.INVALID_GET_TO_ROUTE + " /");
+      return Constants.INVALID_GET_TO_ROUTE + " /";
     }
     String mongoResponse = MONGO_DB_OPS.getRecipesByUserID(username);
     // System.out.println("Request Handler's response: " + mongoResponse);
     if (mongoResponse == null) {
       statusCode = 501;
-      throw new Exception(Constants.INVALID_GET_TO_ROUTE + " /");
+      return Constants.INVALID_GET_TO_ROUTE + " /";
     }
     return mongoResponse;
   }
