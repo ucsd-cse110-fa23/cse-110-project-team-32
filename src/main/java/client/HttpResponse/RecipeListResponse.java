@@ -42,7 +42,8 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
           recipeComponents[0],
           recipeComponents[1],
           recipeComponents[2],
-          recipeComponents[3].replace("\\n", "\n")
+          recipeComponents[3].replace("\\n", "\n"),
+          "dummyURL for now"
         )
       );
     }

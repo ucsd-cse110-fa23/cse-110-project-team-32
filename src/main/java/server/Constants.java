@@ -19,6 +19,7 @@ public final class Constants {
   public static final String INVALID_DELETE_TO_ROUTE =
     "ERROR: Invalid Delete Request to Route";
   public static final String USER_EXISTS = "ERROR: Username Already Exists";
+  public static final String WRONG_AUTH = "ERROR: Incorrect Username/Password";
 
   private Constants() {}
 }

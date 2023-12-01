@@ -105,13 +105,15 @@ public class RecipeReqHandler implements HttpHandler {
       String title = dataComponents[2];
       String mealType = dataComponents[3];
       String recipeDetail = dataComponents[4];
+      String imgURL = dataComponents[5];
 
       boolean isSuccessful = MONGO_DB_OPS.createRecipeByUserId(
         userID,
         recipeID,
         title,
         mealType,
-        recipeDetail
+        recipeDetail,
+        imgURL
       );
       if (isSuccessful) {
         return "Succesfully created recipe: " + recipeID;

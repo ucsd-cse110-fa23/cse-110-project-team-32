@@ -130,6 +130,7 @@ public class CreateRecipeModel {
         }
         in.close();
         String responseText = mealType + "#" + response.toString();
+        System.out.println("response text from server: " + responseText);
         res.setValidResponse(responseText);
       } else {
         BufferedReader in = new BufferedReader(
@@ -162,16 +163,21 @@ public class CreateRecipeModel {
     );
   }
 
-  public Recipe generateByChatGPT(
+  public ServerResponse<Recipe> generateByChatGPT(
     String mealType,
     String ingredients,
     boolean isDummyRecipe
   ) {
     if (isDummyRecipe) {
-      return generateByChatGPT(mealType, ingredients).getResponse();
-      // return new Recipe("Title", "Meal Type", "Ingredients");
+      CreateRecipeResponse createRecipeRes = new CreateRecipeResponse();
+      String template =
+        "%s # DUMMY TITLE # %s DUMMY DESCRIPTION # https://www.allrecipes.com/thmb/iXKYAl17eIEnvhLtb4WxM7wKqTc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/240376-homemade-pepperoni-pizza-Beauty-3x4-1-6ae54059c23348b3b9a703b6a3067a44.jpg";
+      createRecipeRes.setValidResponse(
+        String.format(template, mealType, ingredients)
+      );
+      return createRecipeRes;
     } else {
-      return generateByChatGPT(mealType, ingredients).getResponse();
+      return generateByChatGPT(mealType, ingredients);
     }
   }
 }

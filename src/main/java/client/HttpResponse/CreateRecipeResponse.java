@@ -35,8 +35,18 @@ public class CreateRecipeResponse implements ServerResponse<Recipe> {
     String mealType = hashSeparatedResultArray[0].strip();
     String title = hashSeparatedResultArray[1].strip();
     String recipeDetail = hashSeparatedResultArray[2].strip();
-
-    recipe = new Recipe(title, mealType, recipeDetail);
+    String imgURL = hashSeparatedResultArray[3].strip();
+    System.out.println(
+      "mealType: " +
+      mealType +
+      "title: " +
+      title +
+      "recipeDetail: " +
+      recipeDetail +
+      " imgURL: " +
+      imgURL
+    );
+    recipe = new Recipe(title, mealType, recipeDetail, imgURL);
   }
 
   @Override
