@@ -3,11 +3,18 @@ package client.RecipeListScene;
 import client.AppController;
 import client.HttpResponse.ServerResponse;
 import client.Recipe;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javafx.event.ActionEvent;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.RadioMenuItem;
 
 public class RecipeListController {
-
+  private Set<String> selectedMealTypes = new HashSet<>();
   RecipeListView recipeListView;
   RecipeListModel recipeListModel;
   AppController appController;
@@ -21,8 +28,10 @@ public class RecipeListController {
     this.recipeListModel = recipeListModel;
     this.appController = appController;
 
+    recipeListView.setLogOutButtonAction(this::handlelogOutButton);
     recipeListView.setNewRecipeButtonAction(this::handleNewRecipeButtonAction);
-    readAllRecipesByUID();
+    recipeListView.setFilterAction(this::handleFilterSelection);
+        // readAllRecipesByUID();
   }
 
   private void readAllRecipesByUID() {
@@ -39,4 +48,18 @@ public class RecipeListController {
   private void handleNewRecipeButtonAction(ActionEvent event) {
     appController.changeToCreateRecipeScene();
   }
+
+  private void handlelogOutButton(ActionEvent event){
+    appController.changeToLogInScene();
+  }
+  private void handleFilterSelection(ActionEvent event) {
+    String selectedMealType = recipeListView.getSelectedMealType();
+
+    if (selectedMealType != null && !selectedMealType.equals("Reset Filter")) {
+        appController.handleFilter(selectedMealType);
+    } else {
+        appController.updateRecipeListView(appController.getRecipeList());
+    }
+  }
+
 }

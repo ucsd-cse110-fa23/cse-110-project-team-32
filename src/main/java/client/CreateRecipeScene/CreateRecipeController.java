@@ -40,6 +40,8 @@ public class CreateRecipeController {
     createRecipeView.setCreateDummyRecipeButtonAction(
       this::handleCreateDummyRecipeButtonAction
     );
+    createRecipeView.setLogOutButtonAction(this::handleLogOutButton);
+
   }
 
   private AudioFormat setUpAudioFormat() {
@@ -60,6 +62,10 @@ public class CreateRecipeController {
       signed,
       bigEndian
     );
+  }
+
+  private void handleLogOutButton(ActionEvent event){
+    appController.changeToLogInScene();
   }
 
   private void handleCancelButtonAction(ActionEvent event) {

@@ -1,9 +1,12 @@
 package client.CreateRecipeScene;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -24,6 +27,9 @@ public class CreateRecipeView {
     private Button startRecordingButton;
     private Button stopRecordingButton;
     private Text recordingToolTip = new Text("Recording...");
+    
+    // Button for logging out
+    private Button logOutButton;
 
     // Bottom elements (create recipe)
     private Button createDummyRecipeButton;
@@ -31,10 +37,17 @@ public class CreateRecipeView {
     // Constructor for initializing the view
     public CreateRecipeView() {
         borderPane = new BorderPane();
-        
+
+        Region r = new Region();
+        HBox.setHgrow(r, Priority.ALWAYS);
         // Header element initialization (cancel button)
         cancelButton = new Button("Cancel");
-        HBox buttonGroup = new HBox(cancelButton);
+        // Places Log Out on Bottom of view
+        logOutButton = new Button("Log Out");
+
+        HBox buttonGroup = new HBox(cancelButton, r, logOutButton);
+        buttonGroup.setPrefSize(500D,20);
+    
         borderPane.setTop(buttonGroup);
 
         // Center elements intialization (recording and prompts)
@@ -50,6 +63,9 @@ public class CreateRecipeView {
         // Bottom elements initialization (create recipe)
         createDummyRecipeButton = new Button("Create Dummy Recipe");
         borderPane.setBottom(createDummyRecipeButton);
+
+        
+
     }
 
     // setter method for creating a recipe 
@@ -74,6 +90,11 @@ public class CreateRecipeView {
     // setter method for stop recording button
     public void setStopRecordingButtonAction(EventHandler<ActionEvent> eventHandler) {
         this.stopRecordingButton.setOnAction(eventHandler);
+    }
+
+    // setter method for "Log Out" button
+    public void setLogOutButtonAction(EventHandler<ActionEvent> eventHandler){
+        this.logOutButton.setOnAction(eventHandler);
     }
 
     // getter method for recorded meal type
@@ -127,4 +148,8 @@ public class CreateRecipeView {
         recordingErrorMsg.setVisible(false);
         recordingToolTip.setVisible(false);
     }
+
+
+
+
 }

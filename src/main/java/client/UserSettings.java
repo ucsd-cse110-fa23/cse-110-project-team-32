@@ -23,10 +23,10 @@ public class UserSettings {
       settings = generateAndStoreUUID();
     }
 
-    String[] settingsItems = settings.split("&");
-    this.autoLogin = settingsItems[0].split("=")[1].equals("true");
-    this.username = settingsItems[1].split("=")[1];
-    this.password = settingsItems[2].split("=")[1];
+  //   String[] settingsItems = settings.split("&");
+  //   this.autoLogin = settingsItems[0].split("=")[1].equals("true");
+  //   this.username = settingsItems[1].split("=")[1];
+  //   this.password = settingsItems[2].split("=")[1];
   }
 
   public String getUsername() {

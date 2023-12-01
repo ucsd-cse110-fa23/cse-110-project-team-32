@@ -16,6 +16,7 @@ public class RecipeDetailController {
         view.setSaveOrEditButtonAction(this::handleSaveOrEditButtonAction);
         view.setBackButtonAction(this::handleBackButtonAction);
         view.setDeleteButtonAction(this::handleDeleteButtonAction);
+        view.setLogOutButtonAction(this::handleLogOutButton);
     }
 
     public void handleSaveOrEditButtonAction(ActionEvent event) {
@@ -53,6 +54,10 @@ public class RecipeDetailController {
             view.switchToEditMode();
         }
     }
+
+    private void handleLogOutButton(ActionEvent event){
+        appController.changeToLogInScene();
+      }
 
     public void handleBackButtonAction(ActionEvent event) {
         // go back to the recipe list view
