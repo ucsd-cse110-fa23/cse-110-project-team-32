@@ -162,18 +162,6 @@ public class AppController {
         }
     }
     
-
-    // Changes scene to recipe detail view based on the recipe selected
-    public void changeToRecipeDetailScene(Recipe recipe, boolean isNewRecipe) {
-        // Check if recipe is new
-        if (isNewRecipe) {
-            this.recipeDetailView.renderNewRecipe(recipe);
-        } else { // render existing recipe
-            this.recipeDetailView.renderExistingRecipe(recipe);
-        }
-        this.stage.setScene(recipeDetailScene);
-        this.stage.setTitle(recipe.getTitle());
-    }
   
 
   public List<Recipe> getRecipeList() {
