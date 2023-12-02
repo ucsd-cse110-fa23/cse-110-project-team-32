@@ -87,6 +87,11 @@ public class RecipeReqHandler implements HttpHandler {
           .append("<h1>" + title + "</h1>\n")
           .append("<p>Meal Type: " + mealType + "</p>\n")
           .append(
+            "<img src=\"../../../../images/" +
+            recipeID +
+            ".jpg\" alt=\"recipe img\">"
+          )
+          .append(
             "<p>Recipe Detail: " +
             recipeDetail.replace("\\n", "<br>") +
             "</p>\n"

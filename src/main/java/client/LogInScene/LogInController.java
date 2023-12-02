@@ -94,6 +94,7 @@ public class LogInController {
 
   private void handleAutoLoginCheckboxAction(ActionEvent event) {
     String savedUsername = USER_SETTINGS.getUsername();
+    if (logInView.autoLoginChecked()) return;
     USER_SETTINGS.writeSettingsToFile(logInView.autoLoginChecked());
   }
 }
