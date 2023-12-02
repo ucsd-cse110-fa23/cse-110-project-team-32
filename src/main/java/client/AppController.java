@@ -174,7 +174,7 @@ public class AppController {
         this.stage.setScene(recipeDetailScene);
         this.stage.setTitle(recipe.getTitle());
     }
-  }
+  
 
   public List<Recipe> getRecipeList() {
     // use this function to test
