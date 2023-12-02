@@ -38,7 +38,7 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
     if (res == null) return;
     String[] stringRecipeList = res.split("#");
     for (String recipeString : stringRecipeList) {
-      System.out.println(recipeString);
+      // System.out.println(recipeString);
       String[] recipeComponents = recipeString.split(";");
       recipeList.add(
         new RecipeBuilder()
@@ -46,6 +46,7 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
           .addTitle(recipeComponents[1])
           .addMealType(recipeComponents[2])
           .addRecipeDetail(recipeComponents[3].replace("\\n", "\n"))
+          .addImgBase64Str(recipeComponents[4])
           .getRecipe()
       );
     }
@@ -66,7 +67,7 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
   @Override
   public String toString() {
     String temp =
-      "Create Recipe Response: \nStatus Code: %d \nError Msg: %s \nLoaded Recipes: %s";
+      "Read All Recipes Response: \nStatus Code: %d \nError Msg: %s \nLoaded Recipes: %s";
     return String.format(
       temp,
       statusCode,

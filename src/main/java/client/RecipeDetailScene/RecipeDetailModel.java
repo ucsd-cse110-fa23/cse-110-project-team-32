@@ -38,7 +38,9 @@ public class RecipeDetailModel {
         ";" +
         newRecipe.getMealType() +
         ";" +
-        newRecipe.getRecipeDetail().replace("\n", "\\n")
+        newRecipe.getRecipeDetail().replace("\n", "\\n") +
+        ";" +
+        newRecipe.getImgBase64Str()
       );
       out.flush();
       out.close();

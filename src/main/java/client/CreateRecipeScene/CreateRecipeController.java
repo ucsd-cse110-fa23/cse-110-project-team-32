@@ -43,7 +43,6 @@ public class CreateRecipeController {
       this::handleCreateDummyRecipeButtonAction
     );
     createRecipeView.setLogOutButtonAction(this::handleLogOutButton);
-
   }
 
   private AudioFormat setUpAudioFormat() {
@@ -66,7 +65,7 @@ public class CreateRecipeController {
     );
   }
 
-  private void handleLogOutButton(ActionEvent event){
+  private void handleLogOutButton(ActionEvent event) {
     appController.changeToLogInScene();
   }
 
@@ -162,6 +161,7 @@ public class CreateRecipeController {
           createRecipeView.getIngredients(),
           false
         );
+        System.out.println(createRecipeRes);
         if (createRecipeRes.getStatusCode() == 503) {
           // server is suddenly down, nav to log in and display message
           System.out.println("!!!!!!!!!!!");

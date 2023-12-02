@@ -46,6 +46,9 @@ public class LogInController {
     if (savedUsername != null) {
       logInView.getUsernameField().setText(savedUsername);
     }
+    // logInView.getAutoLoginCheckBox().setSelected(USER_SETTINGS.isAutoLoginOn());
+    logInView.getAutoLoginCheckBox().setSelected(false);
+    USER_SETTINGS.writeSettingsToFile(false);
   }
 
   private void initRecipeList() {
@@ -81,6 +84,9 @@ public class LogInController {
         logInView.autoLoginChecked(),
         logInView.getUsername()
       );
+      // clear the form
+      logInView.getUsernameField().setText("");
+      logInView.getPasswordField().setText("");
       initRecipeList();
     } else {
       logInView.showError(authRes.getErrorMsg()); // possibly res.errorMsg

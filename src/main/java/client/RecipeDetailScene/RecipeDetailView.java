@@ -1,9 +1,14 @@
 package client.RecipeDetailScene;
 
 import client.Recipe;
+import client.UserSettings;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -15,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class RecipeDetailView {
 
@@ -32,23 +38,68 @@ public class RecipeDetailView {
   private Button backButton = new Button("Back");
   private Button deleteButton = new Button("Delete");
   private Button regenerateButton = new Button("Regenerate");
+  private Button shareButton = new Button("Share");
+  private Text copyUrlMessage = new Text("Copied url to Clipboard!");
+  private FadeTransition messageFadeTrasition;
+
+  private UserSettings USER_SETTINGS = UserSettings.getInstance();
 
   public RecipeDetailView() {
     borderPane = new BorderPane();
 
     regenerateButton.managedProperty().bind(regenerateButton.visibleProperty());
     regenerateButton.setVisible(false);
+    shareButton.managedProperty().bind(shareButton.visibleProperty());
+    shareButton.setVisible(false);
+
+    copyUrlMessage.setVisible(false);
+    setMessageFadeTransition();
+    VBox header = new VBox();
     HBox buttonGroup = new HBox();
     buttonGroup.setSpacing(15);
     buttonGroup
       .getChildren()
-      .addAll(regenerateButton, saveOrEditButton, backButton, deleteButton);
+      .addAll(
+        regenerateButton,
+        saveOrEditButton,
+        backButton,
+        deleteButton,
+        shareButton
+      );
+    header.getChildren().addAll(buttonGroup, copyUrlMessage);
     buttonGroup.setPrefSize(500, 60); // Size of the header
     buttonGroup.setAlignment(Pos.CENTER);
-    borderPane.setTop(buttonGroup);
+    borderPane.setTop(header);
 
     recipeContentHolder = new RecipeContentHolder();
     borderPane.setCenter(recipeContentHolder);
+  }
+
+  private void setMessageFadeTransition() {
+    this.messageFadeTrasition =
+      new FadeTransition(Duration.millis(3000), copyUrlMessage);
+    messageFadeTrasition.setFromValue(1);
+    messageFadeTrasition.setToValue(0);
+    messageFadeTrasition.setAutoReverse(true);
+    messageFadeTrasition.setOnFinished(e -> {
+      copyUrlMessage.setVisible(false);
+    });
+    shareButton.setOnAction(e -> {
+      // System.out.println("play fade");
+      copyUrlMessage.setVisible(true);
+      messageFadeTrasition.play();
+
+      String domain = "http://localhost:8100/";
+      String endpoint =
+        "recipe/?username=%s&recipeID=%s".formatted(
+            USER_SETTINGS.getUsername(),
+            getRecipe().getRecipeID()
+          );
+      String str = domain + endpoint;
+      Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
+      StringSelection strse1 = new StringSelection(str);
+      clip.setContents(strse1, strse1);
+    });
   }
 
   public BorderPane getBorderPane() {
@@ -73,6 +124,8 @@ public class RecipeDetailView {
     hasEdited = true;
     saveOrEditButton.setText("Save");
     regenerateButton.setVisible(true);
+    shareButton.setVisible(false);
+    copyUrlMessage.setVisible(false);
     recipeContentHolder.renderAnotherRecipe(recipe, isEditing);
   }
 
@@ -82,6 +135,7 @@ public class RecipeDetailView {
     hasEdited = false;
     saveOrEditButton.setText("Edit");
     regenerateButton.setVisible(false);
+    shareButton.setVisible(true);
     recipeContentHolder.renderAnotherRecipe(recipe, isEditing);
   }
 
@@ -104,6 +158,10 @@ public class RecipeDetailView {
   ) {
     this.regenerateButton.setOnAction(eventHandler);
   }
+
+  // public void setShareButtonAction(EventHandler<ActionEvent> eventHandler) {
+  //   this.shareButton.setOnAction(eventHandler);
+  // }
 
   public void updateRecipeDetail() {
     recipeContentHolder.updateRecipeDetail();
@@ -195,7 +253,7 @@ class RecipeContentHolder extends VBox {
   private void setImage() {
     try {
       imageView.setImage(
-        new Image(new File(recipe.getImgPath()).toURI().toString())
+        new Image("data:image/png;base64," + recipe.getImgBase64Str())
       );
     } catch (Exception e) {
       System.out.println(

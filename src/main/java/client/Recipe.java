@@ -10,7 +10,7 @@ public class Recipe implements Serializable {
   private String ingredients;
   private String recipeDetail;
   private String recipeID;
-  private String imgPath;
+  private String imgBase64Str;
 
   public Recipe() {}
 
@@ -21,12 +21,17 @@ public class Recipe implements Serializable {
     this.recipeID = "recipe_" + UUID.randomUUID().toString();
   }
 
-  public Recipe(String title, String mealType, String recipe, String imgPath) {
+  public Recipe(
+    String title,
+    String mealType,
+    String recipe,
+    String imgBase64Str
+  ) {
     this.title = title;
     this.recipeDetail = recipe;
     this.mealType = mealType;
     this.recipeID = "recipe_" + UUID.randomUUID().toString();
-    this.imgPath = imgPath;
+    this.imgBase64Str = imgBase64Str;
   }
 
   public Recipe(
@@ -34,13 +39,13 @@ public class Recipe implements Serializable {
     String title,
     String mealType,
     String recipe,
-    String imgPath
+    String imgBase64Str
   ) {
     this.title = title;
     this.recipeDetail = recipe;
     this.mealType = mealType;
     this.recipeID = recipeID;
-    this.imgPath = imgPath;
+    this.imgBase64Str = imgBase64Str;
   }
 
   public String getRecipeID() {
@@ -75,12 +80,12 @@ public class Recipe implements Serializable {
     this.mealType = mealType;
   }
 
-  public String getImgPath() {
-    return this.imgPath;
+  public String getImgBase64Str() {
+    return this.imgBase64Str;
   }
 
-  public void setImgPath(String imgPath) {
-    this.imgPath = imgPath;
+  public void setImgBase64Str(String imgBase64Str) {
+    this.imgBase64Str = imgBase64Str;
   }
 
   public String getIngredients() {
@@ -104,7 +109,8 @@ public class Recipe implements Serializable {
       '\n' +
       recipeDetail +
       '\n' +
-      imgPath
+      "First 10 chars of img base64 string: " +
+      imgBase64Str.substring(0, 10)
     );
   }
 }

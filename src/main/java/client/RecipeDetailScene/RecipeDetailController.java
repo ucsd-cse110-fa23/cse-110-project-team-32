@@ -53,7 +53,10 @@ public class RecipeDetailController {
           Recipe editedRecipe = view.getRecipe();
           if (model != null) {
             // model == null in test mode
-            model.performUpdateRecipeRequest(editedRecipe);
+            ServerResponse<Boolean> updateResponse = model.performUpdateRecipeRequest(
+              editedRecipe
+            );
+            System.out.println(updateResponse);
           }
         }
       }
@@ -78,11 +81,11 @@ public class RecipeDetailController {
     // DELETE request to server
     if (model != null) {
       // model == null in test mode
-      model.performDeleteRequest(currentRecipe);
+      ServerResponse<Boolean> deleteResponse = model.performDeleteRequest(
+        currentRecipe
+      );
+      System.out.println(deleteResponse);
     }
-    new File(currentRecipe.getImgPath()).deleteOnExit();
-    // delete the recipe from the VBox recipeList
-    // if child matches (recipeDetailView.getRecipe())
     appController.removeRecipeFromRecipeList(currentRecipe);
     appController.changeToRecipeListScene();
   }
@@ -93,6 +96,7 @@ public class RecipeDetailController {
       curRecipe.getMealType(),
       curRecipe.getIngredients()
     );
+    System.out.println(createRecipeResponse);
     if (createRecipeResponse.getStatusCode() == 503) {
       System.out.println("SERVER DOWN!!!!!!!!");
       // navigate to log in and display error
@@ -104,8 +108,6 @@ public class RecipeDetailController {
       System.out.println(createRecipeResponse.getErrorMsg());
       return;
     }
-    // delete previous image file
-    new File(curRecipe.getImgPath()).deleteOnExit();
 
     // render the newly generate recipe
     view.renderNewRecipe(createRecipeResponse.getResponse());

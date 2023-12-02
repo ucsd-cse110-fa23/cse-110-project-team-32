@@ -107,8 +107,8 @@ public class MongoDbOps {
           o.getString("mealType") +
           ";" +
           o.getString("recipeDetail");
-        if (o.has("imgURL")) {
-          response += ";" + o.getString("imgURL") + "#";
+        if (o.has("imgBase64Str")) {
+          response += ";" + o.getString("imgBase64Str") + "#";
         } else {
           response += "#";
         }
@@ -140,11 +140,11 @@ public class MongoDbOps {
       if (user == null) {
         return null;
       }
-      System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
+      // System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
 
       JSONObject userJson = new JSONObject(user);
       JSONArray dataJsonArray = userJson.getJSONArray("recipes");
-      System.out.println(dataJsonArray);
+      // System.out.println(dataJsonArray);
 
       JSONObject recipe = null;
       for (int i = 0; i < dataJsonArray.length(); i++) {
@@ -162,7 +162,9 @@ public class MongoDbOps {
         ";" +
         recipe.getString("mealType") +
         ";" +
-        recipe.getString("recipeDetail")
+        recipe.getString("recipeDetail") +
+        ";" +
+        recipe.getString("imgBase64Str")
       );
     } catch (Exception e) {
       e.printStackTrace();
@@ -202,7 +204,8 @@ public class MongoDbOps {
     String recipeID,
     String title,
     String mealType,
-    String recipeDetail
+    String recipeDetail,
+    String imgBase64Str
   ) {
     try (MongoClient mongoClient = MongoClients.create(uri)) {
       MongoDatabase sampleTrainingDB = mongoClient.getDatabase(database);
@@ -215,7 +218,8 @@ public class MongoDbOps {
       Document newRecipe = new Document("recipeID", recipeID)
         .append("title", title)
         .append("mealType", mealType)
-        .append("recipeDetail", recipeDetail);
+        .append("recipeDetail", recipeDetail)
+        .append("imgBase64Str", imgBase64Str);
       if (user == null) {
         user = new Document("_id", new ObjectId());
         List<Document> recipes = new ArrayList<>();
@@ -275,15 +279,34 @@ public class MongoDbOps {
       MongoCollection<Document> recipeCollection = sampleTrainingDB.getCollection(
         collection
       );
+      // Create the filter to match the document
+      // Document filter = new Document("username", new ObjectId("5150a1199fac0e6910000002"));
       Bson filter = Filters.eq("username", username);
-      Bson delete = Updates.pull(
-        "recipes",
-        new Document("recipeID", recipeID)
-          .append("title", title)
-          .append("mealType", mealType)
-          .append("recipeDetail", recipeDetail)
+      // Create the update operation
+      Document pullUpdate = new Document(
+        "$pull",
+        new Document("recipes", new Document("recipeID", recipeID))
       );
-      recipeCollection.updateOne(filter, delete);
+
+      // Perform the update
+      recipeCollection.updateOne(filter, pullUpdate);
+
+      // Close the MongoDB connection
+      mongoClient.close();
+      // Bson delete = Updates.pull(
+      //   "recipes",
+      //   new Document("recipeID", recipeID)
+      //     .append("title", title)
+      //     .append("mealType", mealType)
+      //     .append("recipeDetail", recipeDetail)
+      // );
+      //   recipeCollection.update(
+      // { '_id': ObjectId("5150a1199fac0e6910000002") },
+      // { $pull: { items: { id: 23 } } },
+      // false, // Upsert
+      // true, // Multi
+      // );
+      // recipeCollection.updateOne(filter, delete);
     } catch (Exception e) {
       e.printStackTrace();
       return false;

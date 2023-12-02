@@ -83,13 +83,14 @@ public class RecipeReqHandler implements HttpHandler {
         String title = recipeContents[1];
         String mealType = recipeContents[2];
         String recipeDetail = recipeContents[3];
+        String imgBase64Str = recipeContents[4];
         html
           .append("<h1>" + title + "</h1>\n")
           .append("<p>Meal Type: " + mealType + "</p>\n")
           .append(
-            "<img src=\"../../../../images/" +
-            recipeID +
-            ".jpg\" alt=\"recipe img\">"
+            "<img src=\"data:image/[format];base64,%s\" alt=\"recipe image\" style=\"width: 50px; height: 50px\" >".formatted(
+                imgBase64Str
+              )
           )
           .append(
             "<p>Recipe Detail: " +
@@ -110,13 +111,15 @@ public class RecipeReqHandler implements HttpHandler {
       String title = dataComponents[2];
       String mealType = dataComponents[3];
       String recipeDetail = dataComponents[4];
+      String imgBase64Str = dataComponents[5];
 
       boolean isSuccessful = MONGO_DB_OPS.createRecipeByUserId(
         userID,
         recipeID,
         title,
         mealType,
-        recipeDetail
+        recipeDetail,
+        imgBase64Str
       );
       if (isSuccessful) {
         return "Succesfully created recipe: " + recipeID;

@@ -132,7 +132,7 @@ public class CreateRecipeModel {
         // response contains # separated title AND recipe Detail AND image as file content in String type
         String responseText =
           mealType + "#" + ingredients + "#" + response.toString();
-        System.out.println("response text from server: " + responseText);
+        // System.out.println("response text from server: " + responseText);
         res.setValidResponse(responseText);
       } else {
         BufferedReader in = new BufferedReader(
@@ -176,7 +176,7 @@ public class CreateRecipeModel {
       String template = "%s # %s # DUMMY TITLE # DUMMY DESCRIPTION # ";
       createRecipeRes.setValidResponse(
         String.format(template, mealType, ingredients) +
-        "https://www.allrecipes.com/thmb/iXKYAl17eIEnvhLtb4WxM7wKqTc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/240376-homemade-pepperoni-pizza-Beauty-3x4-1-6ae54059c23348b3b9a703b6a3067a44.jpg"
+        "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
       );
       return createRecipeRes;
     }

@@ -12,7 +12,6 @@ public class RecipeBuilder {
 
   public RecipeBuilder addRecipeID(String ID) {
     recipe.setRecipeID(ID);
-    recipe.setImgPath("images/" + ID + ".jpg");
     return this;
   }
 
@@ -36,10 +35,10 @@ public class RecipeBuilder {
     return this;
   }
 
-  //   public RecipeBuilder addImgPath(String imgPath) {
-  //     recipe.setImgPath(imgPath);
-  //     return this;
-  //   }
+  public RecipeBuilder addImgBase64Str(String imgBase64Str) {
+    recipe.setImgBase64Str(imgBase64Str);
+    return this;
+  }
 
   public Recipe getRecipe() {
     if (recipe.getRecipeID() == null) {

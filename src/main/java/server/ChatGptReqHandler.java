@@ -13,6 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Paths;
+import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,7 +103,15 @@ public class ChatGptReqHandler implements HttpHandler {
         generatedText.indexOf("#") - 1
       );
       String imageURL = requestImageFromDallE(recipeTitle);
-      return generatedText + '#' + imageURL;
+
+      InputStream in = new URI(imageURL).toURL().openStream();
+      String imgInBase64Str = Base64
+        .getEncoder()
+        .encodeToString(in.readAllBytes());
+      // System.out.println("==================");
+      // System.out.println(imgInBase64Str);
+      // System.out.println("==================");
+      return generatedText + '#' + imgInBase64Str;
     } catch (Exception e) {
       statusCode = 501;
       return "An Unexpected Error Happened with Our AI";

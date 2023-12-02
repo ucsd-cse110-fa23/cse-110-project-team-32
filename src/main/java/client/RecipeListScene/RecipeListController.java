@@ -3,17 +3,16 @@ package client.RecipeListScene;
 import client.AppController;
 import client.HttpResponse.ServerResponse;
 import client.Recipe;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.RadioMenuItem;
 
 public class RecipeListController {
+
   private Set<String> selectedMealTypes = new HashSet<>();
   RecipeListView recipeListView;
   RecipeListModel recipeListModel;
@@ -33,14 +32,14 @@ public class RecipeListController {
     recipeListView.setNewRecipeButtonAction(this::handleNewRecipeButtonAction);
 
     recipeListView.setFilterAction(this::handleFilterSelection);
-        // readAllRecipesByUID();
+    // readAllRecipesByUID();
 
   }
 
   public void readAllRecipesByUID() {
     ServerResponse<List<Recipe>> res = recipeListModel.performGetRecipeListRequest();
     System.out.println("Getting user's recipe list..");
-    // System.out.println(res);
+    System.out.println(res);
     if (res.getStatusCode() != 200) {
       // display error msg, if server down, redirect to log in and display error there
       System.out.println(res.getErrorMsg());
@@ -54,17 +53,17 @@ public class RecipeListController {
     appController.changeToCreateRecipeScene();
   }
 
-  private void handlelogOutButton(ActionEvent event){
+  private void handlelogOutButton(ActionEvent event) {
     appController.changeToLogInScene();
   }
+
   private void handleFilterSelection(ActionEvent event) {
     String selectedMealType = recipeListView.getSelectedMealType();
 
     if (selectedMealType != null && !selectedMealType.equals("Reset Filter")) {
-        appController.handleFilter(selectedMealType);
+      appController.handleFilter(selectedMealType);
     } else {
-        appController.updateRecipeListView(appController.getRecipeList());
+      appController.updateRecipeListView(appController.getRecipeList());
     }
   }
-
 }

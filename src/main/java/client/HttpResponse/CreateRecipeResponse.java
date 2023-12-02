@@ -44,16 +44,16 @@ public class CreateRecipeResponse implements ServerResponse<Recipe> {
     String ingredients = hashSeparatedResultArray[1].strip();
     String title = hashSeparatedResultArray[2].strip();
     String recipeDetail = hashSeparatedResultArray[3].strip();
-    String imgURL = hashSeparatedResultArray[4].strip();
+    String imgBase64Str = hashSeparatedResultArray[4].strip();
 
     String recipeID = "recipe_" + UUID.randomUUID().toString();
 
-    // ensures a images folder exists (for new users only)
-    new File("images").mkdir();
-    String imgPath = "images/" + recipeID + ".jpg";
-    try (InputStream in = new URI(imgURL).toURL().openStream()) {
-      Files.copy(in, Paths.get(imgPath));
-    } catch (Exception e) {}
+    // // ensures a images folder exists (for new users only)
+    // new File("images").mkdir();
+    // String imgPath = "images/" + recipeID + ".jpg";
+    // try (InputStream in = new URI(imgURL).toURL().openStream()) {
+    //   Files.copy(in, Paths.get(imgPath));
+    // } catch (Exception e) {}
     System.out.println(
       "RecipeID: " +
       recipeID +
@@ -70,8 +70,8 @@ public class CreateRecipeResponse implements ServerResponse<Recipe> {
       "recipeDetail: " +
       recipeDetail +
       '\n' +
-      "imgURL: " +
-      imgURL +
+      "imgBase64Str: " +
+      imgBase64Str +
       '\n'
     );
     recipe =
@@ -81,7 +81,7 @@ public class CreateRecipeResponse implements ServerResponse<Recipe> {
         .addMealType(mealType)
         .addIngredients(ingredients)
         .addRecipeDetail(recipeDetail)
-        // .addImgPath(imgPath)
+        .addImgBase64Str(imgBase64Str)
         .getRecipe();
   }
 
