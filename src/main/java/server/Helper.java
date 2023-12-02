@@ -3,6 +3,7 @@ package server;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class Helper {
@@ -17,9 +18,11 @@ public class Helper {
 
   public String readReqBody(HttpExchange httpExchange) throws IOException {
     // read the request body
-    BufferedReader in = new BufferedReader(
-      new InputStreamReader(httpExchange.getRequestBody())
-    );
+    return readInputStream(httpExchange.getRequestBody());
+  }
+
+  public String readInputStream(InputStream inStream) throws IOException {
+    BufferedReader in = new BufferedReader(new InputStreamReader(inStream));
     String inputLine;
     StringBuilder reqBody = new StringBuilder();
     while ((inputLine = in.readLine()) != null) {

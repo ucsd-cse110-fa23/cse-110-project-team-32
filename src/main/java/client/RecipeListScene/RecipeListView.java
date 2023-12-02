@@ -5,10 +5,12 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -19,6 +21,7 @@ import javafx.scene.control.MenuItem;
 
 // View class for recipe list
 public class RecipeListView {
+
     // Main layout
     private BorderPane borderPane;
     // Container to hold content (list of recipes and buttons)

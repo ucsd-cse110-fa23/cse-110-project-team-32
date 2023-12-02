@@ -119,21 +119,32 @@ public class CreateRecipeModel {
       outputStream.close();
 
       int responseCode = connection.getResponseCode();
-      BufferedReader in = new BufferedReader(
-        new InputStreamReader(connection.getInputStream())
-      );
-      String inputLine;
-      StringBuilder response = new StringBuilder();
-      while ((inputLine = in.readLine()) != null) {
-        response.append(inputLine).append("\n");
-      }
-      in.close();
-
-      String responseText = mealType + "#" + response.toString();
       if (responseCode == 200) {
+        BufferedReader in = new BufferedReader(
+          new InputStreamReader(connection.getInputStream())
+        );
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+          response.append(inputLine).append("\n");
+        }
+        in.close();
+        // response contains # separated title AND recipe Detail AND image as file content in String type
+        String responseText =
+          mealType + "#" + ingredients + "#" + response.toString();
+        System.out.println("response text from server: " + responseText);
         res.setValidResponse(responseText);
       } else {
-        res.setErrorResponse(responseCode, responseText);
+        BufferedReader in = new BufferedReader(
+          new InputStreamReader(connection.getErrorStream())
+        );
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+          response.append(inputLine).append("\n");
+        }
+        in.close();
+        res.setErrorResponse(responseCode, response.toString());
       }
       return res;
     } catch (Exception e) {
@@ -154,16 +165,21 @@ public class CreateRecipeModel {
     );
   }
 
-  public Recipe generateByChatGPT(
+  public ServerResponse<Recipe> generateByChatGPT(
     String mealType,
     String ingredients,
     boolean isDummyRecipe
   ) {
     if (isDummyRecipe) {
-      return generateByChatGPT(mealType, ingredients).getResponse();
-      // return new Recipe("Title", "Meal Type", "Ingredients");
-    } else {
-      return generateByChatGPT(mealType, ingredients).getResponse();
+      CreateRecipeResponse createRecipeRes = new CreateRecipeResponse();
+      // mealType, ingredients, title, detail, url
+      String template = "%s # %s # DUMMY TITLE # DUMMY DESCRIPTION # ";
+      createRecipeRes.setValidResponse(
+        String.format(template, mealType, ingredients) +
+        "https://www.allrecipes.com/thmb/iXKYAl17eIEnvhLtb4WxM7wKqTc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/240376-homemade-pepperoni-pizza-Beauty-3x4-1-6ae54059c23348b3b9a703b6a3067a44.jpg"
+      );
+      return createRecipeRes;
     }
+    return generateByChatGPT(mealType, ingredients);
   }
 }

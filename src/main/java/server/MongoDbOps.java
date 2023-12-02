@@ -11,22 +11,14 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
-// import java.io.BufferedReader;
-// import java.io.File;
-// import java.io.FileReader;
-// import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bson.json.JsonObject;
-import org.bson.json.JsonWriterSettings;
 import org.bson.json.JsonWriterSettings;
 import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONString;
 
 public class MongoDbOps {
 
@@ -114,8 +106,12 @@ public class MongoDbOps {
           ";" +
           o.getString("mealType") +
           ";" +
-          o.getString("recipeDetail") +
-          "#";
+          o.getString("recipeDetail");
+        if (o.has("imgURL")) {
+          response += ";" + o.getString("imgURL") + "#";
+        } else {
+          response += "#";
+        }
       }
       // System.out.println("Mongo's response: " + response);
       return response;

@@ -1,10 +1,8 @@
 package server;
 
-import com.google.common.net.HttpHeaders;
 import com.sun.net.httpserver.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class RecipeReqHandler implements HttpHandler {
 
@@ -89,6 +87,11 @@ public class RecipeReqHandler implements HttpHandler {
           .append("<h1>" + title + "</h1>\n")
           .append("<p>Meal Type: " + mealType + "</p>\n")
           .append(
+            "<img src=\"../../../../images/" +
+            recipeID +
+            ".jpg\" alt=\"recipe img\">"
+          )
+          .append(
             "<p>Recipe Detail: " +
             recipeDetail.replace("\\n", "<br>") +
             "</p>\n"
@@ -117,9 +120,9 @@ public class RecipeReqHandler implements HttpHandler {
       );
       if (isSuccessful) {
         return "Succesfully created recipe: " + recipeID;
-      } else {
-        return "Failed to create recipe: " + recipeID;
       }
+      statusCode = 501;
+      return "Failed to create recipe: " + recipeID;
     } catch (IOException ioExcep) {
       System.out.println("IO Exception");
       ioExcep.printStackTrace();

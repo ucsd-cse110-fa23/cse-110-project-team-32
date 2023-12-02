@@ -27,15 +27,20 @@ public class RecipeListController {
     this.recipeListView = recipeListView;
     this.recipeListModel = recipeListModel;
     this.appController = appController;
+    this.appController.registerRecipeListController(this);
 
     recipeListView.setLogOutButtonAction(this::handlelogOutButton);
     recipeListView.setNewRecipeButtonAction(this::handleNewRecipeButtonAction);
+
     recipeListView.setFilterAction(this::handleFilterSelection);
         // readAllRecipesByUID();
+
   }
 
-  private void readAllRecipesByUID() {
+  public void readAllRecipesByUID() {
     ServerResponse<List<Recipe>> res = recipeListModel.performGetRecipeListRequest();
+    System.out.println("Getting user's recipe list..");
+    // System.out.println(res);
     if (res.getStatusCode() != 200) {
       // display error msg, if server down, redirect to log in and display error there
       System.out.println(res.getErrorMsg());
