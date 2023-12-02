@@ -1,6 +1,7 @@
 package client.RecipeDetailScene;
 
 import client.Recipe;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import javafx.event.ActionEvent;
@@ -30,19 +31,18 @@ public class RecipeDetailView {
   private Button saveOrEditButton = new Button();
   private Button backButton = new Button("Back");
   private Button deleteButton = new Button("Delete");
+  private Button regenerateButton = new Button("Regenerate");
 
   public RecipeDetailView() {
     borderPane = new BorderPane();
-    // borderPane.setStyle(Styles.borderPaneStyle);
 
-    // saveOrEditButton.setStyle(Styles.defaultButtonStyle);
-    // backButton.setStyle(Styles.defaultButtonStyle);
-    // deleteButton.setStyle(Styles.defaultButtonStyle);
+    regenerateButton.managedProperty().bind(regenerateButton.visibleProperty());
+    regenerateButton.setVisible(false);
     HBox buttonGroup = new HBox();
     buttonGroup.setSpacing(15);
     buttonGroup
       .getChildren()
-      .addAll(saveOrEditButton, backButton, deleteButton);
+      .addAll(regenerateButton, saveOrEditButton, backButton, deleteButton);
     buttonGroup.setPrefSize(500, 60); // Size of the header
     buttonGroup.setAlignment(Pos.CENTER);
     borderPane.setTop(buttonGroup);
@@ -72,6 +72,7 @@ public class RecipeDetailView {
     isEditing = true;
     hasEdited = true;
     saveOrEditButton.setText("Save");
+    regenerateButton.setVisible(true);
     recipeContentHolder.renderAnotherRecipe(recipe, isEditing);
   }
 
@@ -80,6 +81,7 @@ public class RecipeDetailView {
     isEditing = false;
     hasEdited = false;
     saveOrEditButton.setText("Edit");
+    regenerateButton.setVisible(false);
     recipeContentHolder.renderAnotherRecipe(recipe, isEditing);
   }
 
@@ -95,6 +97,12 @@ public class RecipeDetailView {
 
   public void setDeleteButtonAction(EventHandler<ActionEvent> eventHandler) {
     this.deleteButton.setOnAction(eventHandler);
+  }
+
+  public void setRegenerateButtonAction(
+    EventHandler<ActionEvent> eventHandler
+  ) {
+    this.regenerateButton.setOnAction(eventHandler);
   }
 
   public void updateRecipeDetail() {
@@ -137,6 +145,7 @@ class RecipeContentHolder extends VBox {
       .bind(editedRecipeDetail.visibleProperty());
     imageView.setFitWidth(100);
     imageView.setFitHeight(100);
+
     this.getChildren()
       .addAll(title, mealType, imageView, recipeDetail, editedRecipeDetail);
   }
@@ -147,14 +156,7 @@ class RecipeContentHolder extends VBox {
     mealType.setText(recipe.getMealType());
     recipeDetail.setText(recipe.getRecipeDetail());
     editedRecipeDetail.setText(recipe.getRecipeDetail());
-    System.out.println(recipe.getImgURL());
-    try {
-      InputStream in = new URI(recipe.getImgURL()).toURL().openStream();
-      imageView.setImage(new Image(in));
-    } catch (Exception e) {
-      System.out.println("There was an error loading the image");
-      e.printStackTrace();
-    }
+    this.setImage();
 
     if (isEditing) {
       switchToEditMode();
@@ -188,5 +190,17 @@ class RecipeContentHolder extends VBox {
 
   public TextArea getRecipeDetailEditTextArea() {
     return editedRecipeDetail;
+  }
+
+  private void setImage() {
+    try {
+      imageView.setImage(
+        new Image(new File(recipe.getImgPath()).toURI().toString())
+      );
+    } catch (Exception e) {
+      System.out.println(
+        "There is no img with this recipe (created in Version 1)"
+      );
+    }
   }
 }

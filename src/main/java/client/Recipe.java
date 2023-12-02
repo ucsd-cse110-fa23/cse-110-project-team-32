@@ -7,9 +7,12 @@ public class Recipe implements Serializable {
 
   private String title;
   private String mealType;
+  private String ingredients;
   private String recipeDetail;
   private String recipeID;
-  private String imgURL;
+  private String imgPath;
+
+  public Recipe() {}
 
   public Recipe(String title, String mealType, String recipe) {
     this.title = title;
@@ -18,12 +21,12 @@ public class Recipe implements Serializable {
     this.recipeID = "recipe_" + UUID.randomUUID().toString();
   }
 
-  public Recipe(String title, String mealType, String recipe, String imgURL) {
+  public Recipe(String title, String mealType, String recipe, String imgPath) {
     this.title = title;
     this.recipeDetail = recipe;
     this.mealType = mealType;
     this.recipeID = "recipe_" + UUID.randomUUID().toString();
-    this.imgURL = imgURL;
+    this.imgPath = imgPath;
   }
 
   public Recipe(
@@ -31,21 +34,29 @@ public class Recipe implements Serializable {
     String title,
     String mealType,
     String recipe,
-    String imgURL
+    String imgPath
   ) {
     this.title = title;
     this.recipeDetail = recipe;
     this.mealType = mealType;
     this.recipeID = recipeID;
-    this.imgURL = imgURL;
+    this.imgPath = imgPath;
   }
 
   public String getRecipeID() {
     return recipeID;
   }
 
+  public void setRecipeID(String recipeID) {
+    this.recipeID = recipeID;
+  }
+
   public String getTitle() {
     return this.title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getRecipeDetail() {
@@ -60,8 +71,24 @@ public class Recipe implements Serializable {
     return this.mealType;
   }
 
-  public String getImgURL() {
-    return this.imgURL;
+  public void setMealType(String mealType) {
+    this.mealType = mealType;
+  }
+
+  public String getImgPath() {
+    return this.imgPath;
+  }
+
+  public void setImgPath(String imgPath) {
+    this.imgPath = imgPath;
+  }
+
+  public String getIngredients() {
+    return this.ingredients;
+  }
+
+  public void setIngredients(String ingredients) {
+    this.ingredients = ingredients;
   }
 
   @Override
@@ -73,9 +100,11 @@ public class Recipe implements Serializable {
       ", " +
       mealType +
       '\n' +
+      ingredients +
+      '\n' +
       recipeDetail +
       '\n' +
-      imgURL
+      imgPath
     );
   }
 }

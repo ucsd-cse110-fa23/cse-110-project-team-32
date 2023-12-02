@@ -202,8 +202,7 @@ public class MongoDbOps {
     String recipeID,
     String title,
     String mealType,
-    String recipeDetail,
-    String imgURL
+    String recipeDetail
   ) {
     try (MongoClient mongoClient = MongoClients.create(uri)) {
       MongoDatabase sampleTrainingDB = mongoClient.getDatabase(database);
@@ -216,8 +215,7 @@ public class MongoDbOps {
       Document newRecipe = new Document("recipeID", recipeID)
         .append("title", title)
         .append("mealType", mealType)
-        .append("recipeDetail", recipeDetail)
-        .append("imgURL", imgURL);
+        .append("recipeDetail", recipeDetail);
       if (user == null) {
         user = new Document("_id", new ObjectId());
         List<Document> recipes = new ArrayList<>();
