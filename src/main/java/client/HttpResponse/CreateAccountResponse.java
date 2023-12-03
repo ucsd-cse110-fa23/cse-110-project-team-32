@@ -32,12 +32,6 @@ public class CreateAccountResponse implements ServerResponse<String> {
     statusCode = 200;
     errorMsg = null;
     accountDetails = res;
-    // String[] hashSeparatedResultArray = res.split("#");
-    // String mealType = hashSeparatedResultArray[0].strip();
-    // String title = hashSeparatedResultArray[1].strip();
-    // String recipeDetail = hashSeparatedResultArray[2].strip();
-
-    // recipe = new Recipe(title, mealType, recipeDetail);
   }
 
   @Override

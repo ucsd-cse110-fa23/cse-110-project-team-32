@@ -34,27 +34,42 @@ public class CreateAccountModel {
 
     public ServerResponse<String> performStoreDetails(String username, String password) {
         ServerResponse<String> res = new CreateAccountResponse();
-        try {
-            String urlString = URL + "?username=" + username +"&password=" +password;
-            //URL: localhost...?username=<username>&password=<password>;
+        try { //"/auth/?username="
+            String urlString = URL + "auth/"; //+ "username=" +username+ "&password=" +password;
             URL url = new URI(urlString).toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             conn.setDoInput(true);
-      
+
+            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+            // request body format: "userID;recipeID;title;mealType;recipeDetail"
+            out.write(
+              "username=" +username+ "&password=" +password
+            );
+            out.flush();
+            out.close();
+            
             int responseCode = conn.getResponseCode();
+
+            if (responseCode == 200) {
             BufferedReader in = new BufferedReader(
               new InputStreamReader(conn.getInputStream())
             );
             String response = in.readLine();
             in.close();
-      
-            if (responseCode == 200) {
               res.setValidResponse(response);
-            } else {
+            } 
+            
+            else {
+            BufferedReader in = new BufferedReader(
+              new InputStreamReader(conn.getErrorStream())
+            );
+            String response = in.readLine();
+            in.close();
               res.setErrorResponse(responseCode, response);
             }
+            
             return res;
           } catch (Exception e) {
             e.printStackTrace();

@@ -28,14 +28,17 @@ public class CreateAccountView {
         username.setPromptText("username");
         password = new TextField();
         password.setPromptText("password");
-        error = new Text("Username already taken");
+        // error = new Text("Username already taken");
+        error = new Text();
         accountDetails = new VBox(username, password, error);
         borderPane.setCenter(accountDetails);
         createAccButton = new Button("Create Account");
         logInButton = new Button("Log In");
         buttonList = new HBox(createAccButton,logInButton);
         borderPane.setBottom(buttonList);
+        error.setText("TEST");
         error.setVisible(false);
+        
     }
 
     // getter method for borderpane

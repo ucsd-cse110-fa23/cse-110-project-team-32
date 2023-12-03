@@ -94,6 +94,7 @@ class AuthReqHandler implements HttpHandler {
       int parserInd = reqBody.indexOf("&");
       String username = reqBody.substring(0, parserInd).split("=")[1];
       String password = reqBody.substring(parserInd + 1).split("=")[1];
+      if (username.isEmpty()) return Constants.FALSE;
       if (password.isEmpty()) return Constants.FALSE;
       // String dbPassword = MONGO_DB_OPS.getUserPasswordByUsername(username);
       boolean isCreateUserSuccessful = MONGO_DB_OPS.createUser(
@@ -104,6 +105,7 @@ class AuthReqHandler implements HttpHandler {
       statusCode = 501;
       return Constants.USER_EXISTS;
     } catch (Exception e) {
+      e.printStackTrace();
       statusCode = 404;
       return Constants.INVALID_POST_TO_ROUTE + "/auth";
     }
