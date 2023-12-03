@@ -144,6 +144,28 @@ public class AppController {
 
   }
 
+  public void reverseSortRecipesByTitle() {
+    System.out.println("Sort button clicked!");
+    List<Recipe> recipeList = getRecipeList();
+    List<Recipe> sortedRecipes = new ArrayList<>();
+    Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
+
+    for (Recipe x : recipeList) {
+      // System.out.println("Sorted recipe: " + x.getTitle());
+      sortedRecipes.add(x);
+    }
+
+    Collections.reverse(sortedRecipes);
+    for (Recipe x : recipeList) {
+      System.out.println("Sorted recipe: " + x.getTitle()); // debug statement only
+    }
+
+    updateRecipeListViews(sortedRecipes);
+    // updateRecipeListView(sortedRecipes);
+    // System.out.println("reached"); //Just a debugging tool
+
+  }
+
   public void updateRecipeListViews(List<Recipe> recipes) {
     // Clear existing content
     recipeListContainer.getChildren().clear();
