@@ -41,6 +41,7 @@ public class RecipeListView {
     private RadioMenuItem lastSelectedFilter;
     private ToggleGroup mealTypeToggle;
     private Button sortButton;
+    private Button reverseSortButton;
     private AppController appController;
 
     // Constructor
@@ -51,8 +52,10 @@ public class RecipeListView {
         newRecipeButton = new Button("New Recipe");
         newRecipeButton.getStyleClass().add("textBox");
         logOutButton = new Button("Log Out");
-        sortButton = new Button("Sort Alphabetically");
+        sortButton = new Button("Sort (A-Z)");
         sortButton.getStyleClass().add("textBox");
+        reverseSortButton = new Button("Sort (Z-A)");
+        reverseSortButton.getStyleClass().add("textBox");
         // drop down menu for filter
         filterButton = new MenuButton("Filter By");
         filterButton.getStyleClass().add("textBox");
@@ -76,7 +79,7 @@ public class RecipeListView {
         HBox.setHgrow(r1, Priority.ALWAYS);
 
         // creates horizontal box for the buttons and adds buttons to button group
-        HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, logOutButton, sortButton);
+        HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, sortButton, reverseSortButton, logOutButton);
         buttonGroup.setPrefSize(500D, 20);
 
         // set button group up top
@@ -98,6 +101,14 @@ public class RecipeListView {
         if (sortButton != null) {
             sortButton.setOnAction(event -> {
                 appController.sortRecipesByTitle();
+            });
+        }
+    }
+
+    public void setReverseSortButtonEventHandler(AppController appController) {
+        if (reverseSortButton != null) {
+            reverseSortButton.setOnAction(event -> {
+                appController.reverseSortRecipesByTitle();
             });
         }
     }
