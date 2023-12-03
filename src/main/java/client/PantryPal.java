@@ -1,4 +1,5 @@
 package client;
+
 import client.RecipeListScene.*;
 import client.RecipeDetailScene.*;
 import client.CreateRecipeScene.*;
@@ -12,25 +13,31 @@ public class PantryPal extends Application {
         launch(args);
     }
 
+    AppController appController;
+
     @Override
     public void start(Stage primaryStage) {
-        RecipeListView recipeListView = new RecipeListView();
+        RecipeListView recipeListView = new RecipeListView(appController);
         RecipeDetailView recipeDetailView = new RecipeDetailView();
         CreateRecipeView createRecipeView = new CreateRecipeView();
         CreateAccountView createAccView = new CreateAccountView();
         LogInView logInView = new LogInView();
-        
+
         RecipeDetailModel recipeDetailModel = new RecipeDetailModel();
         RecipeListModel recipeListModel = new RecipeListModel();
         CreateRecipeModel createRecipeModel = new CreateRecipeModel();
         CreateAccountModel createAccountModel = new CreateAccountModel();
         LogInModel logInModel = new LogInModel();
 
-        AppController appController = new AppController(recipeListView, recipeDetailView, createRecipeView, createAccView, logInView, primaryStage);
-        RecipeDetailController rdController = new RecipeDetailController(recipeDetailView, recipeDetailModel, appController);
+        AppController appController = new AppController(recipeListView, recipeDetailView, createRecipeView,
+                createAccView, logInView, primaryStage);
+        RecipeDetailController rdController = new RecipeDetailController(recipeDetailView, recipeDetailModel,
+                appController);
         RecipeListController rlController = new RecipeListController(recipeListView, recipeListModel, appController);
-        CreateRecipeController rcController = new CreateRecipeController(createRecipeView, createRecipeModel, appController);
-        CreateAccountController caController = new CreateAccountController(createAccView, createAccountModel, appController); 
+        CreateRecipeController rcController = new CreateRecipeController(createRecipeView, createRecipeModel,
+                appController);
+        CreateAccountController caController = new CreateAccountController(createAccView, createAccountModel,
+                appController);
         LogInController linController = new LogInController(logInView, logInModel, appController);
 
         primaryStage.show();
