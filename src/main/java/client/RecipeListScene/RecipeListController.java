@@ -30,6 +30,7 @@ public class RecipeListController {
     recipeListView.setLogOutButtonAction(this::handlelogOutButton);
     recipeListView.setNewRecipeButtonAction(this::handleNewRecipeButtonAction);
     recipeListView.setSortButtonEventHandler(appController);
+    recipeListView.setReverseSortButtonEventHandler(appController);
 
     recipeListView.setFilterAction(this::handleFilterSelection);
     // readAllRecipesByUID();
@@ -61,8 +62,17 @@ public class RecipeListController {
     appController.sortRecipesByTitle();
   }
 
+  public void handleReverseSortButton(ActionEvent event) {
+    appController.reverseSortRecipesByTitle();
+  }
+
   public void sortRecipesByTitle() {
     appController.sortRecipesByTitle();
+    appController.updateRecipeListView(appController.getRecipeList());
+  }
+
+  public void reverseSortRecipesByTitle() {
+    appController.reverseSortRecipesByTitle();
     appController.updateRecipeListView(appController.getRecipeList());
   }
 
