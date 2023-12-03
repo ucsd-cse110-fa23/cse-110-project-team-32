@@ -1,5 +1,6 @@
 package client.LogInScene;
 
+import client.TextFieldLowerChar;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -31,9 +32,9 @@ public class LogInView {
     borderPane = new BorderPane();
     title = new HBox(new Text("Pantry Pal 2"));
     borderPane.setTop(title);
-    username = new TextField();
+    username = new TextFieldLowerChar();
     username.setPromptText("username");
-    password = new TextField();
+    password = new TextFieldLowerChar();
     password.setPromptText("password");
     rememberMe = new CheckBox("Auto Login");
     rememberMe.setAllowIndeterminate(false); //Only care if CheckBox is selected or unselected
@@ -102,5 +103,11 @@ public class LogInView {
   public void showError(String err) {
     error.setText(err);
     error.setVisible(true);
+  }
+
+  public void clearForm() {
+    username.setText("");
+    password.setText("");
+    rememberMe.setSelected(false);
   }
 }

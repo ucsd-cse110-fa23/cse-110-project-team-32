@@ -24,6 +24,8 @@ public class LogInController {
     logInView.setLogInButtonOnAction(this::handleLogInButtonAction);
     logInView.setCreateButtonOnAction(this::handleCreateButtonAction);
     logInView.setAutoLoginCheckBoxAction(this::handleAutoLoginCheckboxAction);
+
+    appController.registerLogInController(this);
     init();
   }
 
@@ -46,9 +48,6 @@ public class LogInController {
     if (savedUsername != null) {
       logInView.getUsernameField().setText(savedUsername);
     }
-    // logInView.getAutoLoginCheckBox().setSelected(USER_SETTINGS.isAutoLoginOn());
-    logInView.getAutoLoginCheckBox().setSelected(false);
-    USER_SETTINGS.writeSettingsToFile(false);
   }
 
   private void initRecipeList() {
@@ -85,8 +84,7 @@ public class LogInController {
         logInView.getUsername()
       );
       // clear the form
-      logInView.getUsernameField().setText("");
-      logInView.getPasswordField().setText("");
+      logInView.clearForm();
       initRecipeList();
     } else {
       logInView.showError(authRes.getErrorMsg()); // possibly res.errorMsg
@@ -102,5 +100,12 @@ public class LogInController {
     String savedUsername = USER_SETTINGS.getUsername();
     if (logInView.autoLoginChecked()) return;
     USER_SETTINGS.writeSettingsToFile(logInView.autoLoginChecked());
+  }
+
+  public void handleLogOut() {
+    // set auto log in to false
+    // clear the form
+    USER_SETTINGS.writeSettingsToFile(false);
+    logInView.clearForm();
   }
 }
