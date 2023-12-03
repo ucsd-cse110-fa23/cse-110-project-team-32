@@ -3,13 +3,10 @@ package client.RecipeListScene;
 import client.AppController;
 import client.HttpResponse.ServerResponse;
 import client.Recipe;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.event.ActionEvent;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.RadioMenuItem;
 
 public class RecipeListController {
 

@@ -3,7 +3,6 @@ package client.RecipeDetailScene;
 import client.AppController;
 import client.HttpResponse.ServerResponse;
 import client.Recipe;
-import java.io.File;
 import javafx.event.ActionEvent;
 
 public class RecipeDetailController {
