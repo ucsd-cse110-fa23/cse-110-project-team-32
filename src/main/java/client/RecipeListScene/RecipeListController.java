@@ -19,10 +19,9 @@ public class RecipeListController {
   AppController appController;
 
   public RecipeListController(
-    RecipeListView recipeListView,
-    RecipeListModel recipeListModel,
-    AppController appController
-  ) {
+      RecipeListView recipeListView,
+      RecipeListModel recipeListModel,
+      AppController appController) {
     this.recipeListView = recipeListView;
     this.recipeListModel = recipeListModel;
     this.appController = appController;
@@ -30,6 +29,7 @@ public class RecipeListController {
 
     recipeListView.setLogOutButtonAction(this::handlelogOutButton);
     recipeListView.setNewRecipeButtonAction(this::handleNewRecipeButtonAction);
+    recipeListView.setSortButtonEventHandler(appController);
 
     recipeListView.setFilterAction(this::handleFilterSelection);
     // readAllRecipesByUID();
@@ -55,6 +55,15 @@ public class RecipeListController {
 
   private void handlelogOutButton(ActionEvent event) {
     appController.changeToLogInScene();
+  }
+
+  private void handleSortButton(ActionEvent event) {
+    // Sort recipes by title
+    appController.sortRecipesByTitle();
+  }
+
+  public void sortRecipesByTitle() {
+    appController.sortRecipesByTitle();
   }
 
   private void handleFilterSelection(ActionEvent event) {
