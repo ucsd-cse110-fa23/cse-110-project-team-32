@@ -1,11 +1,11 @@
 package client.HttpResponse;
 
-public class ModifyRecipeResponse implements ServerResponse<Boolean> {
+public class PingResponse implements ServerResponse<Boolean> {
 
   private String errorMsg;
   private int statusCode;
 
-  public ModifyRecipeResponse() {
+  public PingResponse() {
     errorMsg = null;
   }
 
@@ -21,7 +21,7 @@ public class ModifyRecipeResponse implements ServerResponse<Boolean> {
 
   @Override
   public Boolean getResponse() {
-    return statusCode == 200;
+    return this.statusCode == 200;
   }
 
   @Override
@@ -44,7 +44,7 @@ public class ModifyRecipeResponse implements ServerResponse<Boolean> {
 
   @Override
   public String toString() {
-    String temp = "Modify Recipe Response: \nStatus Code: %d \nError Msg: %s";
+    String temp = "Ping Server Response: \nStatus Code: %d \nError Msg: %s";
     return String.format(temp, statusCode, errorMsg);
   }
 }

@@ -62,7 +62,8 @@ public class CreateAccountView {
         this.logInButton.setOnAction(eventHandler);
     }
 
-    public void showError() {
+    public void showError(String errorMsg) {
+        error.setText(errorMsg);
         error.setVisible(true);
     }
 }

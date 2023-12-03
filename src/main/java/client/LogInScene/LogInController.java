@@ -1,52 +1,106 @@
 package client.LogInScene;
 
 import client.AppController;
-import client.Recipe;
-import java.io.File;
+import client.HttpResponse.ServerResponse;
+import client.UserSettings;
 import javafx.event.ActionEvent;
 
 public class LogInController {
-    LogInView logInView;
-    LogInModel logInModel;
-    AppController appController;
 
-    public LogInController(
-     LogInView logInView,
-     LogInModel logInModel,
-     AppController appController) {
-        
-        this.logInView = logInView;
-        this.logInModel = logInModel;
-        this.appController = appController;
+  LogInView logInView;
+  LogInModel logInModel;
+  AppController appController;
+  private final UserSettings USER_SETTINGS = UserSettings.getInstance();
 
-        logInView.setLogInButtonOnAction(this::handleLogInButtonAction);
-        logInView.setCreateButtonOnAction(this::handleCreateButtonAction);
+  public LogInController(
+    LogInView logInView,
+    LogInModel logInModel,
+    AppController appController
+  ) {
+    this.logInView = logInView;
+    this.logInModel = logInModel;
+    this.appController = appController;
+
+    logInView.setLogInButtonOnAction(this::handleLogInButtonAction);
+    logInView.setCreateButtonOnAction(this::handleCreateButtonAction);
+    logInView.setAutoLoginCheckBoxAction(this::handleAutoLoginCheckboxAction);
+    init();
+  }
+
+  private void init() {
+    // ping server, if server is ready, determine if auto login was selected
+    ServerResponse<Boolean> res = this.logInModel.pingServer();
+    System.out.println(res);
+    if (!res.getResponse()) {
+      logInView.showError(res.getErrorMsg()); // possibly res.errorMsg
+      disableLoginUI();
+      return;
     }
 
-    // Log In button event
-    private void handleLogInButtonAction(ActionEvent event) {
-        String user = logInView.getUsername();
-        String pass = logInView.getPassword();
-        if (logInModel.checkUserPass(user, pass) == true) {
-            appController.changeToRecipeListScene();
-        }
-        else {
-            logInView.showError();
-            System.out.println("Invalid Username");
-            
-        }
+    // if selected, init the recipe list for user
+    if (USER_SETTINGS.isAutoLoginOn()) {
+      initRecipeList();
     }
-
-    // Create Account Button event
-    private void handleCreateButtonAction(ActionEvent event) {
-        appController.changeToCreateAccountScene();
+    // if not, stay here, display saved username if there is one
+    String savedUsername = USER_SETTINGS.getUsername();
+    if (savedUsername != null) {
+      logInView.getUsernameField().setText(savedUsername);
     }
+    // logInView.getAutoLoginCheckBox().setSelected(USER_SETTINGS.isAutoLoginOn());
+    logInView.getAutoLoginCheckBox().setSelected(false);
+    USER_SETTINGS.writeSettingsToFile(false);
+  }
 
+  private void initRecipeList() {
+    appController.loadRecipeList();
+    appController.changeToRecipeListScene();
+  }
 
+  private void disableLoginUI() {
+    logInView.getUsernameField().setDisable(true);
+    logInView.getPasswordField().setDisable(true);
+    logInView.getSignupButton().setDisable(true);
+    logInView.getLoginButton().setDisable(true);
+    logInView.getAutoLoginCheckBox().setDisable(true);
+  }
 
+  // Log In button event
+  private void handleLogInButtonAction(ActionEvent event) {
+    String user = logInView.getUsername();
+    String pass = logInView.getPassword();
+    if (user == null || user.isEmpty()) {
+      logInView.showError("Please Enter Username.");
+      return;
+    }
+    if (pass == null || pass.isEmpty()) {
+      logInView.showError("Please Enter Password.");
+      return;
+    }
+    // look at the response object
+    ServerResponse<Boolean> authRes = logInModel.checkUserPass(user, pass);
+    System.out.println(authRes);
+    if (authRes.getResponse()) {
+      USER_SETTINGS.writeSettingsToFile(
+        logInView.autoLoginChecked(),
+        logInView.getUsername()
+      );
+      // clear the form
+      logInView.getUsernameField().setText("");
+      logInView.getPasswordField().setText("");
+      initRecipeList();
+    } else {
+      logInView.showError(authRes.getErrorMsg()); // possibly res.errorMsg
+    }
+  }
 
+  // Create Account Button event
+  private void handleCreateButtonAction(ActionEvent event) {
+    appController.changeToCreateAccountScene();
+  }
 
-
-
-
+  private void handleAutoLoginCheckboxAction(ActionEvent event) {
+    String savedUsername = USER_SETTINGS.getUsername();
+    if (logInView.autoLoginChecked()) return;
+    USER_SETTINGS.writeSettingsToFile(logInView.autoLoginChecked());
+  }
 }

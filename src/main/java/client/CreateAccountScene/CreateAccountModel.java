@@ -30,8 +30,7 @@ import org.json.JSONObject;
 public class CreateAccountModel {
     
     private static final String URL = "http://localhost:8100/";
-  private final UserSettings USER_SETTINGS = new UserSettings();
-
+    
     public ServerResponse<String> performStoreDetails(String username, String password) {
         ServerResponse<String> res = new CreateAccountResponse();
         try { //"/auth/?username="

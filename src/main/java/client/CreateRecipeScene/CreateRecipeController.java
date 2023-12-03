@@ -1,6 +1,8 @@
 package client.CreateRecipeScene;
 
 import client.AppController;
+import client.HttpResponse.CreateRecipeResponse;
+import client.HttpResponse.ServerResponse;
 import client.Recipe;
 import java.io.File;
 import javafx.event.ActionEvent;
@@ -41,7 +43,6 @@ public class CreateRecipeController {
       this::handleCreateDummyRecipeButtonAction
     );
     createRecipeView.setLogOutButtonAction(this::handleLogOutButton);
-
   }
 
   private AudioFormat setUpAudioFormat() {
@@ -64,7 +65,7 @@ public class CreateRecipeController {
     );
   }
 
-  private void handleLogOutButton(ActionEvent event){
+  private void handleLogOutButton(ActionEvent event) {
     appController.changeToLogInScene();
   }
 
@@ -155,13 +156,32 @@ public class CreateRecipeController {
         // System.out.println("3");
         createRecipeView.setRecordedIngredients(text);
 
-        Recipe newRecipe = createRecipeModel.generateByChatGPT(
+        ServerResponse<Recipe> createRecipeRes = createRecipeModel.generateByChatGPT(
           createRecipeView.getMealType(),
           createRecipeView.getIngredients(),
           false
         );
-        appController.changeToRecipeDetailScene(newRecipe, true);
-        createRecipeView.reset();
+        System.out.println(createRecipeRes);
+        if (createRecipeRes.getStatusCode() == 503) {
+          // server is suddenly down, nav to log in and display message
+          System.out.println("!!!!!!!!!!!");
+          System.out.println("Server down!");
+          System.out.println(createRecipeRes.getErrorMsg());
+          System.out.println("!!!!!!!!!!!");
+          return;
+        }
+        if (createRecipeRes.getStatusCode() == 200) {
+          appController.changeToRecipeDetailScene(
+            createRecipeRes.getResponse(),
+            true
+          );
+          createRecipeView.reset();
+        } else {
+          System.out.println("!!!!!!!!!!!");
+          System.out.println("Server ERROR!");
+          System.out.println(createRecipeRes.getErrorMsg());
+          System.out.println("!!!!!!!!!!!");
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -169,13 +189,13 @@ public class CreateRecipeController {
   }
 
   private void handleCreateDummyRecipeButtonAction(ActionEvent event) {
-    Recipe dummy = createRecipeModel.generateByChatGPT(
+    ServerResponse<Recipe> dummyRes = createRecipeModel.generateByChatGPT(
       "lunch",
       "chicken thighs",
       true
     );
     // Recipe dummy = new Recipe("Dummy Recipe Title", "Dummy Recipe Meal Type", "Dummy Recipe Detail");
-    appController.changeToRecipeDetailScene(dummy, true);
+    appController.changeToRecipeDetailScene(dummyRes.getResponse(), true);
     createRecipeView.reset();
   }
 }

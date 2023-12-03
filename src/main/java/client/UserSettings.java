@@ -4,11 +4,12 @@ import java.io.*;
 
 public class UserSettings {
 
+  private static final UserSettings userSettings = new UserSettings();
   private static final String SETTINGS_FILE = "user_settings.txt";
   private String username;
   private boolean autoLogin;
 
-  public UserSettings() {
+  private UserSettings() {
     // Try to read the UUID from the file
     String settings = readSettingsFromFile();
 
@@ -21,6 +22,10 @@ public class UserSettings {
       this.autoLogin = settingsItems[0].split("=")[1].equals("true");
       this.username = settingsItems[1].split("=")[1];
     }
+  }
+
+  public static UserSettings getInstance() {
+    return userSettings;
   }
 
   public String getUsername() {
@@ -39,6 +44,38 @@ public class UserSettings {
     } catch (IOException e) {
       e.printStackTrace();
       return null;
+    }
+  }
+
+  public void writeSettingsToFile(Boolean authLoginChecked, String username) {
+    String template = "autoLogin=%s&username=%s";
+    String newSettings = String.format(template, authLoginChecked, username);
+    try (
+      BufferedWriter writer = new BufferedWriter(new FileWriter(SETTINGS_FILE));
+    ) {
+      writer.write(newSettings);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void writeSettingsToFile(Boolean authLoginChecked) {
+    // if no user ever logged in (user_settings.txt file dont exist),
+    // dont try to write settings to that file
+    if (this.username == null) return;
+
+    String template = "autoLogin=%s&username=%s";
+    String newSettings = String.format(
+      template,
+      authLoginChecked,
+      this.username
+    );
+    try (
+      BufferedWriter writer = new BufferedWriter(new FileWriter(SETTINGS_FILE));
+    ) {
+      writer.write(newSettings);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }

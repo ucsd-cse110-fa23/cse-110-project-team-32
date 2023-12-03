@@ -1,20 +1,10 @@
 package server;
 
-import static com.mongodb.client.model.Filters.empty;
-
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 class AuthReqHandler implements HttpHandler {
 
@@ -77,7 +67,8 @@ class AuthReqHandler implements HttpHandler {
       if (mongoPassword.equals(password)) {
         return Constants.TRUE;
       } else {
-        return Constants.FALSE;
+        statusCode = 501;
+        return "Incorrect Username/Password!";
       }
 
 
