@@ -2,6 +2,8 @@ package client.RecipeListScene;
 
 import java.util.List;
 
+import client.AppController;
+import client.Recipe;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -12,6 +14,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
 import javafx.scene.layout.BorderPane;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -34,21 +39,25 @@ public class RecipeListView {
     private MenuButton filterButton;
     private RadioMenuItem lastSelectedFilter;
     private ToggleGroup mealTypeToggle;
-    
+    private Button sortButton;
+    private AppController appController;
+
     // Constructor
-    public RecipeListView() {
+    public RecipeListView(AppController appController) {
         borderPane = new BorderPane();
         // create buttons
+        this.appController = appController;
         newRecipeButton = new Button("New Recipe");
         newRecipeButton.getStyleClass().add("textBox");
         logOutButton = new Button("Log Out");
-        
+        sortButton = new Button("Sort");
+        sortButton.getStyleClass().add("textBox");
         // drop down menu for filter
         filterButton = new MenuButton("Filter By");
         filterButton.getStyleClass().add("textBox");
-        
-        mealTypeToggle = new ToggleGroup();
 
+        mealTypeToggle = new ToggleGroup();
+        setSortButtonEventHandler(appController);
         RadioMenuItem breakfastItem = new RadioMenuItem("Breakfast");
         breakfastItem.setToggleGroup(mealTypeToggle);
         RadioMenuItem lunchItem = new RadioMenuItem("Lunch");
@@ -66,15 +75,15 @@ public class RecipeListView {
         HBox.setHgrow(r1, Priority.ALWAYS);
 
         // creates horizontal box for the buttons and adds buttons to button group
-        HBox buttonGroup = new HBox(newRecipeButton, r,  filterButton, r1,  logOutButton);
-        buttonGroup.setPrefSize(500D,20);
+        HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, logOutButton, sortButton);
+        buttonGroup.setPrefSize(500D, 20);
 
         // set button group up top
         borderPane.setTop(buttonGroup);
         // creates container for recipe list
         recipeListContainer = new VBox();
         borderPane.setCenter(recipeListContainer);
-        
+
         initializeFilterSelection();
     }
 
@@ -82,6 +91,25 @@ public class RecipeListView {
     public RecipeListView(boolean test) {
         // constructor for testing purposes
         recipeListContainer = new VBox();
+    }
+
+    // public void setSortButtonEventHandler(AppController appController) {
+    // if (mealTypeToggle != null) {
+    // mealTypeToggle.selectedToggleProperty().addListener((observable, oldValue,
+    // newValue) -> {
+    // if (newValue != null) {
+    // lastSelectedFilter = (RadioMenuItem) newValue;
+    // appController.sortRecipesByTitle();
+    // }
+    // });
+    // }
+    // }
+    public void setSortButtonEventHandler(AppController appController) {
+        if (sortButton != null) {
+            sortButton.setOnAction(event -> {
+                appController.sortRecipesByTitle();
+            });
+        }
     }
 
     // Gets the main layout of recipe list view
@@ -99,8 +127,16 @@ public class RecipeListView {
         this.newRecipeButton.setOnAction(eventHandler);
     }
 
+    // private void sortRecipesByTitle() {
+    // if (recipeListController != null) {
+    // List<Recipe> recipeList = recipeListController.getAllRecipes();
+    // sortRecipesByTitle(recipeList);
+    // // TODO: Update the UI or perform any other actions after sorting
+    // }
+    // }
+
     // setter method for "Log Out" button
-    public void setLogOutButtonAction(EventHandler<ActionEvent> eventHandler){
+    public void setLogOutButtonAction(EventHandler<ActionEvent> eventHandler) {
         this.logOutButton.setOnAction(eventHandler);
     }
 
@@ -130,5 +166,3 @@ public class RecipeListView {
         }
     }
 }
-     
-
