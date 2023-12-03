@@ -51,7 +51,7 @@ public class RecipeListController {
   }
 
   private void handlelogOutButton(ActionEvent event) {
-    appController.changeToLogInScene();
+    appController.logOut();
   }
 
   private void handleFilterSelection(ActionEvent event) {

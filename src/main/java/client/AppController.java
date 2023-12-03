@@ -2,6 +2,7 @@ package client;
 
 import client.CreateAccountScene.*;
 import client.CreateRecipeScene.*;
+import client.LogInScene.LogInController;
 import client.LogInScene.LogInView;
 import client.RecipeDetailScene.*;
 import client.RecipeListScene.*;
@@ -33,6 +34,7 @@ public class AppController {
   private Scene createRecipeScene;
   private CreateAccountView createAccountView; // => Cav
   private Scene createAccountScene;
+  private LogInController logInController;
   private LogInView logInView;
   private Scene logInScene;
 
@@ -103,6 +105,10 @@ public class AppController {
   // when user successfully logs in, load the recipe list
   public void registerRecipeListController(RecipeListController rlController) {
     recipeListController = rlController;
+  }
+
+  public void registerLogInController(LogInController liController) {
+    logInController = liController;
   }
 
   // when user successfully logs in, load the recipe list
@@ -253,6 +259,12 @@ public class AppController {
       stage.setScene(createAccountScene);
       stage.setTitle("Create Account");
     }
+  }
+
+  public void logOut() {
+    // change to log in scene
+    logInController.handleLogOut();
+    changeToLogInScene();
   }
 
   public void changeToLogInScene() {
