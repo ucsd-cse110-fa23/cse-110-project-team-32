@@ -16,10 +16,9 @@ public class RecipeListController {
   AppController appController;
 
   public RecipeListController(
-    RecipeListView recipeListView,
-    RecipeListModel recipeListModel,
-    AppController appController
-  ) {
+      RecipeListView recipeListView,
+      RecipeListModel recipeListModel,
+      AppController appController) {
     this.recipeListView = recipeListView;
     this.recipeListModel = recipeListModel;
     this.appController = appController;
@@ -27,6 +26,8 @@ public class RecipeListController {
 
     recipeListView.setLogOutButtonAction(this::handlelogOutButton);
     recipeListView.setNewRecipeButtonAction(this::handleNewRecipeButtonAction);
+    recipeListView.setSortButtonEventHandler(appController);
+    recipeListView.setReverseSortButtonEventHandler(appController);
 
     recipeListView.setFilterAction(this::handleFilterSelection);
     // readAllRecipesByUID();
@@ -52,6 +53,28 @@ public class RecipeListController {
 
   private void handlelogOutButton(ActionEvent event) {
     appController.logOut();
+  }
+
+  public void handleSortButton(ActionEvent event) {
+    String selectedMealType = recipeListView.getSelectedMealType();
+    appController.sortRecipesByTitle(selectedMealType);
+  }
+
+  public void handleReverseSortButton(ActionEvent event) {
+    String selectedMealType = recipeListView.getSelectedMealType();
+    appController.reverseSortRecipesByTitle(selectedMealType);
+  }
+
+  public void sortRecipesByTitle() {
+    String selectedMealType = recipeListView.getSelectedMealType();
+    appController.sortRecipesByTitle(selectedMealType);
+    appController.updateRecipeListView(appController.getRecipeList());
+  }
+
+  public void reverseSortRecipesByTitle() {
+    String selectedMealType = recipeListView.getSelectedMealType();
+    appController.reverseSortRecipesByTitle(selectedMealType);
+    appController.updateRecipeListView(appController.getRecipeList());
   }
 
   private void handleFilterSelection(ActionEvent event) {
