@@ -316,7 +316,7 @@ public class AppController {
           filteredRecipes.add(recipe);
         }
       }
-    } else if (mealType.equals("reset filter")) {
+    } else if (mealType.equalsIgnoreCase("reset filter")) {
       // System.out.println("REACHED2");
       filteredRecipes.addAll(savedSorted);
     } else {
