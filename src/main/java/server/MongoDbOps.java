@@ -57,7 +57,7 @@ public class MongoDbOps {
       if (user == null) {
         return null;
       }
-      System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
+      // System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
 
       JSONObject userJson = new JSONObject(user);
       String password = userJson.getString("password");
@@ -94,7 +94,7 @@ public class MongoDbOps {
 
       JSONObject userJson = new JSONObject(user);
       JSONArray dataJsonArray = userJson.getJSONArray("recipes");
-      System.out.println(dataJsonArray);
+      // System.out.println(dataJsonArray);
 
       String response = "";
       for (int i = 0; i < dataJsonArray.length(); i++) {
@@ -230,7 +230,7 @@ public class MongoDbOps {
         // user already exists, so just append a recipe entry in the recipes list
         Bson filter = Filters.eq("username", userID);
         Bson update = Updates.push("recipes", newRecipe);
-        Document oldVersion = recipeCollection.findOneAndUpdate(filter, update);
+        // Document oldVersion = recipeCollection.findOneAndUpdate(filter, update);
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -293,20 +293,6 @@ public class MongoDbOps {
 
       // Close the MongoDB connection
       mongoClient.close();
-      // Bson delete = Updates.pull(
-      //   "recipes",
-      //   new Document("recipeID", recipeID)
-      //     .append("title", title)
-      //     .append("mealType", mealType)
-      //     .append("recipeDetail", recipeDetail)
-      // );
-      //   recipeCollection.update(
-      // { '_id': ObjectId("5150a1199fac0e6910000002") },
-      // { $pull: { items: { id: 23 } } },
-      // false, // Upsert
-      // true, // Multi
-      // );
-      // recipeCollection.updateOne(filter, delete);
     } catch (Exception e) {
       e.printStackTrace();
       return false;

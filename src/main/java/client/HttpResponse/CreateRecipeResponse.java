@@ -2,12 +2,6 @@ package client.HttpResponse;
 
 import client.Recipe;
 import client.RecipeBuilder;
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-// import com.google.common.io.Files;
 import java.util.UUID;
 
 public class CreateRecipeResponse implements ServerResponse<Recipe> {
