@@ -382,7 +382,10 @@ public class AppController {
   }
 
   public void handleServerDown() {
-    System.out.println("Server is down from AppController");
+    // System.out.println("Server is down from AppController");
+    logInController.disableLoginUI();
+    logInController.showError("Server is Down! Please Come back Later!");
+    stage.setScene(logInScene);
   }
 }
 /*

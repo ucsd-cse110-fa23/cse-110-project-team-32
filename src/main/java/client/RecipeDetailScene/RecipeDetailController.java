@@ -48,6 +48,10 @@ public class RecipeDetailController {
             newRecipe
           );
           System.out.println(postResponse);
+          if (postResponse.getStatusCode() == 503) {
+            appController.handleServerDown();
+            return;
+          }
         }
       } else {
         if (view.hasEdited()) {
@@ -59,6 +63,10 @@ public class RecipeDetailController {
               editedRecipe
             );
             System.out.println(updateResponse);
+            if (updateResponse.getStatusCode() == 503) {
+              appController.handleServerDown();
+              return;
+            }
           }
         }
       }
@@ -87,6 +95,10 @@ public class RecipeDetailController {
         currentRecipe
       );
       System.out.println(deleteResponse);
+      if (deleteResponse.getStatusCode() == 503) {
+        appController.handleServerDown();
+        return;
+      }
     }
     appController.removeRecipeFromRecipeList(currentRecipe);
     appController.changeToRecipeListScene();
@@ -100,7 +112,7 @@ public class RecipeDetailController {
     );
     System.out.println(createRecipeResponse);
     if (createRecipeResponse.getStatusCode() == 503) {
-      System.out.println("SERVER DOWN!!!!!!!!");
+      appController.handleServerDown();
       // navigate to log in and display error
       return;
     }

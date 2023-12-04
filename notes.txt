@@ -4,7 +4,4 @@ css
 
 sorting logic
 
-take off logout button in detail
-
-mock DALL-E 
-test user_settings.java
+take off logout button in detail, can leave it for now
