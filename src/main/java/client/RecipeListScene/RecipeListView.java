@@ -7,6 +7,7 @@ import client.Recipe;
 import client.RecipeListItem;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 
 import javafx.scene.control.RadioMenuItem;
@@ -91,6 +92,15 @@ public class RecipeListView {
         // creates container for recipe list
         recipeListContainer = new VBox();
         borderPane.setCenter(recipeListContainer);
+
+        // UI Styling (WIP)
+        // String buttonStyle = "-fx-background-color: #DAE5EA; -fx-border-width: 0;";
+        // newRecipeButton.setStyle(buttonStyle);
+        // filterButton.setStyle(buttonStyle);
+        // sortButton.setStyle(buttonStyle);
+        // reverseSortButton.setStyle(buttonStyle);
+        // sortDateButton.setStyle(buttonStyle);
+        // logOutButton.setStyle(buttonStyle);
 
         initializeFilterSelection();
     }
