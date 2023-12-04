@@ -62,9 +62,10 @@ class AuthReqHandler implements HttpHandler {
         statusCode = 404;
         return Constants.INVALID_GET_TO_ROUTE + "/auth";
       }
-      // if(MONGO_DB_OPS.getRecipesByUserID(username) == null){
-      //   return Constants.USER_EXISTS;
-      // }
+      if(MONGO_DB_OPS.getRecipesByUserID(username) == null){
+        statusCode = 501;
+        return "Incorrect Username/Password!";
+      }
 
       String mongoPassword = MONGO_DB_OPS.getUserPasswordByUsername(username);
       if (mongoPassword.equals(password)) {
