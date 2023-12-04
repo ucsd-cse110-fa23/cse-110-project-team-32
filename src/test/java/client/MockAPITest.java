@@ -78,9 +78,8 @@ class mockVoiceRecorder implements API{
         //Doesn't actually do voice recording
         return FILE;
     }
-
-
 }
+
 public class MockAPITest {
 
     @Test void testChatGPT(){
