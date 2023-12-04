@@ -81,7 +81,8 @@ public class RecipeListController {
     String selectedMealType = recipeListView.getSelectedMealType();
 
     if (selectedMealType != null && !selectedMealType.equals("Reset Filter")) {
-      appController.handleFilter(selectedMealType);
+      List<Recipe> filteredRecipes = appController.handleFilter(selectedMealType);
+      appController.updateRecipeListView(filteredRecipes);
     } else {
       appController.updateRecipeListView(appController.getRecipeList());
     }
