@@ -1,5 +1,6 @@
 package client.CreateAccountScene;
 import javafx.event.EventHandler;
+import client.TextFieldLowerChar;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -15,8 +16,8 @@ public class CreateAccountView {
     private Button createAccButton;
     private Button logInButton;
     private HBox title;
-    private TextField username;
-    private TextField password;
+    private TextFieldLowerChar username;
+    private TextFieldLowerChar password;
     private VBox accountDetails;
     private HBox buttonList;
     private Text error;
@@ -26,9 +27,9 @@ public class CreateAccountView {
         borderPane = new BorderPane();
         title = new HBox(new Text("Create Account"));
         borderPane.setTop(title);
-        username = new TextField();
+        username = new TextFieldLowerChar();
         username.setPromptText("username");
-        password = new TextField();
+        password = new TextFieldLowerChar();
         password.setPromptText("password");
         // error = new Text("Username already taken");
         error = new Text();
