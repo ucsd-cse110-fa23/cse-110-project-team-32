@@ -59,20 +59,24 @@ public class RecipeListController {
   }
 
   public void handleSortButton(ActionEvent event) {
-    appController.sortRecipesByTitle();
+    String selectedMealType = recipeListView.getSelectedMealType();
+    appController.sortRecipesByTitle(selectedMealType);
   }
 
   public void handleReverseSortButton(ActionEvent event) {
-    appController.reverseSortRecipesByTitle();
+    String selectedMealType = recipeListView.getSelectedMealType();
+    appController.reverseSortRecipesByTitle(selectedMealType);
   }
 
   public void sortRecipesByTitle() {
-    appController.sortRecipesByTitle();
+    String selectedMealType = recipeListView.getSelectedMealType();
+    appController.sortRecipesByTitle(selectedMealType);
     appController.updateRecipeListView(appController.getRecipeList());
   }
 
   public void reverseSortRecipesByTitle() {
-    appController.reverseSortRecipesByTitle();
+    String selectedMealType = recipeListView.getSelectedMealType();
+    appController.reverseSortRecipesByTitle(selectedMealType);
     appController.updateRecipeListView(appController.getRecipeList());
   }
 
