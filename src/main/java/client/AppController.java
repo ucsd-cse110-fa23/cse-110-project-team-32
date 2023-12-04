@@ -127,43 +127,71 @@ public class AppController {
     }
   }
 
-  public void sortRecipesByTitle() {
-    System.out.println("Sort button clicked!");
+  public void sortRecipesByTitle(String mealType) {
+    mealType = mealType.toLowerCase();
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
     Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
+    if (mealType != null && mealType != "reset filter") {
+      for (Recipe x : recipeList) {
+        if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
+          System.out.println("Sorted recipe: " + x.getTitle());
+          sortedRecipes.add(x);
+        }
+      }
+      updateRecipeListViews(sortedRecipes);
+      return;
+    } else {
+      for (Recipe x : recipeList) {
+        System.out.println("Sorted recipe: " + x.getTitle());
+        sortedRecipes.add(x);
+      }
 
-    for (Recipe x : recipeList) {
-      System.out.println("Sorted recipe: " + x.getTitle());
-      sortedRecipes.add(x);
+      updateRecipeListViews(sortedRecipes);
     }
-
-    updateRecipeListViews(sortedRecipes);
-    // updateRecipeListView(sortedRecipes);
-    // System.out.println("reached"); //Just a debugging tool
-
   }
 
-  public void reverseSortRecipesByTitle() {
+  public void reverseSortRecipesByTitle(String mealType) {
     System.out.println("Sort button clicked!");
+    mealType = mealType.toLowerCase();
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
     Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
 
-    for (Recipe x : recipeList) {
-      // System.out.println("Sorted recipe: " + x.getTitle());
-      sortedRecipes.add(x);
+    if (mealType != null && mealType != "reset filter") {
+      for (Recipe x : recipeList) {
+        if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
+          System.out.println("Sorted recipe: " + x.getTitle());
+          sortedRecipes.add(x);
+        }
+      }
+      // updateRecipeListViews(sortedRecipes);
+      // return;
+    } else {
+      for (Recipe x : recipeList) {
+        System.out.println("Sorted recipe: " + x.getTitle());
+        sortedRecipes.add(x);
+      }
+
+      // updateRecipeListViews(sortedRecipes);
     }
 
     Collections.reverse(sortedRecipes);
     for (Recipe x : recipeList) {
       System.out.println("Sorted recipe: " + x.getTitle()); // debug statement only
     }
-
     updateRecipeListViews(sortedRecipes);
+
+    // updateRecipeListViews(sortedRecipes);
     // updateRecipeListView(sortedRecipes);
     // System.out.println("reached"); //Just a debugging tool
 
+  }
+
+  public void sortRecipesByDate() {
+    System.out.println("Sort button clicked!");
+    List<Recipe> recipeList = getRecipeList();
+    List<Recipe> sortedRecipes = new ArrayList<>();
   }
 
   public void updateRecipeListViews(List<Recipe> recipes) {
