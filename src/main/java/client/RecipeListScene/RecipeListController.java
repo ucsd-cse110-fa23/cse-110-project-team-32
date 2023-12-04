@@ -3,13 +3,10 @@ package client.RecipeListScene;
 import client.AppController;
 import client.HttpResponse.ServerResponse;
 import client.Recipe;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.event.ActionEvent;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.RadioMenuItem;
 
 public class RecipeListController {
 
@@ -55,7 +52,7 @@ public class RecipeListController {
   }
 
   private void handlelogOutButton(ActionEvent event) {
-    appController.changeToLogInScene();
+    appController.logOut();
   }
 
   public void handleSortButton(ActionEvent event) {
@@ -84,7 +81,13 @@ public class RecipeListController {
     String selectedMealType = recipeListView.getSelectedMealType();
 
     if (selectedMealType != null && !selectedMealType.equals("Reset Filter")) {
-      appController.handleFilter(selectedMealType);
+      List<Recipe> filteredRecipes = appController.handleFilter(selectedMealType);
+      appController.updateRecipeListView(filteredRecipes);
+    } else if (appController.isSort == true) {
+      System.out.println("HERE");
+      appController.updateRecipeListViews2(appController.savedSorted);
+    } else if (appController.isReversedSort == true) {
+      appController.updateRecipeListViews2(appController.savedReverseSorted);
     } else {
       appController.updateRecipeListView(appController.getRecipeList());
     }
