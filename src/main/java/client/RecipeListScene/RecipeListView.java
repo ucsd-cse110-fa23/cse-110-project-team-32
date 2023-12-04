@@ -79,12 +79,14 @@ public class RecipeListView {
 
         Region r = new Region();
         Region r1 = new Region();
+        Region r2 = new Region();
         HBox.setHgrow(r, Priority.ALWAYS);
         HBox.setHgrow(r1, Priority.ALWAYS);
+        HBox.setHgrow(r2, Priority.ALWAYS);
 
         // creates horizontal box for the buttons and adds buttons to button group
         HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, sortButton, reverseSortButton, sortDateButton,
-                logOutButton);
+                                    r2, logOutButton);
         buttonGroup.setPrefSize(500D, 20);
 
         // set button group up top

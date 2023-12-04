@@ -46,7 +46,7 @@ public class LogInView {
     createAccButton = new Button("Create Account");
     error.setVisible(false);
 
-    buttonList = new HBox(createAccButton, logInButton);
+    buttonList = new HBox(logInButton, createAccButton);
     borderPane.setBottom(buttonList);
 
     // UI Styling
