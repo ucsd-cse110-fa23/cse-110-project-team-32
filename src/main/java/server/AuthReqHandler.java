@@ -10,7 +10,7 @@ class AuthReqHandler implements HttpHandler {
 
   private final MongoDbOps MONGO_DB_OPS = MongoDbOps.getInstance();
   private final Helper HELPER = Helper.getInstance();
-  private int statusCode = 200;
+  private int statusCode = 200; //How do get status code from CreateAccModel?
 
   @Override
   public void handle(HttpExchange httpExchange) throws IOException {
@@ -25,6 +25,7 @@ class AuthReqHandler implements HttpHandler {
         response = handlePost(httpExchange);
       } else {
         statusCode = 404;
+        System.out.println("LINE 28 AUTHREQHANDLER");
         response = Constants.INVALID_REQ_TO_ROUTE + "/auth";
       }
     } catch (Exception e) {
@@ -46,8 +47,8 @@ class AuthReqHandler implements HttpHandler {
     // decode request
     try {
       URI uri = httpExchange.getRequestURI();
-      String query = uri.getRawQuery();
-      String[] usernameAndPassword = query.split("&");
+      String query = uri.getRawQuery(); 
+      String[] usernameAndPassword = query.split("&"); //?=Java, ?=
       String username = usernameAndPassword[0].split("=")[1];
       String password = usernameAndPassword[1].split("=")[1];
       if (
@@ -56,9 +57,16 @@ class AuthReqHandler implements HttpHandler {
         password == null ||
         password.isEmpty()
       ) {
+        System.out.println("User: " + username);
+        System.out.println("Password: " + password);
         statusCode = 404;
         return Constants.INVALID_GET_TO_ROUTE + "/auth";
       }
+      if(MONGO_DB_OPS.getRecipesByUserID(username) == null){
+        statusCode = 501;
+        return "Incorrect Username/Password!";
+      }
+
       String mongoPassword = MONGO_DB_OPS.getUserPasswordByUsername(username);
       if (mongoPassword.equals(password)) {
         return Constants.TRUE;
@@ -66,8 +74,11 @@ class AuthReqHandler implements HttpHandler {
         statusCode = 501;
         return "Incorrect Username/Password!";
       }
+
+
     } catch (Exception e) {
       statusCode = 404;
+      System.out.println("LINE 80 AUTHREQHANDLER");
       return Constants.INVALID_GET_TO_ROUTE + "/auth";
     }
   }
@@ -79,6 +90,7 @@ class AuthReqHandler implements HttpHandler {
       int parserInd = reqBody.indexOf("&");
       String username = reqBody.substring(0, parserInd).split("=")[1];
       String password = reqBody.substring(parserInd + 1).split("=")[1];
+      if (username.isEmpty()) return Constants.FALSE;
       if (password.isEmpty()) return Constants.FALSE;
       // String dbPassword = MONGO_DB_OPS.getUserPasswordByUsername(username);
       boolean isCreateUserSuccessful = MONGO_DB_OPS.createUser(
@@ -87,10 +99,12 @@ class AuthReqHandler implements HttpHandler {
       );
       if (isCreateUserSuccessful) return Constants.TRUE;
       statusCode = 501;
-      return Constants.USER_EXISTS;
+      return "Username Already Exists!";
     } catch (Exception e) {
+      e.printStackTrace();
       statusCode = 404;
       return Constants.INVALID_POST_TO_ROUTE + "/auth";
     }
   }
+
 }

@@ -2,6 +2,8 @@ package client.CreateAccountScene;
 
 import client.AppController;
 import client.Recipe;
+import client.HttpResponse.ServerResponse;
+
 import java.io.File;
 import javafx.event.ActionEvent;
 
@@ -29,14 +31,39 @@ public class CreateAccountController {
     private void handleCreateButtonAction(ActionEvent event) {
         String user = createAccountView.getUsername();
         String pass = createAccountView.getPassword();
-        if (createAccountModel.checkValidUsername(user) == false) {
-            createAccountModel.storeAccountDetails(user, pass);
-            appController.changeToRecipeListScene();
+        if(user == null || pass ==  null || user.isEmpty() || pass.isEmpty()){
+            createAccountView.showError("Please enter username and password.");
+            return;
         }
-        else {
-            createAccountView.showError();
-            System.out.println("Invalid Username");
+        ServerResponse<String> createAccResponse = createAccountModel.performStoreDetails(user, pass);
+        if(createAccResponse.getStatusCode() != 200){
+            createAccountView.showError(createAccResponse.getErrorMsg());
+            // System.out.println("Response: " + createAccResponse.getResponse());
+            // System.out.println("Create Acc Error Msg: " + createAccResponse.getErrorMsg());
         }
+        else{
+            // System.out.println("Successfully created Account");
+            appController.changeToLogInScene();
+        }
+
+        // if(createAccountModel.performStoreDetails(user, pass).getStatusCode()==503
+        // || createAccountModel.performStoreDetails(user, pass).getStatusCode()==501
+        // ){
+        //     createAccountView.showError();
+        // }
+        // else{
+        //     appController.changeToRecipeListScene();
+        // }
+
+
+        // if (createAccountModel.checkValidUsername(user) == false) {
+        //     createAccountModel.performStoreDetails(user, pass);
+        //     appController.changeToRecipeListScene();
+        // }
+        // else {
+        //     createAccountView.showError();
+        //     System.out.println("Invalid Username");
+        // }
     }
 
 
