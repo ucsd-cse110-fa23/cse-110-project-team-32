@@ -90,7 +90,7 @@ public class MongoDbOps {
       if (user == null) {
         return null;
       }
-      System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
+      // System.out.println("pretty print user: \n" + user.toJson(prettyPrint));
 
       JSONObject userJson = new JSONObject(user);
       JSONArray dataJsonArray = userJson.getJSONArray("recipes");
@@ -257,7 +257,7 @@ public class MongoDbOps {
       UpdateOptions options = new UpdateOptions().arrayFilters(arrayFilter);
       Bson update = set("recipes.$[ele].recipeDetail", recipeDetail);
       UpdateResult result = recipeCollection.updateOne(filter, update, options);
-      System.out.println("result: " + result);
+      // System.out.println("result: " + result);
       return true;
     } catch (Exception e) {
       e.printStackTrace();

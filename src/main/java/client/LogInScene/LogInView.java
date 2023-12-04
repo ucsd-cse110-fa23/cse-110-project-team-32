@@ -109,5 +109,6 @@ public class LogInView {
     username.setText("");
     password.setText("");
     rememberMe.setSelected(false);
+    error.setVisible(false);
   }
 }
