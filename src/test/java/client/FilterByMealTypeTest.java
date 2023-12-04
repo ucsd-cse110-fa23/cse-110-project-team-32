@@ -36,7 +36,7 @@ public class FilterByMealTypeTest {
         // test for reset filter (should show all)
         List <Recipe> reset = appController.handleFilter(null);
         reset.equals(appController.getRecipeList());
-
+        assertEquals(reset, appController.getRecipeList());
     }
 
     // Method to create recipes

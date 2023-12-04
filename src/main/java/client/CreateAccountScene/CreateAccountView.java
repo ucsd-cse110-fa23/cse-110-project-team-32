@@ -67,15 +67,23 @@ public class CreateAccountView {
   }
 
   public void setCreateButtonOnAction(EventHandler<ActionEvent> eventHandler) {
+    clearForm();
     this.createAccButton.setOnAction(eventHandler);
   }
 
   public void setLogInButtonOnAction(EventHandler<ActionEvent> eventHandler) {
+    clearForm();
     this.logInButton.setOnAction(eventHandler);
   }
 
   public void showError(String errorMsg) {
     error.setText(errorMsg);
     error.setVisible(true);
+  }
+
+  public void clearForm() {
+    username.setText("");
+    password.setText("");
+    error.setVisible(false);
   }
 }
