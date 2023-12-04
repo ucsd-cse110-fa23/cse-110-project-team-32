@@ -50,6 +50,8 @@ public class UserSettings {
   public void writeSettingsToFile(Boolean authLoginChecked, String username) {
     String template = "autoLogin=%s&username=%s";
     String newSettings = String.format(template, authLoginChecked, username);
+    this.username = username;
+    this.autoLogin = authLoginChecked;
     try (
       BufferedWriter writer = new BufferedWriter(new FileWriter(SETTINGS_FILE));
     ) {
@@ -59,7 +61,7 @@ public class UserSettings {
     }
   }
 
-  public void writeSettingsToFile(Boolean authLoginChecked) {
+  public void writeSettingsToFile(Boolean autoLoginChecked) {
     // if no user ever logged in (user_settings.txt file dont exist),
     // dont try to write settings to that file
     if (this.username == null) return;
@@ -67,9 +69,10 @@ public class UserSettings {
     String template = "autoLogin=%s&username=%s";
     String newSettings = String.format(
       template,
-      authLoginChecked,
+      autoLoginChecked,
       this.username
     );
+    this.autoLogin = autoLoginChecked;
     try (
       BufferedWriter writer = new BufferedWriter(new FileWriter(SETTINGS_FILE));
     ) {
