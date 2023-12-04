@@ -230,7 +230,7 @@ public class MongoDbOps {
         // user already exists, so just append a recipe entry in the recipes list
         Bson filter = Filters.eq("username", userID);
         Bson update = Updates.push("recipes", newRecipe);
-        // Document oldVersion = recipeCollection.findOneAndUpdate(filter, update);
+        recipeCollection.findOneAndUpdate(filter, update);
       }
     } catch (Exception e) {
       e.printStackTrace();

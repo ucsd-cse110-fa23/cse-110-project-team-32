@@ -1,0 +1,5 @@
+exit to login page when server is down
+display server error on screen
+css
+
+sorting logic

@@ -37,8 +37,8 @@ public class RootReqHandler implements HttpHandler {
   private String handleGet(HttpExchange httpExchange) {
     URI uri = httpExchange.getRequestURI();
     // query is in the form: username=<username>
-
     String query = uri.getRawQuery();
+    System.out.println("query to get all recipes: " + query);
     String username = query.substring(query.indexOf("=") + 1);
     System.out.println("Getting recipes of username: " + username);
     if (username == null || username.isEmpty()) {
