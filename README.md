@@ -1,4 +1,5 @@
-﻿# PantryPal Team 32
+
+-# PantryPal Team 32
 
 
 Clone the repo
@@ -68,3 +69,4 @@ How to run Pantry pal 2:
    If done correctly, you will be brought into a new page where the application will generate a recipe according to your desired meal type and ingredients.
 7. In the new page, you are able to regenerate the recipe if you are not satisfied by clicking the "regenerate recipe". You are also able to edit the instructions and ingredients of the recipe
    by clicking the edit button. Next to that, you are also able to save and cancel the recipe generated.
+

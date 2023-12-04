@@ -45,13 +45,12 @@ public class AppController {
   private static final Double windowHeight = 500D;
 
   public AppController(
-    RecipeListView recipeListView,
-    RecipeDetailView recipeDetailView,
-    CreateRecipeView createRecipeView,
-    CreateAccountView createAccountView,
-    LogInView logInView,
-    Stage stage
-  ) {
+      RecipeListView recipeListView,
+      RecipeDetailView recipeDetailView,
+      CreateRecipeView createRecipeView,
+      CreateAccountView createAccountView,
+      LogInView logInView,
+      Stage stage) {
     this.recipeListView = recipeListView;
     this.recipeListContainer = this.recipeListView.getRecipeListContainer();
     this.recipeDetailView = recipeDetailView;
@@ -60,36 +59,26 @@ public class AppController {
     this.logInView = logInView;
     // recipeListView.setSortButtonAction(this);
 
-    this.recipeListScene =
-      new Scene(
+    this.recipeListScene = new Scene(
         new ScrollPane(recipeListView.getBorderPane()),
         windowWidth,
-        windowHeight
-      );
-    this.recipeDetailScene =
-      new Scene(
+        windowHeight);
+    this.recipeDetailScene = new Scene(
         new ScrollPane(recipeDetailView.getBorderPane()),
         windowWidth,
-        windowHeight
-      );
-    this.createRecipeScene =
-      new Scene(
+        windowHeight);
+    this.createRecipeScene = new Scene(
         new ScrollPane(createRecipeView.getBorderPane()),
         windowWidth,
-        windowHeight
-      );
-    this.createAccountScene =
-      new Scene(
+        windowHeight);
+    this.createAccountScene = new Scene(
         new ScrollPane(createAccountView.getBorderPane()),
         windowWidth,
-        windowHeight
-      );
-    this.logInScene =
-      new Scene(
+        windowHeight);
+    this.logInScene = new Scene(
         new ScrollPane(logInView.getBorderPane()),
         windowWidth,
-        windowHeight
-      );
+        windowHeight);
     // this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth,
     // windowHeight);
     // this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(),
@@ -121,7 +110,8 @@ public class AppController {
 
   // when user successfully logs in, load the recipe list
   public void loadRecipeList() {
-    if (recipeListController == null) return;
+    if (recipeListController == null)
+      return;
     recipeListController.readAllRecipesByUID();
   }
 
@@ -144,63 +134,81 @@ public class AppController {
     }
   }
 
+  public boolean isSort = false;
+  public List<Recipe> savedSorted;
+
   public void sortRecipesByTitle(String mealType) {
-    mealType = mealType.toLowerCase();
+    isSort = true;
+    isReversedSort = false;
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
+    // List<Recipe> remainingRecipes = new ArrayList<>();
     Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
-    if (mealType != null && mealType != "reset filter") {
+    savedSorted = recipeList;
+    if (mealType == null || mealType.equals("reset filter") ||
+        mealType.equals("Reset Filter")) {
       for (Recipe x : recipeList) {
-        if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
-          System.out.println("Sorted recipe: " + x.getTitle());
-          sortedRecipes.add(x);
-        }
-      }
-      updateRecipeListViews(sortedRecipes);
-      return;
-    } else {
-      for (Recipe x : recipeList) {
-        System.out.println("Sorted recipe: " + x.getTitle());
+        // System.out.println("Sorted recipe: " + x.getTitle());
         sortedRecipes.add(x);
       }
+      updateRecipeListViews(sortedRecipes, recipeList);
+    } else {
+      mealType = mealType.toLowerCase();
+      for (Recipe x : recipeList) {
+        if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
+          // System.out.println("Sorted recipe: " + x.getTitle());
+          sortedRecipes.add(x);
+        }
 
-      updateRecipeListViews(sortedRecipes);
+      }
+      updateRecipeListViews(sortedRecipes, recipeList);
     }
   }
 
+  // public void sortRecipesByTitle(String mealType) {
+  // List<Recipe> recipeList = getRecipeList();
+  // List<Recipe> sortedRecipes = new ArrayList<>();
+  // // List<Recipe> remainingRecipes = new ArrayList<>();
+  // Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
+  // if (mealType != null) {
+  // mealType = mealType.toLowerCase();
+  // }
+
+  // updateRecipeListViews(recipeList, mealType);
+
+  // }
+  public boolean isReversedSort = false;
+  public List<Recipe> savedReverseSorted;
+
   public void reverseSortRecipesByTitle(String mealType) {
-    System.out.println("Sort button clicked!");
-    mealType = mealType.toLowerCase();
+    isReversedSort = true;
+    isSort = false;
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
     Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
-
-    if (mealType != null && mealType != "reset filter") {
+    if (mealType == null || mealType.equals("reset filter") || mealType.equals("Reset Filter")) {
+      for (Recipe x : recipeList) {
+        System.out.println("Sorted recipe: " + x.getTitle());
+        sortedRecipes.add(x);
+      }
+      // updateRecipeListViews(sortedRecipes);
+    } else {
+      mealType = mealType.toLowerCase();
       for (Recipe x : recipeList) {
         if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
           System.out.println("Sorted recipe: " + x.getTitle());
           sortedRecipes.add(x);
         }
       }
-      // updateRecipeListViews(sortedRecipes);
-      // return;
-    } else {
-      for (Recipe x : recipeList) {
-        System.out.println("Sorted recipe: " + x.getTitle());
-        sortedRecipes.add(x);
-      }
-      // updateRecipeListViews(sortedRecipes);
+      updateRecipeListViews(sortedRecipes, recipeList);
     }
-
     Collections.reverse(sortedRecipes);
     for (Recipe x : recipeList) {
       System.out.println("Sorted recipe: " + x.getTitle()); // debug statement only
     }
-    updateRecipeListViews(sortedRecipes);
-    // updateRecipeListViews(sortedRecipes);
-    // updateRecipeListView(sortedRecipes);
-    // System.out.println("reached"); //Just a debugging tool
-
+    savedReverseSorted = recipeList;
+    Collections.reverse(savedReverseSorted);
+    updateRecipeListViews(sortedRecipes, recipeList);
   }
 
   public void sortRecipesByDate() {
@@ -209,7 +217,7 @@ public class AppController {
     List<Recipe> sortedRecipes = new ArrayList<>();
   }
 
-  public void updateRecipeListViews(List<Recipe> recipes) {
+  public void updateRecipeListViews(List<Recipe> recipes, List<Recipe> recipeList) {
     // Clear existing content
     recipeListContainer.getChildren().clear();
 
@@ -219,9 +227,71 @@ public class AppController {
         this.changeToRecipeDetailScene(recipe, false);
       });
 
-      // Add the new recipe to the container
       recipeListContainer.getChildren().add(recipeListItem);
     }
+
+    for (Recipe x : recipeList) {
+      if (!containsRecipe(x)) {
+        RecipeListItem recipeListItem = new RecipeListItem(x);
+        recipeListItem.setOnMouseClicked(e -> {
+          this.changeToRecipeDetailScene(x, false);
+        });
+        recipeListItem.setVisible(false);
+
+        // Add the new recipe to the container
+        recipeListContainer.getChildren().add(recipeListItem);
+      }
+    }
+  }
+
+  public void updateRecipeListViews2(List<Recipe> recipes) {
+    // Clear existing content
+    recipeListContainer.getChildren().clear();
+
+    for (Recipe recipe : recipes) {
+      RecipeListItem recipeListItem = new RecipeListItem(recipe);
+      recipeListItem.setOnMouseClicked(e -> {
+        this.changeToRecipeDetailScene(recipe, false);
+      });
+
+      recipeListContainer.getChildren().add(recipeListItem);
+    }
+  }
+
+  // public void updateRecipeListViews(List<Recipe> recipes, String mealType) {
+  // recipeListContainer.getChildren().clear();
+
+  // for (Recipe recipe : recipes) {
+  // RecipeListItem recipeListItem = new RecipeListItem(recipe);
+  // recipeListItem.setOnMouseClicked(e -> {
+  // this.changeToRecipeDetailScene(recipe, false);
+  // });
+
+  // if (mealType == null || recipe.getMealType().equalsIgnoreCase(mealType) ||
+  // mealType.equals("reset filter")) {
+  // // Show the recipe
+  // recipeListContainer.getChildren().add(recipeListItem);
+  // } else {
+  // // Hide the recipe by setting its height to 0
+  // recipeListItem.setMinHeight(0);
+  // recipeListItem.setMaxHeight(0);
+  // recipeListItem.setPrefHeight(0);
+  // recipeListItem.setVisible(false);
+  // recipeListContainer.getChildren().add(recipeListItem);
+  // }
+  // }
+  // }
+
+  private boolean containsRecipe(Recipe recipe) {
+    for (Node node : recipeListContainer.getChildren()) {
+      if (node instanceof RecipeListItem) {
+        RecipeListItem listItem = (RecipeListItem) node;
+        if (listItem.getRecipe().equals(recipe)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public void updateRecipeList(List<Recipe> recipes) {
@@ -239,14 +309,18 @@ public class AppController {
   public List<Recipe> handleFilter(String mealType) {
     List<Recipe> allRecipes = getRecipeList();
     List<Recipe> filteredRecipes = new ArrayList<>();
-
-    if (mealType != null) {
+    if (mealType != null && !mealType.equals("reset filter")) {
+      // System.out.println("REACHED1");
       for (Recipe recipe : allRecipes) {
         if (mealType.equalsIgnoreCase(recipe.getMealType())) {
           filteredRecipes.add(recipe);
         }
       }
+    } else if (mealType.equals("reset filter")) {
+      // System.out.println("REACHED2");
+      filteredRecipes.addAll(savedSorted);
     } else {
+      // System.out.println("REACHED3");
       filteredRecipes.addAll(allRecipes); // Display all recipes if no meal type selected
     }
 
@@ -275,8 +349,7 @@ public class AppController {
 
   public List<Recipe> getRecipeList() {
     // use this function to test
-    ObservableList<Node> recipeItemsList =
-      this.recipeListContainer.getChildren();
+    ObservableList<Node> recipeItemsList = this.recipeListContainer.getChildren();
     List<Recipe> recipeList = new ArrayList<>();
     for (Node c : recipeItemsList) {
       if (c instanceof RecipeListItem) {
@@ -295,27 +368,16 @@ public class AppController {
   public void removeRecipeFromRecipeList(Recipe recipe) {
     int indexOfRecipeToRemove = 0;
     ObservableList<Node> recipeListItems = recipeListContainer.getChildren();
-    for (
-      ;
-      indexOfRecipeToRemove < recipeListItems.size();
-      indexOfRecipeToRemove++
-    ) {
-      if (
-        recipeListItems.get(indexOfRecipeToRemove) instanceof RecipeListItem
-      ) {
-        if (
-          (
-            (RecipeListItem) recipeListItems.get(indexOfRecipeToRemove)
-          ).getRecipe() ==
-          recipe
-        ) break;
+    for (; indexOfRecipeToRemove < recipeListItems.size(); indexOfRecipeToRemove++) {
+      if (recipeListItems.get(indexOfRecipeToRemove) instanceof RecipeListItem) {
+        if (((RecipeListItem) recipeListItems.get(indexOfRecipeToRemove)).getRecipe() == recipe)
+          break;
       }
     }
     recipeListContainer.getChildren().remove(indexOfRecipeToRemove);
     System.out.println(
-      "After deleting a recipe, the size of the recipe list is now " +
-      recipeListContainer.getChildren().size()
-    );
+        "After deleting a recipe, the size of the recipe list is now " +
+            recipeListContainer.getChildren().size());
   }
 
   // Changes scene to recipe list view scene
