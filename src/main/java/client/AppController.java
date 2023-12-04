@@ -2,13 +2,15 @@ package client;
 
 import client.CreateAccountScene.*;
 import client.CreateRecipeScene.*;
+import client.LogInScene.LogInController;
 import client.LogInScene.LogInView;
 import client.RecipeDetailScene.*;
 import client.RecipeListScene.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,8 +19,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.Collections;
-import java.util.Comparator;
 import javax.sound.sampled.*;
 
 // Controller class for managing interactions between views and models in the app
@@ -37,6 +37,7 @@ public class AppController {
   private Scene createRecipeScene;
   private CreateAccountView createAccountView; // => Cav
   private Scene createAccountScene;
+  private LogInController logInController;
   private LogInView logInView;
   private Scene logInScene;
 
@@ -103,6 +104,10 @@ public class AppController {
     recipeListController = rlController;
   }
 
+  public void registerLogInController(LogInController liController) {
+    logInController = liController;
+  }
+
   // when user successfully logs in, load the recipe list
   public void loadRecipeList() {
     if (recipeListController == null)
@@ -116,7 +121,9 @@ public class AppController {
 
   public void initRecipeList(List<Recipe> recipeList) {
     recipeListContainer.getChildren().clear();
-    for (Recipe recipe : recipeList) {
+    for (int i = 0; i < recipeList.size(); i++) {
+      Recipe recipe = recipeList.get(i);
+      recipe.setIndex(i);
       RecipeListItem recipeListItem = new RecipeListItem(recipe);
       recipeListItem.setOnMouseClicked(e -> {
         // the next time to render the detail of this recipe, this recipe would be
@@ -127,65 +134,81 @@ public class AppController {
     }
   }
 
+  public boolean isSort = false;
+  public List<Recipe> savedSorted;
+
   public void sortRecipesByTitle(String mealType) {
-    mealType = mealType.toLowerCase();
+    isSort = true;
+    isReversedSort = false;
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
+    // List<Recipe> remainingRecipes = new ArrayList<>();
     Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
-    if (mealType != null && mealType != "reset filter") {
+    savedSorted = recipeList;
+    if (mealType == null || mealType.equals("reset filter") ||
+        mealType.equals("Reset Filter")) {
       for (Recipe x : recipeList) {
-        if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
-          System.out.println("Sorted recipe: " + x.getTitle());
-          sortedRecipes.add(x);
-        }
-      }
-      updateRecipeListViews(sortedRecipes);
-      return;
-    } else {
-      for (Recipe x : recipeList) {
-        System.out.println("Sorted recipe: " + x.getTitle());
+        // System.out.println("Sorted recipe: " + x.getTitle());
         sortedRecipes.add(x);
       }
+      updateRecipeListViews(sortedRecipes, recipeList);
+    } else {
+      mealType = mealType.toLowerCase();
+      for (Recipe x : recipeList) {
+        if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
+          // System.out.println("Sorted recipe: " + x.getTitle());
+          sortedRecipes.add(x);
+        }
 
-      updateRecipeListViews(sortedRecipes);
+      }
+      updateRecipeListViews(sortedRecipes, recipeList);
     }
   }
 
+  // public void sortRecipesByTitle(String mealType) {
+  // List<Recipe> recipeList = getRecipeList();
+  // List<Recipe> sortedRecipes = new ArrayList<>();
+  // // List<Recipe> remainingRecipes = new ArrayList<>();
+  // Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
+  // if (mealType != null) {
+  // mealType = mealType.toLowerCase();
+  // }
+
+  // updateRecipeListViews(recipeList, mealType);
+
+  // }
+  public boolean isReversedSort = false;
+  public List<Recipe> savedReverseSorted;
+
   public void reverseSortRecipesByTitle(String mealType) {
-    System.out.println("Sort button clicked!");
-    mealType = mealType.toLowerCase();
+    isReversedSort = true;
+    isSort = false;
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
     Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
-
-    if (mealType != null && mealType != "reset filter") {
+    if (mealType == null || mealType.equals("reset filter") || mealType.equals("Reset Filter")) {
+      for (Recipe x : recipeList) {
+        System.out.println("Sorted recipe: " + x.getTitle());
+        sortedRecipes.add(x);
+      }
+      // updateRecipeListViews(sortedRecipes);
+    } else {
+      mealType = mealType.toLowerCase();
       for (Recipe x : recipeList) {
         if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
           System.out.println("Sorted recipe: " + x.getTitle());
           sortedRecipes.add(x);
         }
       }
-      // updateRecipeListViews(sortedRecipes);
-      // return;
-    } else {
-      for (Recipe x : recipeList) {
-        System.out.println("Sorted recipe: " + x.getTitle());
-        sortedRecipes.add(x);
-      }
-
-      // updateRecipeListViews(sortedRecipes);
+      updateRecipeListViews(sortedRecipes, recipeList);
     }
-
     Collections.reverse(sortedRecipes);
     for (Recipe x : recipeList) {
       System.out.println("Sorted recipe: " + x.getTitle()); // debug statement only
     }
-    updateRecipeListViews(sortedRecipes);
-
-    // updateRecipeListViews(sortedRecipes);
-    // updateRecipeListView(sortedRecipes);
-    // System.out.println("reached"); //Just a debugging tool
-
+    savedReverseSorted = recipeList;
+    Collections.reverse(savedReverseSorted);
+    updateRecipeListViews(sortedRecipes, recipeList);
   }
 
   public void sortRecipesByDate() {
@@ -194,7 +217,7 @@ public class AppController {
     List<Recipe> sortedRecipes = new ArrayList<>();
   }
 
-  public void updateRecipeListViews(List<Recipe> recipes) {
+  public void updateRecipeListViews(List<Recipe> recipes, List<Recipe> recipeList) {
     // Clear existing content
     recipeListContainer.getChildren().clear();
 
@@ -204,9 +227,71 @@ public class AppController {
         this.changeToRecipeDetailScene(recipe, false);
       });
 
-      // Add the new recipe to the container
       recipeListContainer.getChildren().add(recipeListItem);
     }
+
+    for (Recipe x : recipeList) {
+      if (!containsRecipe(x)) {
+        RecipeListItem recipeListItem = new RecipeListItem(x);
+        recipeListItem.setOnMouseClicked(e -> {
+          this.changeToRecipeDetailScene(x, false);
+        });
+        recipeListItem.setVisible(false);
+
+        // Add the new recipe to the container
+        recipeListContainer.getChildren().add(recipeListItem);
+      }
+    }
+  }
+
+  public void updateRecipeListViews2(List<Recipe> recipes) {
+    // Clear existing content
+    recipeListContainer.getChildren().clear();
+
+    for (Recipe recipe : recipes) {
+      RecipeListItem recipeListItem = new RecipeListItem(recipe);
+      recipeListItem.setOnMouseClicked(e -> {
+        this.changeToRecipeDetailScene(recipe, false);
+      });
+
+      recipeListContainer.getChildren().add(recipeListItem);
+    }
+  }
+
+  // public void updateRecipeListViews(List<Recipe> recipes, String mealType) {
+  // recipeListContainer.getChildren().clear();
+
+  // for (Recipe recipe : recipes) {
+  // RecipeListItem recipeListItem = new RecipeListItem(recipe);
+  // recipeListItem.setOnMouseClicked(e -> {
+  // this.changeToRecipeDetailScene(recipe, false);
+  // });
+
+  // if (mealType == null || recipe.getMealType().equalsIgnoreCase(mealType) ||
+  // mealType.equals("reset filter")) {
+  // // Show the recipe
+  // recipeListContainer.getChildren().add(recipeListItem);
+  // } else {
+  // // Hide the recipe by setting its height to 0
+  // recipeListItem.setMinHeight(0);
+  // recipeListItem.setMaxHeight(0);
+  // recipeListItem.setPrefHeight(0);
+  // recipeListItem.setVisible(false);
+  // recipeListContainer.getChildren().add(recipeListItem);
+  // }
+  // }
+  // }
+
+  private boolean containsRecipe(Recipe recipe) {
+    for (Node node : recipeListContainer.getChildren()) {
+      if (node instanceof RecipeListItem) {
+        RecipeListItem listItem = (RecipeListItem) node;
+        if (listItem.getRecipe().equals(recipe)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public void updateRecipeList(List<Recipe> recipes) {
@@ -220,23 +305,29 @@ public class AppController {
     }
   }
 
-  public void handleFilter(String mealType) {
+  // Filtering feature logic
+  public List<Recipe> handleFilter(String mealType) {
     List<Recipe> allRecipes = getRecipeList();
     List<Recipe> filteredRecipes = new ArrayList<>();
-
-    if (mealType != null) {
+    if (mealType != null && !mealType.equals("reset filter")) {
+      // System.out.println("REACHED1");
       for (Recipe recipe : allRecipes) {
         if (mealType.equalsIgnoreCase(recipe.getMealType())) {
           filteredRecipes.add(recipe);
         }
       }
+    } else if (mealType.equals("reset filter")) {
+      // System.out.println("REACHED2");
+      filteredRecipes.addAll(savedSorted);
     } else {
+      // System.out.println("REACHED3");
       filteredRecipes.addAll(allRecipes); // Display all recipes if no meal type selected
     }
 
-    updateRecipeListView(filteredRecipes);
+    return filteredRecipes;
   }
 
+  // shows filtered recipes by making others invisible in the display
   public void updateRecipeListView(List<Recipe> recipes) {
     for (Node node : recipeListContainer.getChildren()) {
       if (node instanceof RecipeListItem) {
@@ -337,6 +428,12 @@ public class AppController {
     }
   }
 
+  public void logOut() {
+    // change to log in scene
+    logInController.handleLogOut();
+    changeToLogInScene();
+  }
+
   public void changeToLogInScene() {
     // Sanity check
     if (stage != null && logInScene != null) {
@@ -350,13 +447,13 @@ public class AppController {
  * generated recipes are automatically in edit mode
  * Recipe original: null
  * Recipe updating: {values from GPT}
- * 
+ *
  * In DetailView:
  * boolean isNewRecipe;
  * boolean inEditMode; init false for existing recipe, true for new recipe
  * if true: edit/save button says save, recipe body is TextField
  * if false: edit/save button says edit, recipe body is Text
- * 
+ *
  * Back button actions:
  * if the Recipe original is not null:
  * simply exit to list view
@@ -367,31 +464,31 @@ public class AppController {
  * exit to list view
  * Edit button actions:
  * on
- * 
+ *
  * https://piazza.com/class/lmy9axhgowe53s/post/174
  * 10. Should the user be able to edit the generated recipe, or does editing
  * only entail making changes to their prompt?
  * The user should be able to edit the generated recipe. They won’t be able to
  * edit their prompt (meal type or ingredients).
- * 
+ *
  * take the user from add recipe straight to recipe detail page
- * 
+ *
  * From e2e story
  * After editng and clicking save, the app stays in the detail view
  * this means: the app stays in detail view unless user click back or delete
- * 
+ *
  * Caitlin clicks the "Save" button to add it to her collection.
  * The new recipe now takes the top spot in her list
  * This means clicking save after new recipe generation exits to the list view
- * 
+ *
  * https://piazza.com/class/lmy9axhgowe53s/post/164
  * 1. Once Caitlyn makes a recipe, what happens if she does not want to save it?
  * She can just exit out of the detailed view.
- * 
+ *
  * 2.If Caitlyn is editing a recipe and doesn’t want to save her changes, what
  * should she do?
  * She can just exit out of the edit view.
- * 
+ *
  * 3. Before recipes are deleted, should there be a confirmation
  * message/interface for the user?
  * Sure, that would be a good way to handle deletion in case the user
