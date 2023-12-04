@@ -1,4 +1,7 @@
 package client.CreateAccountScene;
+
+import client.TextFieldLowerChar;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import client.TextFieldLowerChar;
 import javafx.event.ActionEvent;
@@ -41,38 +44,38 @@ public class CreateAccountView {
         borderPane.setBottom(buttonList);
         error.setVisible(false);
 
-        // UI styling
-        title.setStyle("-fx-background-color: #F3F3F3; -fx-border-width: 0; -fx-font-weight: bold; -fx-font-size: 24"); 
-        accountDetails.setPadding(new Insets(10,0,0,0) );
-        accountDetails.setSpacing(10);
-        buttonList.setSpacing(15);
-        createAccButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
-        logInButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
-    }
+            // UI styling
+            title.setStyle("-fx-background-color: #F3F3F3; -fx-border-width: 0; -fx-font-weight: bold; -fx-font-size: 24"); 
+            accountDetails.setPadding(new Insets(10,0,0,0) );
+            accountDetails.setSpacing(10);
+            buttonList.setSpacing(15);
+            createAccButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
+            logInButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
+        }
+  
+  // getter method for borderpane
+  public BorderPane getBorderPane() {
+    return this.borderPane;
+  }
 
-    // getter method for borderpane
-    public BorderPane getBorderPane() {
-        return this.borderPane;
-    }
+  public String getUsername() {
+    return username.getText();
+  }
 
-    public String getUsername(){
-        return username.getText();
-    }
+  public String getPassword() {
+    return password.getText();
+  }
 
-    public String getPassword(){
-        return password.getText();
-    }
+  public void setCreateButtonOnAction(EventHandler<ActionEvent> eventHandler) {
+    this.createAccButton.setOnAction(eventHandler);
+  }
 
-    public void setCreateButtonOnAction(EventHandler<ActionEvent> eventHandler){
-        this.createAccButton.setOnAction(eventHandler);
-    }
+  public void setLogInButtonOnAction(EventHandler<ActionEvent> eventHandler) {
+    this.logInButton.setOnAction(eventHandler);
+  }
 
-    public void setLogInButtonOnAction(EventHandler<ActionEvent> eventHandler){
-        this.logInButton.setOnAction(eventHandler);
-    }
-
-    public void showError(String errorMsg) {
-        error.setText(errorMsg);
-        error.setVisible(true);
-    }
+  public void showError(String errorMsg) {
+    error.setText(errorMsg);
+    error.setVisible(true);
+  }
 }
