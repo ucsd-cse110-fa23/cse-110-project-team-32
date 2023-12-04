@@ -8,8 +8,9 @@ import client.RecipeDetailScene.*;
 import client.RecipeListScene.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,8 +19,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.Collections;
-import java.util.Comparator;
 import javax.sound.sampled.*;
 
 // Controller class for managing interactions between views and models in the app
@@ -46,12 +45,13 @@ public class AppController {
   private static final Double windowHeight = 500D;
 
   public AppController(
-      RecipeListView recipeListView,
-      RecipeDetailView recipeDetailView,
-      CreateRecipeView createRecipeView,
-      CreateAccountView createAccountView,
-      LogInView logInView,
-      Stage stage) {
+    RecipeListView recipeListView,
+    RecipeDetailView recipeDetailView,
+    CreateRecipeView createRecipeView,
+    CreateAccountView createAccountView,
+    LogInView logInView,
+    Stage stage
+  ) {
     this.recipeListView = recipeListView;
     this.recipeListContainer = this.recipeListView.getRecipeListContainer();
     this.recipeDetailView = recipeDetailView;
@@ -60,26 +60,36 @@ public class AppController {
     this.logInView = logInView;
     // recipeListView.setSortButtonAction(this);
 
-    this.recipeListScene = new Scene(
+    this.recipeListScene =
+      new Scene(
         new ScrollPane(recipeListView.getBorderPane()),
         windowWidth,
-        windowHeight);
-    this.recipeDetailScene = new Scene(
+        windowHeight
+      );
+    this.recipeDetailScene =
+      new Scene(
         new ScrollPane(recipeDetailView.getBorderPane()),
         windowWidth,
-        windowHeight);
-    this.createRecipeScene = new Scene(
+        windowHeight
+      );
+    this.createRecipeScene =
+      new Scene(
         new ScrollPane(createRecipeView.getBorderPane()),
         windowWidth,
-        windowHeight);
-    this.createAccountScene = new Scene(
+        windowHeight
+      );
+    this.createAccountScene =
+      new Scene(
         new ScrollPane(createAccountView.getBorderPane()),
         windowWidth,
-        windowHeight);
-    this.logInScene = new Scene(
+        windowHeight
+      );
+    this.logInScene =
+      new Scene(
         new ScrollPane(logInView.getBorderPane()),
         windowWidth,
-        windowHeight);
+        windowHeight
+      );
     // this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth,
     // windowHeight);
     // this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(),
@@ -111,8 +121,7 @@ public class AppController {
 
   // when user successfully logs in, load the recipe list
   public void loadRecipeList() {
-    if (recipeListController == null)
-      return;
+    if (recipeListController == null) return;
     recipeListController.readAllRecipesByUID();
   }
 
@@ -122,7 +131,9 @@ public class AppController {
 
   public void initRecipeList(List<Recipe> recipeList) {
     recipeListContainer.getChildren().clear();
-    for (Recipe recipe : recipeList) {
+    for (int i = 0; i < recipeList.size(); i++) {
+      Recipe recipe = recipeList.get(i);
+      recipe.setIndex(i);
       RecipeListItem recipeListItem = new RecipeListItem(recipe);
       recipeListItem.setOnMouseClicked(e -> {
         // the next time to render the detail of this recipe, this recipe would be
@@ -178,7 +189,6 @@ public class AppController {
         System.out.println("Sorted recipe: " + x.getTitle());
         sortedRecipes.add(x);
       }
-
       // updateRecipeListViews(sortedRecipes);
     }
 
@@ -187,7 +197,6 @@ public class AppController {
       System.out.println("Sorted recipe: " + x.getTitle()); // debug statement only
     }
     updateRecipeListViews(sortedRecipes);
-
     // updateRecipeListViews(sortedRecipes);
     // updateRecipeListView(sortedRecipes);
     // System.out.println("reached"); //Just a debugging tool
@@ -264,10 +273,10 @@ public class AppController {
     }
   }
 
-
   public List<Recipe> getRecipeList() {
     // use this function to test
-    ObservableList<Node> recipeItemsList = this.recipeListContainer.getChildren();
+    ObservableList<Node> recipeItemsList =
+      this.recipeListContainer.getChildren();
     List<Recipe> recipeList = new ArrayList<>();
     for (Node c : recipeItemsList) {
       if (c instanceof RecipeListItem) {
@@ -286,16 +295,27 @@ public class AppController {
   public void removeRecipeFromRecipeList(Recipe recipe) {
     int indexOfRecipeToRemove = 0;
     ObservableList<Node> recipeListItems = recipeListContainer.getChildren();
-    for (; indexOfRecipeToRemove < recipeListItems.size(); indexOfRecipeToRemove++) {
-      if (recipeListItems.get(indexOfRecipeToRemove) instanceof RecipeListItem) {
-        if (((RecipeListItem) recipeListItems.get(indexOfRecipeToRemove)).getRecipe() == recipe)
-          break;
+    for (
+      ;
+      indexOfRecipeToRemove < recipeListItems.size();
+      indexOfRecipeToRemove++
+    ) {
+      if (
+        recipeListItems.get(indexOfRecipeToRemove) instanceof RecipeListItem
+      ) {
+        if (
+          (
+            (RecipeListItem) recipeListItems.get(indexOfRecipeToRemove)
+          ).getRecipe() ==
+          recipe
+        ) break;
       }
     }
     recipeListContainer.getChildren().remove(indexOfRecipeToRemove);
     System.out.println(
-        "After deleting a recipe, the size of the recipe list is now " +
-            recipeListContainer.getChildren().size());
+      "After deleting a recipe, the size of the recipe list is now " +
+      recipeListContainer.getChildren().size()
+    );
   }
 
   // Changes scene to recipe list view scene
@@ -365,13 +385,13 @@ public class AppController {
  * generated recipes are automatically in edit mode
  * Recipe original: null
  * Recipe updating: {values from GPT}
- * 
+ *
  * In DetailView:
  * boolean isNewRecipe;
  * boolean inEditMode; init false for existing recipe, true for new recipe
  * if true: edit/save button says save, recipe body is TextField
  * if false: edit/save button says edit, recipe body is Text
- * 
+ *
  * Back button actions:
  * if the Recipe original is not null:
  * simply exit to list view
@@ -382,31 +402,31 @@ public class AppController {
  * exit to list view
  * Edit button actions:
  * on
- * 
+ *
  * https://piazza.com/class/lmy9axhgowe53s/post/174
  * 10. Should the user be able to edit the generated recipe, or does editing
  * only entail making changes to their prompt?
  * The user should be able to edit the generated recipe. They won’t be able to
  * edit their prompt (meal type or ingredients).
- * 
+ *
  * take the user from add recipe straight to recipe detail page
- * 
+ *
  * From e2e story
  * After editng and clicking save, the app stays in the detail view
  * this means: the app stays in detail view unless user click back or delete
- * 
+ *
  * Caitlin clicks the "Save" button to add it to her collection.
  * The new recipe now takes the top spot in her list
  * This means clicking save after new recipe generation exits to the list view
- * 
+ *
  * https://piazza.com/class/lmy9axhgowe53s/post/164
  * 1. Once Caitlyn makes a recipe, what happens if she does not want to save it?
  * She can just exit out of the detailed view.
- * 
+ *
  * 2.If Caitlyn is editing a recipe and doesn’t want to save her changes, what
  * should she do?
  * She can just exit out of the edit view.
- * 
+ *
  * 3. Before recipes are deleted, should there be a confirmation
  * message/interface for the user?
  * Sure, that would be a good way to handle deletion in case the user
