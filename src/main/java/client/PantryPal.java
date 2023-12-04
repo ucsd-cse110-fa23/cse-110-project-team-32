@@ -5,6 +5,8 @@ import client.CreateRecipeScene.*;
 import client.LogInScene.*;
 import client.CreateAccountScene.*;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class PantryPal extends Application {
@@ -32,6 +34,10 @@ public class PantryPal extends Application {
         CreateRecipeController rcController = new CreateRecipeController(createRecipeView, createRecipeModel, appController);
         CreateAccountController caController = new CreateAccountController(createAccView, createAccountModel, appController); 
         LogInController linController = new LogInController(logInView, logInModel, appController);
+
+        // Attempting to add CSS to logInView
+        // Scene scene = new Scene(logInView);
+        // scene.getStylesheets().add(getClass().getResource("styling.css").toExternalForm());
 
         primaryStage.show();
     }
