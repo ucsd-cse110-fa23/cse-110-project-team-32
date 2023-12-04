@@ -54,8 +54,8 @@ public class LogInView {
     accountDetails.setPadding(new Insets(10,0,0,0) );
     accountDetails.setSpacing(10);
     buttonList.setSpacing(15);
-    createAccButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
-    logInButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
+    createAccButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0; -fx-border-color: blue");
+    logInButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0; -fx-border-color: blue");
 
   }
 

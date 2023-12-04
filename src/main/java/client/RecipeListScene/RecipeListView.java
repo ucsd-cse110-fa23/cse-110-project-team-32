@@ -94,13 +94,16 @@ public class RecipeListView {
         borderPane.setCenter(recipeListContainer);
 
         // UI Styling (WIP)
-        // String buttonStyle = "-fx-background-color: #DAE5EA; -fx-border-width: 0;";
-        // newRecipeButton.setStyle(buttonStyle);
-        // filterButton.setStyle(buttonStyle);
-        // sortButton.setStyle(buttonStyle);
-        // reverseSortButton.setStyle(buttonStyle);
-        // sortDateButton.setStyle(buttonStyle);
-        // logOutButton.setStyle(buttonStyle);
+        String buttonStyle = "-fx-background-color: #DAE5EA; -fx-border-width: 0;";
+        newRecipeButton.setStyle(buttonStyle);
+        filterButton.setStyle(buttonStyle);
+        sortButton.setStyle(buttonStyle);
+       
+        reverseSortButton.setStyle(buttonStyle);
+       
+        sortDateButton.setStyle(buttonStyle);
+        
+        logOutButton.setStyle(buttonStyle);
 
         initializeFilterSelection();
     }
