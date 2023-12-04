@@ -83,6 +83,11 @@ public class RecipeListController {
     if (selectedMealType != null && !selectedMealType.equals("Reset Filter")) {
       List<Recipe> filteredRecipes = appController.handleFilter(selectedMealType);
       appController.updateRecipeListView(filteredRecipes);
+    } else if (appController.isSort == true) {
+      System.out.println("HERE");
+      appController.updateRecipeListViews2(appController.savedSorted);
+    } else if (appController.isReversedSort == true) {
+      appController.updateRecipeListViews2(appController.savedReverseSorted);
     } else {
       appController.updateRecipeListView(appController.getRecipeList());
     }
