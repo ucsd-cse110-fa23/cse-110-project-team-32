@@ -3,3 +3,9 @@ display server error on screen
 css
 
 sorting logic
+
+take off logout button in detail
+
+mock DALL-E 
+server response, write a few more
+test user_settings.java

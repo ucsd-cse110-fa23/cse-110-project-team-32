@@ -161,7 +161,7 @@ public class CreateRecipeController {
           createRecipeView.getIngredients(),
           false
         );
-        // System.out.println(createRecipeRes);
+        System.out.println(createRecipeRes);
         if (createRecipeRes.getStatusCode() == 503) {
           // server is suddenly down, nav to log in and display message
           System.out.println("!!!!!!!!!!!");
