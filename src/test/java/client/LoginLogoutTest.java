@@ -1,5 +1,3 @@
 package client;
 
-public class LoginLogoutTest {
-    
-}
+public class LoginLogoutTest {}

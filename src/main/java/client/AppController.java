@@ -380,6 +380,10 @@ public class AppController {
       stage.setTitle("Log In");
     }
   }
+
+  public void handleServerDown() {
+    System.out.println("Server is down from AppController");
+  }
 }
 /*
  * generated recipes are automatically in edit mode
