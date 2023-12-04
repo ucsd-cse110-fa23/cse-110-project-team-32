@@ -11,6 +11,7 @@ public class Recipe implements Serializable {
   private String recipeDetail;
   private String recipeID;
   private String imgBase64Str;
+  private int index;
 
   public Recipe() {}
 
@@ -46,6 +47,14 @@ public class Recipe implements Serializable {
     this.mealType = mealType;
     this.recipeID = recipeID;
     this.imgBase64Str = imgBase64Str;
+  }
+
+  public int getIndex() {
+    return this.index;
+  }
+
+  public void setIndex(int ind) {
+    this.index = ind;
   }
 
   public String getRecipeID() {
