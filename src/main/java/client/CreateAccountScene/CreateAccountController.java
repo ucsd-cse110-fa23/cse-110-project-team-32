@@ -31,18 +31,18 @@ public class CreateAccountController {
     private void handleCreateButtonAction(ActionEvent event) {
         String user = createAccountView.getUsername();
         String pass = createAccountView.getPassword();
-        if(user == null || pass ==  null){
+        if(user == null || pass ==  null || user.isEmpty() || pass.isEmpty()){
             createAccountView.showError("Please enter username and password.");
             return;
         }
         ServerResponse<String> createAccResponse = createAccountModel.performStoreDetails(user, pass);
         if(createAccResponse.getStatusCode() != 200){
             createAccountView.showError(createAccResponse.getErrorMsg());
-            System.out.println("Response: " + createAccResponse.getResponse());
-            System.out.println("Error msg: " + createAccResponse.getErrorMsg());
+            // System.out.println("Response: " + createAccResponse.getResponse());
+            // System.out.println("Create Acc Error Msg: " + createAccResponse.getErrorMsg());
         }
         else{
-            System.out.println("Successfully created Account");
+            // System.out.println("Successfully created Account");
             appController.changeToLogInScene();
         }
 

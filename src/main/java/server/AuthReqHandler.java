@@ -25,6 +25,7 @@ class AuthReqHandler implements HttpHandler {
         response = handlePost(httpExchange);
       } else {
         statusCode = 404;
+        System.out.println("LINE 28 AUTHREQHANDLER");
         response = Constants.INVALID_REQ_TO_ROUTE + "/auth";
       }
     } catch (Exception e) {
@@ -56,6 +57,8 @@ class AuthReqHandler implements HttpHandler {
         password == null ||
         password.isEmpty()
       ) {
+        System.out.println("User: " + username);
+        System.out.println("Password: " + password);
         statusCode = 404;
         return Constants.INVALID_GET_TO_ROUTE + "/auth";
       }
@@ -74,6 +77,7 @@ class AuthReqHandler implements HttpHandler {
 
     } catch (Exception e) {
       statusCode = 404;
+      System.out.println("LINE 80 AUTHREQHANDLER");
       return Constants.INVALID_GET_TO_ROUTE + "/auth";
     }
   }
@@ -94,7 +98,7 @@ class AuthReqHandler implements HttpHandler {
       );
       if (isCreateUserSuccessful) return Constants.TRUE;
       statusCode = 501;
-      return Constants.USER_EXISTS;
+      return "Username Already Exists!";
     } catch (Exception e) {
       e.printStackTrace();
       statusCode = 404;

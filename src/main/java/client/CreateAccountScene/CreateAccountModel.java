@@ -30,7 +30,7 @@ import org.json.JSONObject;
 public class CreateAccountModel {
     
     private static final String URL = "http://localhost:8100/";
-    
+
     public ServerResponse<String> performStoreDetails(String username, String password) {
         ServerResponse<String> res = new CreateAccountResponse();
         try { //"/auth/?username="
@@ -76,29 +76,4 @@ public class CreateAccountModel {
             return res;
           }
     }
-
-    // public Boolean checkValidUsername(String username) {
-    // try{
-    //     String urlString = URL + "?username=" + username;
-    //   URL url = new URI(urlString).toURL();
-    //   HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    //   conn.setRequestMethod("GET");
-    //   conn.setDoOutput(true);
-    //   conn.setDoInput(true);
-
-    //   int responseCode = conn.getResponseCode();
-    //   BufferedReader in = new BufferedReader(
-    //     new InputStreamReader(conn.getInputStream())
-    //   );
-    //   String response = in.readLine();
-    //   in.close();
-
-    // } catch (Exception e) {
-    //   e.printStackTrace();
-    // //   res.setErrorResponse(501, "Oops... The Server is Down!");
-
-    // }
-
-    //     return false;
-    // }
 }
