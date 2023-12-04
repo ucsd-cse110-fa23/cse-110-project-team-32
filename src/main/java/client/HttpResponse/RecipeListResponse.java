@@ -35,7 +35,7 @@ public class RecipeListResponse implements ServerResponse<List<Recipe>> {
   public void setValidResponse(String res) {
     statusCode = 200;
     errorMsg = null;
-    if (res == null) return;
+    if (res == null || res.isEmpty()) return;
     String[] stringRecipeList = res.split("#");
     for (String recipeString : stringRecipeList) {
       // System.out.println(recipeString);

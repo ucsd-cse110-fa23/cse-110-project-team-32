@@ -4,11 +4,10 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
 
 class PingHandler implements HttpHandler {
 
-  private final Helper HELPER = Helper.getInstance();
+  // private final Helper HELPER = Helper.getInstance();
   private int statusCode = 200;
 
   @Override
