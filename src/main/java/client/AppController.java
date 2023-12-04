@@ -127,7 +127,8 @@ public class AppController {
     }
   }
 
-  public void handleFilter(String mealType) {
+  // Filtering feature logic
+  public List<Recipe> handleFilter(String mealType) {
     List<Recipe> allRecipes = getRecipeList();
     List<Recipe> filteredRecipes = new ArrayList<>();
 
@@ -141,9 +142,10 @@ public class AppController {
       filteredRecipes.addAll(allRecipes); // Display all recipes if no meal type selected
     }
 
-    updateRecipeListView(filteredRecipes);
+    return filteredRecipes;
   }
 
+  // shows filtered recipes by making others invisible in the display
   public void updateRecipeListView(List<Recipe> recipes) {
     for (Node node : recipeListContainer.getChildren()) {
       if (node instanceof RecipeListItem) {
