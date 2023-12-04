@@ -44,7 +44,10 @@ public class RecipeDetailController {
         // POST to server
         if (model != null) {
           // model == null in test mode
-          model.performPostRecipeRequest(newRecipe);
+          ServerResponse<Boolean> postResponse = model.performPostRecipeRequest(
+            newRecipe
+          );
+          System.out.println(postResponse);
         }
       } else {
         if (view.hasEdited()) {

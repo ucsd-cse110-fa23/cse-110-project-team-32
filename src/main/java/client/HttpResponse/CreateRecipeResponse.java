@@ -65,7 +65,7 @@ public class CreateRecipeResponse implements ServerResponse<Recipe> {
       recipeDetail +
       '\n' +
       "imgBase64Str: " +
-      imgBase64Str +
+      imgBase64Str.substring(0, 30) +
       '\n'
     );
     recipe =
