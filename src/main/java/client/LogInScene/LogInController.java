@@ -55,7 +55,11 @@ public class LogInController {
     appController.changeToRecipeListScene();
   }
 
-  private void disableLoginUI() {
+  public void showError(String errMsg) {
+    logInView.showError(errMsg);
+  }
+
+  public void disableLoginUI() {
     logInView.getUsernameField().setDisable(true);
     logInView.getPasswordField().setDisable(true);
     logInView.getSignupButton().setDisable(true);
@@ -78,6 +82,10 @@ public class LogInController {
     // look at the response object
     ServerResponse<Boolean> authRes = logInModel.checkUserPass(user, pass);
     System.out.println(authRes);
+    if (authRes.getStatusCode() == 503) {
+      appController.handleServerDown();
+      return;
+    }
     if (authRes.getResponse()) {
       USER_SETTINGS.writeSettingsToFile(
         logInView.autoLoginChecked(),

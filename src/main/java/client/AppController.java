@@ -316,7 +316,7 @@ public class AppController {
           filteredRecipes.add(recipe);
         }
       }
-    } else if (mealType.equals("reset filter")) {
+    } else if (mealType.equalsIgnoreCase("reset filter")) {
       // System.out.println("REACHED2");
       filteredRecipes.addAll(savedSorted);
     } else {
@@ -441,6 +441,13 @@ public class AppController {
       stage.setScene(logInScene);
       stage.setTitle("Log In");
     }
+  }
+
+  public void handleServerDown() {
+    // System.out.println("Server is down from AppController");
+    logInController.disableLoginUI();
+    logInController.showError("Server is Down! Please Come back Later!");
+    stage.setScene(logInScene);
   }
 }
 /*

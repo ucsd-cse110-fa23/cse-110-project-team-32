@@ -1,11 +1,13 @@
 package client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import client.HttpResponse.AuthResponse;
 import client.HttpResponse.CreateAccountResponse;
 import client.HttpResponse.CreateRecipeResponse;
+import client.HttpResponse.PingResponse;
 import client.HttpResponse.RecipeListResponse;
 import client.HttpResponse.ServerResponse;
 import java.util.ArrayList;
@@ -47,6 +49,27 @@ public class HttpResponseTest {
   }
 
   @Test
+  void PingResponseSuccTest() {
+    ServerResponse<Boolean> pingRes = new PingResponse();
+
+    pingRes.setValidResponse("");
+
+    assertEquals(pingRes.getStatusCode(), 200);
+    assertTrue(pingRes.getResponse());
+  }
+
+  @Test
+  void PingResponseFailTest() {
+    ServerResponse<Boolean> pingRes = new PingResponse();
+    String errorMsg = "Error Message!";
+    pingRes.setErrorResponse(501, errorMsg);
+
+    assertEquals(pingRes.getStatusCode(), 501);
+    assertFalse(pingRes.getResponse());
+    assertEquals(pingRes.getErrorMsg(), errorMsg);
+  }
+
+  @Test
   void ServerDownResponseTest(){
       //Server is Down when opening Application
       ServerResponse<Boolean> logInResponse = new AuthResponse();
@@ -63,4 +86,6 @@ public class HttpResponseTest {
       assertEquals("The server is Down!", createAccResponse.getErrorMsg());
       assertEquals(503, createAccResponse.getStatusCode());
   }
+
+  
 }

@@ -1,13 +1,12 @@
 package client;
-import org.junit.jupiter.api.Test;
-
-import client.RecipeDetailScene.RecipeDetailView;
-import javafx.scene.text.Text;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import client.RecipeDetailScene.RecipeDetailView;
 import java.util.*;
 import javafx.scene.control.TextArea;
-
+import javafx.scene.text.Text;
+import org.junit.jupiter.api.Test;
 
 class mockChatGPT implements API{
     String API;
@@ -24,9 +23,9 @@ class mockChatGPT implements API{
         prompt = "Chicken and Rice";
     }
 
-    public void setInput(String input){
-        this.prompt = input;
-    }
+  public void setInput(String input) {
+    this.prompt = input;
+  }
 
     public Recipe generate(String mealType, String ingredients){
         Recipe r = new Recipe("Chicken and Rice",mealType,ingredients);
@@ -50,47 +49,49 @@ class mockChatGPT implements API{
     }
 }
 
-class mockWhisper implements API{
-    String API;
-    String TOKEN;
-    String Model;
-    String FILE;
-    boolean MealType;
-    public mockWhisper(String audioFilePath){
-        FILE = audioFilePath;
-        MealType = true;
-    }
+class mockWhisper implements API {
 
-    public void setInput(String input){
-        FILE = input;
-    }
+  String API;
+  String TOKEN;
+  String Model;
+  String FILE;
+  boolean MealType;
 
-    public String translateVoiceToText(){
-        if(MealType == true){
-            MealType = false;
-            return "Breakfast";
-        }
-        else {
-            MealType = true;
-            return "Bread, Sausages, and Eggs";
-        }
+  public mockWhisper(String audioFilePath) {
+    FILE = audioFilePath;
+    MealType = true;
+  }
+
+  public void setInput(String input) {
+    FILE = input;
+  }
+
+  public String translateVoiceToText() {
+    if (MealType == true) {
+      MealType = false;
+      return "Breakfast";
+    } else {
+      MealType = true;
+      return "Bread, Sausages, and Eggs";
     }
-    
-    public String getOutput(){
-        return translateVoiceToText();
-    }
+  }
+
+  public String getOutput() {
+    return translateVoiceToText();
+  }
 }
 
-class mockVoiceRecorder implements API{
-    String FILE;
+class mockVoiceRecorder implements API {
 
-    public mockVoiceRecorder(){
-        //Init Stuff
-    }
+  String FILE;
 
-    public void setInput(String input){
-        FILE = input;
-    }
+  public mockVoiceRecorder() {
+    //Init Stuff
+  }
+
+  public void setInput(String input) {
+    FILE = input;
+  }
 
     public String getOutput(){
         //Doesn't actually do voice recording
@@ -117,19 +118,21 @@ class mockDallE implements API{
 }
 public class MockAPITest {
 
-    @Test void testChatGPT(){
-        mockChatGPT budgetChatGPT = new mockChatGPT();
-        budgetChatGPT.setInput("Create a dinner recipe with Chicken, Rice");
-        Recipe curr = budgetChatGPT.generate("Dinner", "Chicken, Rice");
-        assertEquals("Dinner", curr.getMealType());
-        assertEquals("Chicken and Rice", curr.getTitle());
-        assertEquals("Chicken, Rice", curr.getRecipeDetail());
-    }
+  @Test
+  void testChatGPT() {
+    mockChatGPT budgetChatGPT = new mockChatGPT();
+    budgetChatGPT.setInput("Create a dinner recipe with Chicken, Rice");
+    Recipe curr = budgetChatGPT.generate("Dinner", "Chicken, Rice");
+    assertEquals("Dinner", curr.getMealType());
+    assertEquals("Chicken and Rice", curr.getTitle());
+    assertEquals("Chicken, Rice", curr.getRecipeDetail());
+  }
 
-    @Test void testWhisper(){
-        mockWhisper whisper = new mockWhisper("lol.mp3");
-        assertEquals("Breakfast", whisper.translateVoiceToText());
-    }
+  @Test
+  void testWhisper() {
+    mockWhisper whisper = new mockWhisper("lol.mp3");
+    assertEquals("Breakfast", whisper.translateVoiceToText());
+  }
 
     @Test void testVoiceRecorder(){
         mockVoiceRecorder vReg = new mockVoiceRecorder();

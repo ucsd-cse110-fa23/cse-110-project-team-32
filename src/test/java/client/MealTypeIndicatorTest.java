@@ -6,5 +6,4 @@ import java.util.*;
 
 public class MealTypeIndicatorTest {
     
-    
 }
