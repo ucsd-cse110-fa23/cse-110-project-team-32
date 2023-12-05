@@ -10,7 +10,7 @@ import java.util.Set;
 import javax.swing.Action;
 
 import javafx.event.ActionEvent;
-
+ 
 public class RecipeListController {
 
   private Set<String> selectedMealTypes = new HashSet<>();
