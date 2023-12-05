@@ -8,8 +8,9 @@ import client.RecipeListItem;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button; 
-
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ScrollPane;
@@ -46,6 +47,7 @@ public class RecipeListView {
     private AppController appController;
     private Button sortDateButton;
     private Button sortReverseDateButton;
+    private MenuButton sortMenuButton;
 
     // Constructor
     public RecipeListView(AppController appController) {
@@ -66,9 +68,11 @@ public class RecipeListView {
         // drop down menu for filter
         filterButton = new MenuButton("Filter By");
         filterButton.getStyleClass().add("textBox");
-        setSortButtonEventHandler(appController);
+        sortMenuButton = new MenuButton("Sort By");
+        sortMenuButton.getStyleClass().add("textBox");
+        // setSortButtonEventHandler(appController);
         mealTypeToggle = new ToggleGroup();
-        setSortButtonEventHandler(appController);
+        // setSortButtonEventHandler(appController);
         RadioMenuItem breakfastItem = new RadioMenuItem("Breakfast");
         breakfastItem.setToggleGroup(mealTypeToggle);
         RadioMenuItem lunchItem = new RadioMenuItem("Lunch");
@@ -77,8 +81,13 @@ public class RecipeListView {
         dinnerItem.setToggleGroup(mealTypeToggle);
         RadioMenuItem resetFilter = new RadioMenuItem("Reset Filter");
         resetFilter.setToggleGroup(mealTypeToggle);
+        MenuItem sortTitleItem = new MenuItem("Title (A-Z)");
+        MenuItem reverseSortTitleItem = new MenuItem("Title (Z-A)");
+        MenuItem sortDateItem = new MenuItem("Date (Oldest to Newest)");
+        MenuItem reverseSortDateItem = new MenuItem("Date (Newest to Oldest)");
 
         filterButton.getItems().addAll(breakfastItem, lunchItem, dinnerItem, resetFilter);
+        sortMenuButton.getItems().clear();
 
         Region r = new Region();
         Region r1 = new Region();
@@ -86,9 +95,7 @@ public class RecipeListView {
         HBox.setHgrow(r1, Priority.ALWAYS);
 
         // creates horizontal box for the buttons and adds buttons to button group
-        HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, sortButton, reverseSortButton, sortDateButton,
-                sortReverseDateButton,
-                logOutButton);
+        HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, sortMenuButton, logOutButton);
         buttonGroup.setPrefSize(500D, 20);
 
         // set button group up top
@@ -98,6 +105,10 @@ public class RecipeListView {
         borderPane.setCenter(recipeListContainer);
 
         initializeFilterSelection();
+    }
+
+    public MenuButton getSortMenuButton() {
+        return this.sortMenuButton;
     }
 
     // @param test
@@ -112,6 +123,32 @@ public class RecipeListView {
                 appController.sortRecipesByTitle(getSelectedMealType());
             });
         }
+        // Add event handlers for other sorting buttons (reverseSortButton,
+        // sortDateButton, sortReverseDateButton)
+        // ...
+
+        // Add menu items event handlers
+        MenuItem sortTitleItem = new MenuItem("Title (A-Z)");
+        sortTitleItem.setOnAction(event -> {
+            appController.sortRecipesByTitle(getSelectedMealType());
+        });
+
+        MenuItem reverseSortTitleItem = new MenuItem("Title (Z-A)");
+        reverseSortTitleItem.setOnAction(event -> {
+            appController.reverseSortRecipesByTitle(getSelectedMealType());
+        });
+
+        MenuItem sortDateItem = new MenuItem("Date (Oldest to Newest)");
+        sortDateItem.setOnAction(event -> {
+            appController.sortRecipesByDate(getSelectedMealType());
+        });
+
+        MenuItem reverseSortDateItem = new MenuItem("Date (Newest to Oldest)");
+        reverseSortDateItem.setOnAction(event -> {
+            appController.reverseSortRecipesByDate(getSelectedMealType());
+        });
+
+        sortMenuButton.getItems().addAll(sortTitleItem, reverseSortTitleItem, sortDateItem, reverseSortDateItem);
     }
 
     public void setReverseSortButtonEventHandler(AppController appController) {
