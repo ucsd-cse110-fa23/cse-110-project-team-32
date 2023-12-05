@@ -140,8 +140,6 @@ public class AppController {
   public void sortRecipesByTitle(String mealType) {
     isSort = true;
     isReversedSort = false;
-    isSortedDate = false;
-    isReverseSortedDate = false;
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
     // List<Recipe> remainingRecipes = new ArrayList<>();
@@ -185,8 +183,6 @@ public class AppController {
   public void reverseSortRecipesByTitle(String mealType) {
     isReversedSort = true;
     isSort = false;
-    isReverseSortedDate = false;
-    isSortedDate = false;
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
     Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
@@ -411,7 +407,7 @@ public class AppController {
           filteredRecipes.add(recipe);
         }
       }
-    } else if (mealType.equals("reset filter")) {
+    } else if (mealType.equalsIgnoreCase("reset filter")) {
       // System.out.println("REACHED2");
       filteredRecipes.addAll(savedSorted);
     } else {
@@ -536,6 +532,13 @@ public class AppController {
       stage.setScene(logInScene);
       stage.setTitle("Log In");
     }
+  }
+
+  public void handleServerDown() {
+    // System.out.println("Server is down from AppController");
+    logInController.disableLoginUI();
+    logInController.showError("Server is Down! Please Come back Later!");
+    stage.setScene(logInScene);
   }
 }
 /*
