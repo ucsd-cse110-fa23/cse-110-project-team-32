@@ -3,6 +3,8 @@ package client;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import client.HttpResponse.AuthResponse;
+import client.HttpResponse.CreateAccountResponse;
 import client.HttpResponse.CreateRecipeResponse;
 import client.HttpResponse.RecipeListResponse;
 import client.HttpResponse.ServerResponse;
@@ -42,5 +44,23 @@ public class HttpResponseTest {
 
     assertEquals(recipeListResponse.getStatusCode(), 200);
     assertTrue(recipeListResponse.getResponse() instanceof List<Recipe>);
+  }
+
+  @Test
+  void ServerDownResponseTest(){
+      //Server is Down when opening Application
+      ServerResponse<Boolean> logInResponse = new AuthResponse();
+      logInResponse.setServerDownResponse();
+      assertEquals("The server is Down!", logInResponse.getErrorMsg());
+      assertEquals(503, logInResponse.getStatusCode());
+  }
+
+  @Test 
+  void ServerDownCreateAccTest(){
+          //Server is Down when creating your own account
+      ServerResponse<String> createAccResponse = new CreateAccountResponse();
+      createAccResponse.setServerDownResponse();
+      assertEquals("The server is Down!", createAccResponse.getErrorMsg());
+      assertEquals(503, createAccResponse.getStatusCode());
   }
 }

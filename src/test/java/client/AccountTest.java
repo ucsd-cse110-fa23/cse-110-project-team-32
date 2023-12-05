@@ -6,9 +6,14 @@ import java.util.*;
 
 class mockDataBase{
     HashMap<String,String> accDetails;
-
+    HashMap<String,List<Recipe>> recipes;
+    String username;
+    String password;
+    List<Recipe> lst;
     public mockDataBase(){
         accDetails = new HashMap<>();
+        recipes = new HashMap<String,List<Recipe>>();
+        lst = new ArrayList<Recipe>();
     }
 
     public String addAccount(String username, String password){
@@ -32,12 +37,54 @@ class mockDataBase{
     public String logIn(String username, String password){
         if(password == accDetails.get(username)){
             //LoggedIn, maybe return list of recipes?
+            this.username = username;
             return "Logged In Successfully";
         }
         else{
             System.out.println("Incorrect Username + Password");
             return "Incorrect Username + Password";
         }
+    }
+
+    public String logOut(){
+        if(this.username == null){
+            return "User not currently logged in";
+        }
+        this.username = null;
+        lst.clear();
+        return "Logged Out Successfully";
+    }
+    public void storeRecipes(Recipe recipe){
+        lst.add(recipe);
+        recipes.put(username, lst);
+    }
+
+    public void editRecipe(Recipe recipe, String details){
+        // recipes.(lst.get(lst.indexOf(recipe)))
+        lst.get(lst.indexOf(recipe)).setRecipeDetail(details);
+        recipes.replace(username, lst);
+    }
+
+    public void deleteRecipe(Recipe recipe){
+        lst.remove(recipe);
+    }
+
+    public boolean containsRecipe(Recipe recipe){
+        return lst.contains(recipe);
+    }
+
+    public String getRecipeTitle(Recipe recipe){
+        return lst.get(lst.indexOf(recipe)).getTitle();
+    }
+    public String getRecipeMealType(Recipe recipe){
+        return lst.get(lst.indexOf(recipe)).getMealType();
+    }
+    public String getRecipeDetails(Recipe recipe){
+        return lst.get(lst.indexOf(recipe)).getRecipeDetail();
+    }
+
+    public String getRecipeImg(Recipe recipe){
+        return lst.get(lst.indexOf(recipe)).getImgBase64Str();
     }
 }
 
@@ -82,5 +129,64 @@ public class AccountTest {
         String res = mangoDB.addAccount("Joe", "test");
         String loggedInRes = mangoDB.logIn("Joe", "CORRECT");
         assertEquals("Incorrect Username + Password", loggedInRes);
+    }
+
+    @Test void bothUserAndPassWrongLogIn(){
+        mockDataBase mangoDB = new mockDataBase();
+        //Add new Account
+        String res = mangoDB.addAccount("Joe", "test");
+        String loggedInRes = mangoDB.logIn("JoeMama", "cool");
+        assertEquals("Incorrect Username + Password", loggedInRes);
+    }
+
+    @Test void SuccessfulLogOut(){
+        mockDataBase mangoDB = new mockDataBase();
+        //Add new Account
+        mangoDB.addAccount("Joe", "test");
+        mangoDB.logIn("Joe", "test");
+        assertEquals("Logged Out Successfully", mangoDB.logOut());
+    }
+
+    @Test void unsuccessfulLogOut(){
+        mockDataBase mangoDB = new mockDataBase();
+        assertEquals("User not currently logged in", mangoDB.logOut());
+    }
+
+    @Test void storeRecipesInDatabase(){
+        mockDataBase mangoDB = new mockDataBase();
+        mockChatGPT chatGPT = new mockChatGPT();
+
+        String res = mangoDB.addAccount("Joe", "test");
+        mangoDB.logIn("Joe", "test");
+        Recipe r = chatGPT.generate("Dinner", "Chicken, Rice");
+        mangoDB.storeRecipes(r);
+        assertEquals("Chicken and Rice", mangoDB.getRecipeTitle(r));
+        assertEquals("Chicken, Rice", mangoDB.getRecipeDetails(r));
+        assertEquals("imageFileHere", mangoDB.getRecipeImg(r));
+        assertEquals("Dinner", mangoDB.getRecipeMealType(r));
+    }
+
+    @Test void editRecipeInDataBase(){
+        mockDataBase mangoDB = new mockDataBase();
+        mockChatGPT chatGPT = new mockChatGPT();
+
+        String res = mangoDB.addAccount("Joe", "test");
+        mangoDB.logIn("Joe", "test");
+        Recipe r = chatGPT.generate("Dinner", "Chicken, Rice");
+        mangoDB.storeRecipes(r);
+        mangoDB.editRecipe(r, "First cook rice, then pan-fry chicken");
+        assertEquals("First cook rice, then pan-fry chicken", mangoDB.getRecipeDetails(r));
+    }
+
+    @Test void deleteRecipeinDataBase(){
+        mockDataBase mangoDB = new mockDataBase();
+        mockChatGPT chatGPT = new mockChatGPT();
+
+        String res = mangoDB.addAccount("Joe", "test");
+        mangoDB.logIn("Joe", "test");
+        Recipe r = chatGPT.generate("Dinner", "Chicken, Rice");
+        mangoDB.storeRecipes(r);
+        mangoDB.deleteRecipe(r);
+        assertEquals(false,mangoDB.containsRecipe(r));
     }
 }
