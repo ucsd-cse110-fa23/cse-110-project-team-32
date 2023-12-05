@@ -93,12 +93,12 @@ public class LogInView {
   }
 
   public void setCreateButtonOnAction(EventHandler<ActionEvent> eventHandler) {
-    clearForm();
+    // clearForm();
     this.createAccButton.setOnAction(eventHandler);
   }
 
   public void setLogInButtonOnAction(EventHandler<ActionEvent> eventHandler) {
-    clearForm();
+    // clearForm();
     this.logInButton.setOnAction(eventHandler);
   }
 
