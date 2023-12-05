@@ -3,6 +3,7 @@ package client.CreateRecipeScene;
 import client.AppController;
 import client.HttpResponse.CreateRecipeResponse;
 import client.HttpResponse.ServerResponse;
+import client.HttpResponse.WhisperResponse;
 import client.Recipe;
 import java.io.File;
 import javafx.event.ActionEvent;
@@ -116,31 +117,28 @@ public class CreateRecipeController {
   private void handleStopRecordingButtonAction(ActionEvent event) {
     targetDataLine.stop();
     targetDataLine.close();
-    String text = "";
+    ServerResponse<String> whisperResponse = new WhisperResponse();
     try {
-      text = createRecipeModel.translateByWhisper(audioFilePath).getResponse();
-      if (
-        text != null && text == "YIKES! You are not connected to the server!!"
-      ) {
-        createRecipeView.setRecordingErrorMsg(text);
+      whisperResponse = createRecipeModel.translateByWhisper(audioFilePath);
+      if (whisperResponse.getStatusCode() == 503) {
+        appController.handleServerDown();
         return;
       }
-      if (text == null || text.length() == 0) {
+      if (whisperResponse.getStatusCode() != 200) {
         createRecipeView.setRecordingErrorMsg(
           "Oops... I didn't hear what you said. Please record again :>"
         );
         return;
       }
-
       if (
         createRecipeView.getMealType() == null ||
         createRecipeView.getMealType().equals("")
       ) {
         // System.out.println("0");
         if (
-          !text.equals("breakfast") &&
-          !text.equals("lunch") &&
-          !text.equals("dinner")
+          !whisperResponse.getResponse().equals("breakfast") &&
+          !whisperResponse.getResponse().equals("lunch") &&
+          !whisperResponse.getResponse().equals("dinner")
         ) {
           // System.out.println("1");
           createRecipeView.setRecordingErrorMsg(
@@ -150,24 +148,26 @@ public class CreateRecipeController {
           // System.out.println("2");
           // System.out.println("recorded: " + text);
           createRecipeView.switchPrompt();
-          createRecipeView.setRecordedMealType(text);
+          createRecipeView.setRecordedMealType(whisperResponse.getResponse());
         }
       } else {
         // System.out.println("3");
-        createRecipeView.setRecordedIngredients(text);
+        createRecipeView.setRecordedIngredients(whisperResponse.getResponse());
 
         ServerResponse<Recipe> createRecipeRes = createRecipeModel.generateByChatGPT(
           createRecipeView.getMealType(),
           createRecipeView.getIngredients(),
           false
         );
-        // System.out.println(createRecipeRes);
+        System.out.println(createRecipeRes);
         if (createRecipeRes.getStatusCode() == 503) {
           // server is suddenly down, nav to log in and display message
+
           System.out.println("!!!!!!!!!!!");
           System.out.println("Server down!");
           System.out.println(createRecipeRes.getErrorMsg());
           System.out.println("!!!!!!!!!!!");
+          appController.handleServerDown();
           return;
         }
         if (createRecipeRes.getStatusCode() == 200) {

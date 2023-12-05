@@ -442,6 +442,13 @@ public class AppController {
       stage.setTitle("Log In");
     }
   }
+
+  public void handleServerDown() {
+    // System.out.println("Server is down from AppController");
+    logInController.disableLoginUI();
+    logInController.showError("Server is Down! Please Come back Later!");
+    stage.setScene(logInScene);
+  }
 }
 /*
  * generated recipes are automatically in edit mode

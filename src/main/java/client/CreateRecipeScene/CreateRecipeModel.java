@@ -161,7 +161,7 @@ public class CreateRecipeModel {
       " recipe with the ingredients " +
       ingredients +
       ". In the form of: <Title> followed by a single '#', Ingredients: <Line broken ingredient list>, Instructions: <Line broken instruction list>" +
-      ", do not include any chars over a byte long in size, and replace bullet points by '-'"
+      ", do not include any chars over a byte long in size, and replace bullet points by '-'. Don't include any ; characters"
     );
   }
 

@@ -16,9 +16,10 @@ public class RecipeListController {
   AppController appController;
 
   public RecipeListController(
-      RecipeListView recipeListView,
-      RecipeListModel recipeListModel,
-      AppController appController) {
+    RecipeListView recipeListView,
+    RecipeListModel recipeListModel,
+    AppController appController
+  ) {
     this.recipeListView = recipeListView;
     this.recipeListModel = recipeListModel;
     this.appController = appController;
@@ -38,6 +39,10 @@ public class RecipeListController {
     ServerResponse<List<Recipe>> res = recipeListModel.performGetRecipeListRequest();
     System.out.println("Getting user's recipe list..");
     System.out.println(res);
+    if (res.getStatusCode() == 503) {
+      appController.handleServerDown();
+      return;
+    }
     if (res.getStatusCode() != 200) {
       // display error msg, if server down, redirect to log in and display error there
       System.out.println(res.getErrorMsg());
@@ -81,7 +86,9 @@ public class RecipeListController {
     String selectedMealType = recipeListView.getSelectedMealType();
 
     if (selectedMealType != null && !selectedMealType.equals("Reset Filter")) {
-      List<Recipe> filteredRecipes = appController.handleFilter(selectedMealType);
+      List<Recipe> filteredRecipes = appController.handleFilter(
+        selectedMealType
+      );
       appController.updateRecipeListView(filteredRecipes);
     } else if (appController.isSort == true) {
       System.out.println("HERE");
