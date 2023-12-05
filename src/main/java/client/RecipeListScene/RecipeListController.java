@@ -90,6 +90,11 @@ public class RecipeListController {
         selectedMealType
       );
       appController.updateRecipeListView(filteredRecipes);
+    } else if (appController.isSort == true) {
+      System.out.println("HERE");
+      appController.updateRecipeListViews2(appController.savedSorted);
+    } else if (appController.isReversedSort == true) {
+      appController.updateRecipeListViews2(appController.savedReverseSorted);
     } else {
       appController.updateRecipeListView(appController.getRecipeList());
     }
