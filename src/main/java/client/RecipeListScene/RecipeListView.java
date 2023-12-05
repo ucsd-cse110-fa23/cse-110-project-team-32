@@ -45,6 +45,7 @@ public class RecipeListView {
     private Button reverseSortButton;
     private AppController appController;
     private Button sortDateButton;
+    private Button sortReverseDateButton;
 
     // Constructor
     public RecipeListView(AppController appController) {
@@ -60,6 +61,8 @@ public class RecipeListView {
         reverseSortButton.getStyleClass().add("textBox");
         sortDateButton = new Button("Sort (by Date)");
         sortDateButton.getStyleClass().add("textBox");
+        sortReverseDateButton = new Button("Sort (reverse date)");
+        sortReverseDateButton.getStyleClass().add("textBox");
         // drop down menu for filter
         filterButton = new MenuButton("Filter By");
         filterButton.getStyleClass().add("textBox");
@@ -84,6 +87,7 @@ public class RecipeListView {
 
         // creates horizontal box for the buttons and adds buttons to button group
         HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, sortButton, reverseSortButton, sortDateButton,
+                sortReverseDateButton,
                 logOutButton);
         buttonGroup.setPrefSize(500D, 20);
 
@@ -92,15 +96,6 @@ public class RecipeListView {
         // creates container for recipe list
         recipeListContainer = new VBox();
         borderPane.setCenter(recipeListContainer);
-
-        // UI Styling (WIP)
-        // String buttonStyle = "-fx-background-color: #DAE5EA; -fx-border-width: 0;";
-        // newRecipeButton.setStyle(buttonStyle);
-        // filterButton.setStyle(buttonStyle);
-        // sortButton.setStyle(buttonStyle);
-        // reverseSortButton.setStyle(buttonStyle);
-        // sortDateButton.setStyle(buttonStyle);
-        // logOutButton.setStyle(buttonStyle);
 
         initializeFilterSelection();
     }
@@ -130,7 +125,16 @@ public class RecipeListView {
     public void setSortDateButtonEventHandler(AppController appController) {
         if (sortDateButton != null) {
             sortDateButton.setOnAction(event -> {
-                appController.sortRecipesByDate();
+                appController.sortRecipesByDate(getSelectedMealType());
+            });
+        }
+    }
+
+    public void setSortReverseDateButtonEventHandler(AppController appController) {
+        if (sortReverseDateButton != null) {
+            System.out.println("here");
+            sortReverseDateButton.setOnAction(event -> {
+                appController.reverseSortRecipesByDate(getSelectedMealType());
             });
         }
     }
