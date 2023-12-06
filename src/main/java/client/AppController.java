@@ -16,9 +16,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javax.sound.sampled.*;
 
@@ -41,8 +41,8 @@ public class AppController {
   private LogInController logInController;
   private LogInView logInView;
   private Scene logInScene;
-  final File STYLE = new File("styling.css");
-  final String STYLESHEET = "file:" + STYLE.getPath();
+  private AppController appController;
+  // private VBox lst;
 
   private static final Double windowWidth = 500D;
   private static final Double windowHeight = 500D;
@@ -66,27 +66,22 @@ public class AppController {
         new ScrollPane(recipeListView.getBorderPane()),
         windowWidth,
         windowHeight);
-    //this.recipeListScene.getStylesheets().add(STYLESHEET);
     this.recipeDetailScene = new Scene(
         new ScrollPane(recipeDetailView.getBorderPane()),
         windowWidth,
         windowHeight);
-    this.recipeDetailScene.getStylesheets().add(STYLESHEET);
     this.createRecipeScene = new Scene(
         new ScrollPane(createRecipeView.getBorderPane()),
         windowWidth,
         windowHeight);
-    this.createRecipeScene.getStylesheets().add(STYLESHEET);
     this.createAccountScene = new Scene(
         new ScrollPane(createAccountView.getBorderPane()),
         windowWidth,
         windowHeight);
-    this.createAccountScene.getStylesheets().add(STYLESHEET);
     this.logInScene = new Scene(
         new ScrollPane(logInView.getBorderPane()),
         windowWidth,
         windowHeight);
-    this.logInScene.getStylesheets().add(STYLESHEET);
     // this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth,
     // windowHeight);
     // this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(),
@@ -107,10 +102,10 @@ public class AppController {
     this.recipeListContainer = recipeListView.getRecipeListContainer();
   }
 
-  //   public AppController(mockDataBase mangaDB) {
-  //   // constructor for testing
-  //   this.recipeListView = new RecipeListView(true);
-  //   this.recipeListContainer = recipeListView.getRecipeListContainer();
+  // public AppController(mockDataBase mangaDB) {
+  // // constructor for testing
+  // this.recipeListView = new RecipeListView(true);
+  // this.recipeListContainer = recipeListView.getRecipeListContainer();
   // }
 
   // when user successfully logs in, load the recipe list
@@ -182,8 +177,7 @@ public class AppController {
         sortedRecipes.add(x);
       }
       updateRecipeListViews(sortedRecipes, recipeList);
-    } 
-    else {
+    } else {
       mealType = mealType.toLowerCase();
       for (Recipe x : recipeList) {
         if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
@@ -195,6 +189,7 @@ public class AppController {
       updateRecipeListViews(sortedRecipes, recipeList);
     }
   }
+
   public boolean isReversedSort = false;
   public List<Recipe> savedReverseSorted;
 
@@ -233,7 +228,6 @@ public class AppController {
 
   public boolean isSortedDate = false;
   public List<Recipe> savedSortedDate;
-
 
   public void sortRecipesByDate(String mealType) {
     isSortedDate = true;
@@ -528,6 +522,14 @@ public class AppController {
     recipeListContainer.getChildren().add(0, recipeListItem);
     changeToRecipeListScene();
     recipe.setIndex(temp);
+    // RecipeListView recipeView = new RecipeListView(appController);
+
+    // recipeView.resetFilterButton();
+    // reverseSortRecipesByDate(null);
+    recipeListController.recipeListView.resetFilterButton();
+
+    // Reverse sort recipes by date
+    reverseSortRecipesByDate(null);
   }
 
   public Stage getStage() {
@@ -567,7 +569,6 @@ public class AppController {
     logInController.showError("Server is Down! Please Come back Later!");
     stage.setScene(logInScene);
   }
-
 
 }
 /*
