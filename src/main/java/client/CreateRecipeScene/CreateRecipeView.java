@@ -54,6 +54,7 @@ public class CreateRecipeView {
         startRecordingButton = new Button("Start Recording");
         stopRecordingButton = new Button("Stop Recording");
         HBox recordButtonGroup = new HBox(startRecordingButton, stopRecordingButton);
+        recordButtonGroup.setSpacing(10);
         reset();
         HBox recordedMealType = new HBox(new Text("Recorded Meal Type: "), mealType);
         HBox recordedIngredients = new HBox(new Text("Recorded Ingredients: "), ingredients);

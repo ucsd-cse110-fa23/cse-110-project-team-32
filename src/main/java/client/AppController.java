@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javax.sound.sampled.*;
 
@@ -65,18 +66,22 @@ public class AppController {
         new ScrollPane(recipeListView.getBorderPane()),
         windowWidth,
         windowHeight);
+    //this.recipeListScene.getStylesheets().add(STYLESHEET);
     this.recipeDetailScene = new Scene(
         new ScrollPane(recipeDetailView.getBorderPane()),
         windowWidth,
         windowHeight);
+    this.recipeDetailScene.getStylesheets().add(STYLESHEET);
     this.createRecipeScene = new Scene(
         new ScrollPane(createRecipeView.getBorderPane()),
         windowWidth,
         windowHeight);
+    this.createRecipeScene.getStylesheets().add(STYLESHEET);
     this.createAccountScene = new Scene(
         new ScrollPane(createAccountView.getBorderPane()),
         windowWidth,
         windowHeight);
+    this.createAccountScene.getStylesheets().add(STYLESHEET);
     this.logInScene = new Scene(
         new ScrollPane(logInView.getBorderPane()),
         windowWidth,

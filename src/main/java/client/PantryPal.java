@@ -40,6 +40,7 @@ public class PantryPal extends Application {
                 appController);
         LogInController linController = new LogInController(logInView, logInModel, appController);
 
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 }
