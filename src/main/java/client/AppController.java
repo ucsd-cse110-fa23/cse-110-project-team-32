@@ -119,6 +119,20 @@ public class AppController {
     changeToRecipeListScene();
   }
 
+  // public void initRecipeList(List<Recipe> recipeList) {
+  // recipeListContainer.getChildren().clear();
+  // for (int i = 0; i < recipeList.size(); i++) {
+  // Recipe recipe = recipeList.get(i);
+  // recipe.setIndex(i);
+  // RecipeListItem recipeListItem = new RecipeListItem(recipe);
+  // recipeListItem.setOnMouseClicked(e -> {
+  // // the next time to render the detail of this recipe, this recipe would be
+  // // existing
+  // this.changeToRecipeDetailScene(recipe, false);
+  // });
+  // recipeListContainer.getChildren().add(0, recipeListItem);
+  // }
+  // }
   public void initRecipeList(List<Recipe> recipeList) {
     recipeListContainer.getChildren().clear();
     for (int i = 0; i < recipeList.size(); i++) {
@@ -139,6 +153,8 @@ public class AppController {
 
   public void sortRecipesByTitle(String mealType) {
     isSort = true;
+    isReverseSortedDate = false;
+    isSortedDate = false;
     isReversedSort = false;
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
@@ -183,6 +199,8 @@ public class AppController {
   public void reverseSortRecipesByTitle(String mealType) {
     isReversedSort = true;
     isSort = false;
+    isReverseSortedDate = false;
+    isSortedDate = false;
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>();
     Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
@@ -214,6 +232,49 @@ public class AppController {
   public boolean isSortedDate = false;
   public List<Recipe> savedSortedDate;
 
+  // public void sortRecipesByDate(String mealType) {
+  // isSortedDate = true;
+  // isSort = false;
+  // isReversedSort = false;
+  // isReverseSortedDate = false;
+  // // System.out.println("Sort button clicked!");
+  // List<Recipe> recipeList = getRecipeList();
+  // List<Recipe> sortedRecipes = new ArrayList<>(); // sorted with filter tag
+  // List<Integer> indexSaved = new ArrayList<>();
+  // List<Recipe> finalRecipe = new ArrayList<>(); // sorted by date for ALL
+
+  // for (Recipe x : recipeList) {
+  // indexSaved.add(x.getIndex());
+  // }
+  // Collections.sort(indexSaved);
+  // for (int x : indexSaved) {
+  // for (Recipe y : recipeList) {
+  // if (y.getIndex() == x) {
+  // finalRecipe.add(y);
+  // }
+  // }
+  // }
+
+  // savedSortedDate = finalRecipe;
+
+  // if (mealType == null || mealType.equals("reset filter") ||
+  // mealType.equals("Reset Filter")) {
+  // for (Recipe x : finalRecipe) {
+  // sortedRecipes.add(x);
+  // }
+  // updateRecipeListViews(sortedRecipes, finalRecipe);
+  // } else {
+  // mealType = mealType.toLowerCase();
+  // for (Recipe x : finalRecipe) {
+  // if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
+  // sortedRecipes.add(x);
+  // }
+  // }
+  // updateRecipeListViews(sortedRecipes, finalRecipe);
+  // }
+
+  // }
+
   public void sortRecipesByDate(String mealType) {
     isSortedDate = true;
     isSort = false;
@@ -223,18 +284,20 @@ public class AppController {
     List<Recipe> recipeList = getRecipeList();
     List<Recipe> sortedRecipes = new ArrayList<>(); // sorted with filter tag
     List<Integer> indexSaved = new ArrayList<>();
-    List<Recipe> finalRecipe = new ArrayList<>(); // sorted by date for ALL mealtype
-    for (Recipe x : recipeList) {
-      indexSaved.add(x.getIndex());
-    }
-    Collections.sort(indexSaved);
-    for (int x : indexSaved) {
-      for (Recipe y : recipeList) {
-        if (y.getIndex() == x) {
-          finalRecipe.add(y);
-        }
-      }
-    }
+    List<Recipe> finalRecipe = new ArrayList<>(); // sorted by date for ALL
+    finalRecipe = recipeList; // added recently
+    // for (Recipe x : recipeList) {
+    // indexSaved.add(x.getIndex());
+    // }
+    // Collections.sort(indexSaved);
+    // for (int x : indexSaved) {
+    // for (Recipe y : recipeList) {
+    // if (y.getIndex() == x) {
+    // finalRecipe.add(y);
+    // }
+    // }
+    // }
+    Collections.sort(finalRecipe, Comparator.comparingInt(Recipe::getIndex));
 
     savedSortedDate = finalRecipe;
 
@@ -243,7 +306,7 @@ public class AppController {
       for (Recipe x : finalRecipe) {
         sortedRecipes.add(x);
       }
-      updateRecipeListViews(sortedRecipes, finalRecipe);
+      updateRecipeListViews2(sortedRecipes);
     } else {
       mealType = mealType.toLowerCase();
       for (Recipe x : finalRecipe) {
@@ -251,8 +314,12 @@ public class AppController {
           sortedRecipes.add(x);
         }
       }
-      updateRecipeListViews(sortedRecipes, finalRecipe);
+      updateRecipeListViews2(sortedRecipes);
     }
+    for (Recipe x : finalRecipe) {
+      System.out.print(x.getTitle() + " " + x.getIndex());
+    }
+    System.out.println();
 
   }
 
@@ -269,17 +336,19 @@ public class AppController {
     List<Recipe> sortedRecipes = new ArrayList<>(); // sorted with filter tag
     List<Integer> indexSaved = new ArrayList<>();
     List<Recipe> finalRecipe = new ArrayList<>(); // sorted by date for ALL mealtype
-    for (Recipe x : recipeList) {
-      indexSaved.add(x.getIndex());
-    }
-    Collections.sort(indexSaved);
-    for (int x : indexSaved) {
-      for (Recipe y : recipeList) {
-        if (y.getIndex() == x) {
-          finalRecipe.add(y);
-        }
-      }
-    }
+    finalRecipe = recipeList;
+    // for (Recipe x : recipeList) {
+    // indexSaved.add(x.getIndex());
+    // }
+    // Collections.sort(indexSaved);
+    // for (int x : indexSaved) {
+    // for (Recipe y : recipeList) {
+    // if (y.getIndex() == x) {
+    // finalRecipe.add(y);
+    // }
+    // }
+    // }
+    Collections.sort(finalRecipe, Comparator.comparingInt(Recipe::getIndex));
 
     savedReverseSortedDate = finalRecipe;
     Collections.reverse(savedReverseSortedDate);
@@ -292,9 +361,6 @@ public class AppController {
       // Collections.reverse(sortedRecipes);
       // Collections.reverse(finalRecipe);
       updateRecipeListViews(sortedRecipes, finalRecipe);
-      for (Recipe x : sortedRecipes) {
-        System.out.print(x.getTitle() + ", ");
-      }
     } else {
       mealType = mealType.toLowerCase();
       for (Recipe x : finalRecipe) {
@@ -302,8 +368,6 @@ public class AppController {
           sortedRecipes.add(x);
         }
       }
-      // Collections.reverse(sortedRecipes);
-      // Collections.reverse(finalRecipe);
       updateRecipeListViews(sortedRecipes, finalRecipe);
     }
   }
@@ -493,8 +557,8 @@ public class AppController {
     this.stage.setTitle(recipe.getTitle());
   }
 
-  // Adds new recipe to recipe list view
   public void addNewRecipeToList(Recipe recipe) {
+    int temp = recipeListContainer.getChildren().size() + 1;
     RecipeListItem recipeListItem = new RecipeListItem(recipe);
     recipeListItem.setOnMouseClicked(e -> {
       // the next time to render the detail of this recipe, this recipe would be
@@ -503,6 +567,7 @@ public class AppController {
     });
     recipeListContainer.getChildren().add(0, recipeListItem);
     changeToRecipeListScene();
+    recipe.setIndex(temp);
   }
 
   public Stage getStage() {
