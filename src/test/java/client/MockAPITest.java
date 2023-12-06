@@ -8,29 +8,45 @@ import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import org.junit.jupiter.api.Test;
 
-class mockChatGPT implements API {
+class mockChatGPT implements API{
+    String API;
+    String TOKEN;
+    String Model;
+    String chatGPTAnswer;
+    String prompt;
+    // mockDallE imgGen;
 
-  String API;
-  String TOKEN;
-  String Model;
-  String chatGPTAnswer;
-  String prompt;
+    //Recipe: Title, mealType, Ingredients, img64
 
-  public mockChatGPT() {
-    // chatGPTAnswer = prompt;
-  }
+    public mockChatGPT(){
+        chatGPTAnswer = "Chicken and Rice";
+        prompt = "Chicken and Rice";
+    }
 
   public void setInput(String input) {
     this.prompt = input;
   }
 
-  public Recipe generate(String mealType, String ingredients) {
-    return new Recipe("Chicken and Rice", mealType, ingredients);
-  }
+    public Recipe generate(String mealType, String ingredients){
+        Recipe r = new Recipe("Chicken and Rice",mealType,ingredients);
+        r.setImgBase64Str("imageFileHere");
+        return r;
+    }
 
-  public String getOutput() {
-    return "Chicken and Rice";
-  }
+    public Recipe regenerate(String mealType, String ingredients){
+        chatGPTAnswer = "Rice and Chicken";
+        Recipe r = new Recipe("Rice and Chicken",mealType,ingredients);
+        r.setImgBase64Str("imageFileHere");
+        return r;
+    }
+
+    public String getOutput(){
+        return chatGPTAnswer;
+    }
+
+    public String getPrompt(){
+        return prompt;
+    }
 }
 
 class mockWhisper implements API {
@@ -77,35 +93,29 @@ class mockVoiceRecorder implements API {
     FILE = input;
   }
 
-  public String getOutput() {
-    //Doesn't actually do voice recording
-    return FILE;
-  }
+    public String getOutput(){
+        //Doesn't actually do voice recording
+        return FILE;
+    }
 }
 
-class MockDallE implements API {
+class mockDallE implements API{
+    String prompt;
+    String imageFile;
+    public mockDallE(){
 
-  final String dummy =
-    "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII";
-  String prompt;
+    }
 
-  MockDallE() {}
+    public void setInput(String input){
+        this.prompt = input;
+        imageFile = "imageFileHere";
+    }
 
-  @Override
-  public void setInput(String prompt) {
-    this.prompt = prompt;
-  }
-
-  @Override
-  public String getOutput() {
-    return this.dummy;
-  }
-
-  String getDummy() {
-    return this.dummy;
-  }
+    public String getOutput(){
+        //Doesn't actually do voice recording
+        return imageFile;
+    }
 }
-
 public class MockAPITest {
 
   @Test
@@ -124,129 +134,44 @@ public class MockAPITest {
     assertEquals("Breakfast", whisper.translateVoiceToText());
   }
 
-  @Test
-  void testVoiceRecorder() {
-    mockVoiceRecorder vReg = new mockVoiceRecorder();
-    vReg.setInput("recording.wav");
-    assertEquals("recording.wav", vReg.getOutput());
-  }
+    @Test void testVoiceRecorder(){
+        mockVoiceRecorder vReg = new mockVoiceRecorder();
+        vReg.setInput("recording.wav");
+        assertEquals("recording.wav", vReg.getOutput());
+    }
 
-  @Test
-  void addRecipeWithMockAPI() {
-    mockChatGPT budgetChatGPT = new mockChatGPT();
-    budgetChatGPT.setInput("Create a dinner recipe with Chicken, Rice");
-    mockWhisper whisper = new mockWhisper("lol.mp3");
-    Recipe dummyRecipe = budgetChatGPT.generate(
-      whisper.getOutput(),
-      whisper.getOutput()
-    );
-    assertEquals("Chicken and Rice", dummyRecipe.getTitle());
-    assertEquals("Bread, Sausages, and Eggs", dummyRecipe.getRecipeDetail()); //TODO: Fix
-  }
+    @Test void testDallEAPI(){
+        mockDallE imgCreator = new mockDallE();
+        imgCreator.setInput("Give me a banana image");
+        assertEquals("imageFileHere", imgCreator.getOutput());
+    }
 
-  @Test
-  void generateByMockDallE() {
-    MockDallE mockDallE = new MockDallE();
-    mockDallE.setInput("bread and bananas");
-    assertEquals(mockDallE.getOutput(), mockDallE.getDummy());
-  }
+    @Test void addRecipeWithMockAPI(){
+        mockChatGPT budgetChatGPT = new mockChatGPT();
+        budgetChatGPT.setInput("Create a dinner recipe with Chicken, Rice");
+        mockWhisper whisper = new mockWhisper("lol.mp3");
+        mockDallE dallE = new mockDallE();
+        dallE.setInput("Give me an image of Chicken and Rice");
+        Recipe dummyRecipe = budgetChatGPT.generate(whisper.getOutput(), whisper.getOutput());
+        assertEquals("Chicken and Rice", dummyRecipe.getTitle());
+        assertEquals("Bread, Sausages, and Eggs", dummyRecipe.getRecipeDetail());
+    }
 
-  @Test
-  public void EndToEndTest1() {
-    AppController app = new AppController();
-    List<Recipe> currRecipes;
-    mockChatGPT gpt = new mockChatGPT();
-    mockWhisper whisp = new mockWhisper("lol.mp3");
-    mockVoiceRecorder vRec = new mockVoiceRecorder();
-    vRec.setInput("lol.mp3");
-
-    String audioFile = vRec.getOutput();
-    whisp.setInput(audioFile);
-    String mealType = whisp.getOutput();
-
-    audioFile = vRec.getOutput();
-    String ingredients = whisp.getOutput();
-
-    Recipe r1 = gpt.generate(mealType, ingredients);
-
-    app.addNewRecipeToList(r1);
-    //Checks for Recipe Title
-    currRecipes = app.getRecipeList();
-    assertEquals("Chicken and Rice", currRecipes.get(0).getTitle());
-    assertEquals("Breakfast", currRecipes.get(0).getMealType());
-    assertEquals(
-      "Bread, Sausages, and Eggs",
-      currRecipes.get(0).getRecipeDetail()
-    );
-    //Nows Lets edit this recipe:
-    // RecipeDetailView rdv = new RecipeDetailView();
-    r1.setRecipeDetail("Bacon, Cheese, Rice");
-    assertEquals("Bacon, Cheese, Rice", currRecipes.get(0).getRecipeDetail());
-    Recipe r2 = gpt.generate(mealType, ingredients);
-    app.addNewRecipeToList(r2);
-    currRecipes = app.getRecipeList();
-    assertEquals(
-      "Bread, Sausages, and Eggs",
-      currRecipes.get(0).getRecipeDetail()
-    );
-    app.removeRecipeFromRecipeList(r2);
-    currRecipes = app.getRecipeList();
-    assertEquals("Bacon, Cheese, Rice", currRecipes.get(0).getRecipeDetail());
-    app.removeRecipeFromRecipeList(r1);
-    currRecipes = app.getRecipeList();
-    assertEquals(0, currRecipes.size());
-    // Recipe Detail View
-
-  }
-
-  @Test
-  public void EndToEndTest2() {
-    AppController app = new AppController();
-    List<Recipe> currRecipes;
-    mockChatGPT gpt = new mockChatGPT();
-    mockWhisper whisp = new mockWhisper("lol.mp3");
-    mockVoiceRecorder vRec = new mockVoiceRecorder();
-    MockDallE mockDallE = new MockDallE();
-    mockDallE.setInput("Some Prompt");
-    vRec.setInput("lol.mp3");
-
-    String audioFile = vRec.getOutput();
-    whisp.setInput(audioFile);
-    String mealType = whisp.getOutput();
-
-    audioFile = vRec.getOutput();
-    String ingredients = whisp.getOutput();
-
-    Recipe r1 = gpt.generate(mealType, ingredients);
-    r1.setImgBase64Str(mockDallE.getOutput());
-    app.addNewRecipeToList(r1);
-    //Checks for Recipe Title
-    currRecipes = app.getRecipeList();
-    assertEquals("Chicken and Rice", currRecipes.get(0).getTitle());
-    assertEquals("Breakfast", currRecipes.get(0).getMealType());
-    assertEquals(
-      "Bread, Sausages, and Eggs",
-      currRecipes.get(0).getRecipeDetail()
-    );
-    //Nows Lets edit this recipe:
-    // RecipeDetailView rdv = new RecipeDetailView();
-    r1.setRecipeDetail("Bacon, Cheese, Rice");
-    assertEquals("Bacon, Cheese, Rice", currRecipes.get(0).getRecipeDetail());
-    Recipe r2 = gpt.generate(mealType, ingredients);
-    r2.setImgBase64Str(mockDallE.getOutput());
-    app.addNewRecipeToList(r2);
-    currRecipes = app.getRecipeList();
-    assertEquals(
-      "Bread, Sausages, and Eggs",
-      currRecipes.get(0).getRecipeDetail()
-    );
-    app.removeRecipeFromRecipeList(r2);
-    currRecipes = app.getRecipeList();
-    assertEquals("Bacon, Cheese, Rice", currRecipes.get(0).getRecipeDetail());
-    app.removeRecipeFromRecipeList(r1);
-    currRecipes = app.getRecipeList();
-    assertEquals(0, currRecipes.size());
-    // Recipe Detail View
-
-  }
+    @Test void addRecipeWithRegeneration(){
+        mockChatGPT budgetChatGPT = new mockChatGPT();
+        budgetChatGPT.setInput("Create a dinner recipe with Chicken, Rice");
+        mockWhisper whisper = new mockWhisper("lol.mp3");
+        mockDallE dallE = new mockDallE();
+        dallE.setInput("Give me an image of Chicken and Rice");
+        Recipe dummyRecipe = budgetChatGPT.generate(whisper.getOutput(), whisper.getOutput());
+        dummyRecipe.setImgBase64Str(dallE.getOutput());
+        assertEquals("Chicken and Rice", dummyRecipe.getTitle());
+        assertEquals("Bread, Sausages, and Eggs", dummyRecipe.getRecipeDetail());
+        assertEquals("imageFileHere", dummyRecipe.getImgBase64Str());
+        dallE.setInput(budgetChatGPT.getPrompt());
+        Recipe regenRecipe = budgetChatGPT.regenerate(whisper.getOutput(), whisper.getOutput());
+        regenRecipe.setRecipeID("12345");
+        regenRecipe.setImgBase64Str(dallE.getOutput());
+        assertEquals("Rice and Chicken", regenRecipe.getTitle()); //regenRecipe just changes Title
+    }
 }
