@@ -40,6 +40,8 @@ public class AppController {
   private LogInController logInController;
   private LogInView logInView;
   private Scene logInScene;
+  // private VBox lst;
+
 
   private static final Double windowWidth = 500D;
   private static final Double windowHeight = 500D;
@@ -98,6 +100,12 @@ public class AppController {
     this.recipeListView = new RecipeListView(true);
     this.recipeListContainer = recipeListView.getRecipeListContainer();
   }
+
+  //   public AppController(mockDataBase mangaDB) {
+  //   // constructor for testing
+  //   this.recipeListView = new RecipeListView(true);
+  //   this.recipeListContainer = recipeListView.getRecipeListContainer();
+  // }
 
   // when user successfully logs in, load the recipe list
   public void registerRecipeListController(RecipeListController rlController) {
@@ -168,7 +176,8 @@ public class AppController {
         sortedRecipes.add(x);
       }
       updateRecipeListViews(sortedRecipes, recipeList);
-    } else {
+    } 
+    else {
       mealType = mealType.toLowerCase();
       for (Recipe x : recipeList) {
         if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
@@ -180,19 +189,6 @@ public class AppController {
       updateRecipeListViews(sortedRecipes, recipeList);
     }
   }
-
-  // public void sortRecipesByTitle(String mealType) {
-  // List<Recipe> recipeList = getRecipeList();
-  // List<Recipe> sortedRecipes = new ArrayList<>();
-  // // List<Recipe> remainingRecipes = new ArrayList<>();
-  // Collections.sort(recipeList, Comparator.comparing(Recipe::getTitle));
-  // if (mealType != null) {
-  // mealType = mealType.toLowerCase();
-  // }
-
-  // updateRecipeListViews(recipeList, mealType);
-
-  // }
   public boolean isReversedSort = false;
   public List<Recipe> savedReverseSorted;
 
@@ -232,48 +228,6 @@ public class AppController {
   public boolean isSortedDate = false;
   public List<Recipe> savedSortedDate;
 
-  // public void sortRecipesByDate(String mealType) {
-  // isSortedDate = true;
-  // isSort = false;
-  // isReversedSort = false;
-  // isReverseSortedDate = false;
-  // // System.out.println("Sort button clicked!");
-  // List<Recipe> recipeList = getRecipeList();
-  // List<Recipe> sortedRecipes = new ArrayList<>(); // sorted with filter tag
-  // List<Integer> indexSaved = new ArrayList<>();
-  // List<Recipe> finalRecipe = new ArrayList<>(); // sorted by date for ALL
-
-  // for (Recipe x : recipeList) {
-  // indexSaved.add(x.getIndex());
-  // }
-  // Collections.sort(indexSaved);
-  // for (int x : indexSaved) {
-  // for (Recipe y : recipeList) {
-  // if (y.getIndex() == x) {
-  // finalRecipe.add(y);
-  // }
-  // }
-  // }
-
-  // savedSortedDate = finalRecipe;
-
-  // if (mealType == null || mealType.equals("reset filter") ||
-  // mealType.equals("Reset Filter")) {
-  // for (Recipe x : finalRecipe) {
-  // sortedRecipes.add(x);
-  // }
-  // updateRecipeListViews(sortedRecipes, finalRecipe);
-  // } else {
-  // mealType = mealType.toLowerCase();
-  // for (Recipe x : finalRecipe) {
-  // if (x.getMealType().toLowerCase().equals(mealType.toLowerCase())) {
-  // sortedRecipes.add(x);
-  // }
-  // }
-  // updateRecipeListViews(sortedRecipes, finalRecipe);
-  // }
-
-  // }
 
   public void sortRecipesByDate(String mealType) {
     isSortedDate = true;
@@ -594,6 +548,8 @@ public class AppController {
     // Sanity check
     if (stage != null && logInScene != null) {
       // Set scene
+      createAccountView.clearForm();
+      logInView.clearForm();
       stage.setScene(logInScene);
       stage.setTitle("Log In");
     }
@@ -605,6 +561,8 @@ public class AppController {
     logInController.showError("Server is Down! Please Come back Later!");
     stage.setScene(logInScene);
   }
+
+
 }
 /*
  * generated recipes are automatically in edit mode

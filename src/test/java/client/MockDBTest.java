@@ -4,18 +4,36 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import org.junit.jupiter.api.Test;
-
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 class mockDataBase{
     HashMap<String,String> accDetails;
     HashMap<String,List<Recipe>> recipes;
     String username;
     String password;
+    Boolean autoLogin;
     List<Recipe> lst;
     public mockDataBase(){
         accDetails = new HashMap<>();
         recipes = new HashMap<String,List<Recipe>>();
         lst = new ArrayList<Recipe>();
+        autoLogin = false;
+    }
+
+    public void setAutoLogIn(){
+        this.autoLogin = true;
+    }
+    public HashMap<String,String> getAccDetails(){
+        return accDetails;
+    }
+
+    public HashMap<String, List<Recipe>> getRecipeList(){
+        return recipes;
+    }
+
+    public void setRecipeList(String username, List<Recipe> lst){
+        recipes.replace(username, lst);
     }
 
   public String addAccount(String username, String password) {
@@ -23,7 +41,7 @@ class mockDataBase{
       accDetails.put(username, password);
       return "Added Account successfully.";
     }
-    System.out.println("Username Already Exists.");
+    // System.out.println("Username Already Exists.");
     return "Username Already Exists.";
   }
 
@@ -34,15 +52,24 @@ class mockDataBase{
       return true;
     }
   }
+    public String logIn(){
+        if(this.autoLogin == true){
+            return "Logged In Successfully";
+        }
+        else{
+            return "Incorrect Username + Password";
+        }
+    }
 
-    public String logIn(String username, String password){
+    public String logIn(String username, String password, boolean auto){
+        this.autoLogin = auto;
         if(password == accDetails.get(username)){
             //LoggedIn, maybe return list of recipes?
             this.username = username;
             return "Logged In Successfully";
         }
         else{
-            System.out.println("Incorrect Username + Password");
+            // System.out.println("Incorrect Username + Password");
             return "Incorrect Username + Password";
         }
     }
@@ -53,8 +80,10 @@ class mockDataBase{
         }
         this.username = null;
         lst.clear();
+        autoLogin = false;
         return "Logged Out Successfully";
     }
+    
     public void storeRecipes(Recipe recipe){
         lst.add(recipe);
         recipes.put(username, lst);
@@ -87,9 +116,13 @@ class mockDataBase{
     public String getRecipeImg(Recipe recipe){
         return lst.get(lst.indexOf(recipe)).getImgBase64Str();
     }
+
+    public String shareRecipe(Recipe recipe){
+        return recipe.getTitle()+ ".html";
+    }
 }
 
-public class AccountTest {
+public class MockDBTest {
 
   //Fake Database
 
@@ -116,24 +149,24 @@ public class AccountTest {
     mockDataBase mangoDB = new mockDataBase();
     //Add new Account
     String res = mangoDB.addAccount("Joe", "test");
-    String loggedInRes = mangoDB.logIn("Joe", "test");
+    String loggedInRes = mangoDB.logIn("Joe", "test",false);
     assertEquals("Logged In Successfully", loggedInRes);
   }
 
   @Test
-  void wrongUsernameLogIn() {
-    mockDataBase mangoDB = new mockDataBase();
-    //Add new Account
-    String res = mangoDB.addAccount("Joe", "test");
-    String loggedInRes = mangoDB.logIn("Alex", "test");
-    assertEquals("Incorrect Username + Password", loggedInRes);
-  }
-
-        @Test void wrongPasswordLogIn(){
+    void wrongUsernameLogIn() {
         mockDataBase mangoDB = new mockDataBase();
         //Add new Account
         String res = mangoDB.addAccount("Joe", "test");
-        String loggedInRes = mangoDB.logIn("Joe", "CORRECT");
+        String loggedInRes = mangoDB.logIn("Alex", "test",false);
+        assertEquals("Incorrect Username + Password", loggedInRes);
+    }
+
+    @Test void wrongPasswordLogIn(){
+        mockDataBase mangoDB = new mockDataBase();
+        //Add new Account
+        String res = mangoDB.addAccount("Joe", "test");
+        String loggedInRes = mangoDB.logIn("Joe", "CORRECT",false);
         assertEquals("Incorrect Username + Password", loggedInRes);
     }
 
@@ -141,7 +174,7 @@ public class AccountTest {
         mockDataBase mangoDB = new mockDataBase();
         //Add new Account
         String res = mangoDB.addAccount("Joe", "test");
-        String loggedInRes = mangoDB.logIn("JoeMama", "cool");
+        String loggedInRes = mangoDB.logIn("JoeMama", "cool",false);
         assertEquals("Incorrect Username + Password", loggedInRes);
     }
 
@@ -149,7 +182,7 @@ public class AccountTest {
         mockDataBase mangoDB = new mockDataBase();
         //Add new Account
         mangoDB.addAccount("Joe", "test");
-        mangoDB.logIn("Joe", "test");
+        mangoDB.logIn("Joe", "test",false);
         assertEquals("Logged Out Successfully", mangoDB.logOut());
     }
 
@@ -158,12 +191,28 @@ public class AccountTest {
         assertEquals("User not currently logged in", mangoDB.logOut());
     }
 
+    @Test void testAutoLogIn(){
+        mockDataBase mangoDB = new mockDataBase();
+        //Add new Account
+        String res = mangoDB.addAccount("Joe", "test");
+        String loggedInRes = mangoDB.logIn("Joe", "test",true);
+        assertEquals("Logged In Successfully",mangoDB.logIn());
+    }
+
+    @Test void testLogOutWithAutoLogIn(){
+                mockDataBase mangoDB = new mockDataBase();
+        //Add new Account
+        String res = mangoDB.addAccount("Joe", "test");
+        String loggedInRes = mangoDB.logIn("Joe", "test",true);
+        mangoDB.logOut();
+        assertEquals("Incorrect Username + Password",mangoDB.logIn());
+    }
     @Test void storeRecipesInDatabase(){
         mockDataBase mangoDB = new mockDataBase();
         mockChatGPT chatGPT = new mockChatGPT();
 
         String res = mangoDB.addAccount("Joe", "test");
-        mangoDB.logIn("Joe", "test");
+        mangoDB.logIn("Joe", "test",false);
         Recipe r = chatGPT.generate("Dinner", "Chicken, Rice");
         mangoDB.storeRecipes(r);
         assertEquals("Chicken and Rice", mangoDB.getRecipeTitle(r));
@@ -177,7 +226,7 @@ public class AccountTest {
         mockChatGPT chatGPT = new mockChatGPT();
 
         String res = mangoDB.addAccount("Joe", "test");
-        mangoDB.logIn("Joe", "test");
+        mangoDB.logIn("Joe", "test",false);
         Recipe r = chatGPT.generate("Dinner", "Chicken, Rice");
         mangoDB.storeRecipes(r);
         mangoDB.editRecipe(r, "First cook rice, then pan-fry chicken");
@@ -189,7 +238,7 @@ public class AccountTest {
         mockChatGPT chatGPT = new mockChatGPT();
 
         String res = mangoDB.addAccount("Joe", "test");
-        mangoDB.logIn("Joe", "test");
+        mangoDB.logIn("Joe", "test",false);
         Recipe r = chatGPT.generate("Dinner", "Chicken, Rice");
         mangoDB.storeRecipes(r);
         mangoDB.deleteRecipe(r);

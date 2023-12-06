@@ -76,8 +76,28 @@ class mockWhisper implements API {
     }
   }
 
+  public String endToEnd(){
+    if (MealType == true) {
+      MealType = false;
+      return "Lunch";
+    } else {
+      MealType = true;
+      return "bacon and eggs";
+    }
+  }
+
   public String getOutput() {
     return translateVoiceToText();
+  }
+
+  public String getOutput(String mealType, String ingredients){
+    if (MealType == true) {
+      MealType = false;
+      return mealType;
+    } else {
+      MealType = true;
+      return ingredients;
+    }
   }
 }
 

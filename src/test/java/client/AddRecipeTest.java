@@ -48,6 +48,7 @@ public class AddRecipeTest {
         appController.addNewRecipeToList(r2);
         recipeList = appController.getRecipeList();
         assertEquals(r2, recipeList.get(0));
+        assertEquals(3, recipeList.size());
     }
 
     @Test
