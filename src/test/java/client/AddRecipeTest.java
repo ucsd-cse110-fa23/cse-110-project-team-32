@@ -142,4 +142,12 @@ public class AddRecipeTest {
       // viewable
       // in the list of recipes. Hence, test passed.
 
+      @Test
+
+      void storedRecipes(){
+        
+        Recipe recipe1 = new Recipe("Recipe 1", "Breakfast", "Details for Recipe 1");
+        Recipe recipe2 = new Recipe("Recipe 2", "Lunch", "Details for Recipe 2");
+        Recipe recipe3 = new Recipe("Recipe 3", "Dinner", "Details for Recipe 3");
+      }
 }
