@@ -40,6 +40,8 @@ public class AppController {
   private LogInController logInController;
   private LogInView logInView;
   private Scene logInScene;
+  final File STYLE = new File("styling.css");
+  final String STYLESHEET = "file:" + STYLE.getPath();
 
   private static final Double windowWidth = 500D;
   private static final Double windowHeight = 500D;
@@ -79,6 +81,7 @@ public class AppController {
         new ScrollPane(logInView.getBorderPane()),
         windowWidth,
         windowHeight);
+    this.logInScene.getStylesheets().add(STYLESHEET);
     // this.recipeListScene = new Scene(recipeListView.getBorderPane(), windowWidth,
     // windowHeight);
     // this.recipeDetailScene = new Scene(recipeDetailView.getBorderPane(),

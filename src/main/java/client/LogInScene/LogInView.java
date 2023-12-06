@@ -4,8 +4,10 @@ import client.TextFieldLowerChar;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +20,8 @@ public class LogInView {
   private BorderPane borderPane;
   private Button createAccButton;
   private Button logInButton;
-  private HBox title;
+  //private HBox title;
+  private Label title;
   private TextField username;
   private TextField password;
   private VBox accountDetails;
@@ -31,7 +34,7 @@ public class LogInView {
 
   public LogInView() {
     borderPane = new BorderPane();
-    title = new HBox(new Text("Pantry Pal 2"));
+    title = new Label("Pantry Pal 2");
     borderPane.setTop(title);
     username = new TextFieldLowerChar();
     username.setPromptText("username");
@@ -50,12 +53,13 @@ public class LogInView {
     borderPane.setBottom(buttonList);
 
     // UI Styling
-    title.setStyle("-fx-background-color: #F3F3F3; -fx-border-width: 0; -fx-font-weight: bold; -fx-font-size: 24"); 
-    accountDetails.setPadding(new Insets(10,0,0,0) );
-    accountDetails.setSpacing(10);
-    buttonList.setSpacing(15);
-    createAccButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0; -fx-border-color: blue");
-    logInButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0; -fx-border-color: blue");
+    // title.setStyle("-fx-background-color: #F3F3F3; -fx-border-width: 0; -fx-font-weight: bold; -fx-font-size: 24"); 
+    // accountDetails.setPadding(new Insets(10,0,0,0) );
+    // accountDetails.setSpacing(10);
+    // buttonList.setSpacing(15);
+    // createAccButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0; -fx-border-color: blue");
+    // logInButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0; -fx-border-color: blue");
+    // accountDetails.setAlignment(Pos.CENTER);
 
   }
 
