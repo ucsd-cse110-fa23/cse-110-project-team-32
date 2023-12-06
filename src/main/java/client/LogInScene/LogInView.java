@@ -35,33 +35,30 @@ public class LogInView {
   private Boolean checked;
   private Text error;
   
-  
-
   //Remember me checkbox
 
   public LogInView() {
-    Group root = new Group();
-    
-    borderPane = new BorderPane();
+    borderPane = new BorderPane();  
     borderPane.setPrefSize(500D, 250D);
     title = new HBox(new Text("Pantry Pal 2"));
     title.setStyle("-fx-background-color: #E8E6D9;");
     title.setPadding(new Insets(10,0,0,0));
     borderPane.setTop(title);
-    borderPane.setStyle("-fx-background-color: #E8E6D9;");
+    //borderPane.setStyle("-fx-background-color: #A7ED12;");
 
     username = new TextFieldLowerChar();
     username.setPromptText("username");
     password = new TextFieldLowerChar();
     password.setPromptText("password");
     rememberMe = new CheckBox("Auto Login");
+    rememberMe.setPadding(new Insets(20,0,0,0));
     rememberMe.setAllowIndeterminate(false); //Only care if CheckBox is selected or unselected
     error = new Text("Incorrect Username or Password");
     accountDetails = new VBox(username, password, rememberMe, error);
     borderPane.setCenter(accountDetails);
     accountDetails.setAlignment(Pos.CENTER);
-    accountDetails.setPrefSize(100, 10);
-    accountDetails.setStyle("-fx-background-color: #E8E6D9;");
+    //accountDetails.setPrefSize(100, 500);
+    //accountDetails.setStyle("-fx-background-color: #E8E6D9;");
 
     logInButton = new Button("Log In");
     createAccButton = new Button("Create Account");
