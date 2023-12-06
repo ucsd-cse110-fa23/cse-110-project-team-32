@@ -622,3 +622,4 @@ public class AppController {
  * Sure, that would be a good way to handle deletion in case the user
  * accidentally clicks on delete.
  */
+ 
