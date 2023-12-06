@@ -28,10 +28,8 @@ public class ChatGptReqHandler implements HttpHandler {
   private static final int MAX_TOKENS = 300;
 
   private static final String DALLE_MODEL = "dall-e-2";
-  private static final String DALLE_API_ENDPOINT =
-    "https://api.openai.com/v1/images/generations";
-  private static final String DALLE_API_KEY =
-    "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";
+  private static final String DALLE_API_ENDPOINT = "https://api.openai.com/v1/images/generations";
+  private static final String DALLE_API_KEY = "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";
 
   private final Helper HELPER = Helper.getInstance();
   private int statusCode = 200;

@@ -1,17 +1,24 @@
 package client.LogInScene;
 
+import javax.swing.plaf.RootPaneUI;
+
 import client.TextFieldLowerChar;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.paint.*;
+import javafx.scene.shape.*;
+import javafx.scene.Group; 
 
 public class LogInView {
 
@@ -19,6 +26,7 @@ public class LogInView {
   private Button createAccButton;
   private Button logInButton;
   private HBox title;
+  //private Label title;
   private TextField username;
   private TextField password;
   private VBox accountDetails;
@@ -26,36 +34,44 @@ public class LogInView {
   private CheckBox rememberMe;
   private Boolean checked;
   private Text error;
-
+  
   //Remember me checkbox
 
   public LogInView() {
-    borderPane = new BorderPane();
+    borderPane = new BorderPane();  
+    borderPane.setPrefSize(500D, 250D);
     title = new HBox(new Text("Pantry Pal 2"));
+    title.setStyle("-fx-background-color: #E8E6D9;");
+    title.setPadding(new Insets(10,0,0,0));
     borderPane.setTop(title);
+    //borderPane.setStyle("-fx-background-color: #A7ED12;");
+
     username = new TextFieldLowerChar();
     username.setPromptText("username");
     password = new TextFieldLowerChar();
     password.setPromptText("password");
     rememberMe = new CheckBox("Auto Login");
+    rememberMe.setPadding(new Insets(20,0,0,0));
     rememberMe.setAllowIndeterminate(false); //Only care if CheckBox is selected or unselected
     error = new Text("Incorrect Username or Password");
     accountDetails = new VBox(username, password, rememberMe, error);
     borderPane.setCenter(accountDetails);
+    accountDetails.setAlignment(Pos.CENTER);
+    //accountDetails.setPrefSize(100, 500);
+    //accountDetails.setStyle("-fx-background-color: #E8E6D9;");
+
     logInButton = new Button("Log In");
     createAccButton = new Button("Create Account");
     error.setVisible(false);
-
-    buttonList = new HBox(createAccButton, logInButton);
+    buttonList = new HBox(logInButton, createAccButton);
     borderPane.setBottom(buttonList);
 
-    // UI Styling
+    buttonList.setAlignment(Pos.CENTER);
     title.setStyle("-fx-background-color: #F3F3F3; -fx-border-width: 0; -fx-font-weight: bold; -fx-font-size: 24"); 
+    title.setAlignment(Pos.CENTER);
     accountDetails.setPadding(new Insets(10,0,0,0) );
     accountDetails.setSpacing(10);
     buttonList.setSpacing(15);
-    createAccButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
-    logInButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
 
   }
 
