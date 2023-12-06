@@ -23,7 +23,7 @@ public class ChatGptReqHandler implements HttpHandler {
   private static final String API_ENDPOINT =
     "https://api.openai.com/v1/completions";
   private static final String API_KEY =
-    "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";
+  "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";
   private static final String MODEL = "text-davinci-003";
   private static final int MAX_TOKENS = 300;
 
@@ -31,7 +31,7 @@ public class ChatGptReqHandler implements HttpHandler {
   private static final String DALLE_API_ENDPOINT =
     "https://api.openai.com/v1/images/generations";
   private static final String DALLE_API_KEY =
-    "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";
+    "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";
 
   private final Helper HELPER = Helper.getInstance();
   private int statusCode = 200;
