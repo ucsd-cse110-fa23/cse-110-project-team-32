@@ -69,8 +69,8 @@ public class E2ETest {
         app.addNewRecipeToList(r2);
         lst = app.getRecipeList();
         assertEquals(2, lst.size());
-        System.out.println("RECIPELIST after 2nd recipe insertion: " + lst.size());
-        System.out.println(lst.get(0).getRecipeDetail());
+        // System.out.println("RECIPELIST after 2nd recipe insertion: " + lst.size());
+        // System.out.println(lst.get(0).getRecipeDetail());
         mangaDB.setRecipeList("John", lst);
         mangaDB.storeRecipes(r2);
         assertEquals("Dinner", lst.get(lst.indexOf(r2)).getMealType());
@@ -78,11 +78,17 @@ public class E2ETest {
         //BUGGY CODE
         // assertEquals(1,app.reverseSortRecipesByDate(null));
         // app.sortRecipesByDate(null);
+        app.sortRecipesByDate(null);
         lst = app.getRecipeList();
-        assertEquals("Chicken and Rice",lst.get(0).getTitle());
+        assertEquals("Rice and Chicken",lst.get(0).getTitle());
+        assertEquals("Bacon Eggs, Cooks eggs then Bacon", lst.get(0).getRecipeDetail());
         assertEquals(2, lst.size());
         assertEquals(1, app.handleFilter("Dinner").size());
         assertEquals("Chicken and Rice", app.handleFilter("Dinner").get(0).getTitle());
+        assertEquals(2,app.getRecipeList().size());
+        app.reverseSortRecipesByDate(null);
+        // app.handleFilter("reset filter");
+        // assertEquals("Bacon Eggs, Cooks eggs then Bacon",app.handleFilter("Breakfast").get(0).getRecipeDetail());
 
         //Share Recipe 
         String shareURL = mangaDB.shareRecipe(r2);
