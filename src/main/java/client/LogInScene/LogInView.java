@@ -112,12 +112,12 @@ public class LogInView {
   }
 
   public void setCreateButtonOnAction(EventHandler<ActionEvent> eventHandler) {
-    // clearForm();
+    clearForm();
     this.createAccButton.setOnAction(eventHandler);
   }
 
   public void setLogInButtonOnAction(EventHandler<ActionEvent> eventHandler) {
-    // clearForm();
+    clearForm();
     this.logInButton.setOnAction(eventHandler);
   }
 
@@ -137,6 +137,8 @@ public class LogInView {
   }
 
   public void clearForm() {
+    // username.clear();
+    // password.clear();
     username.setText("");
     password.setText("");
     System.out.println("Login Get Username: " + getUsername());

@@ -20,7 +20,7 @@ public class ChatGPT implements API {
 
   public ChatGPT() {
     API_ENDPOINT = "https://api.openai.com/v1/completions";
-    API_KEY = "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";
+    API_KEY = "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";
     MODEL = "text-davinci-003";
   }
 
