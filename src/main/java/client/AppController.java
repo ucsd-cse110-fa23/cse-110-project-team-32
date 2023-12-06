@@ -528,6 +528,14 @@ public class AppController {
     recipeListContainer.getChildren().add(0, recipeListItem);
     changeToRecipeListScene();
     recipe.setIndex(temp);
+    // RecipeListView recipeView = new RecipeListView(appController);
+
+    // recipeView.resetFilterButton();
+    // reverseSortRecipesByDate(null);
+    recipeListController.recipeListView.resetFilterButton();
+
+    // Reverse sort recipes by date
+    reverseSortRecipesByDate(null);
   }
 
   public Stage getStage() {
