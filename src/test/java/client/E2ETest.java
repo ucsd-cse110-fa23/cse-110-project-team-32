@@ -22,14 +22,78 @@ public class E2ETest {
         mockDataBase mangaDB = new mockDataBase();  
         ServerResponse<Boolean> logInResponse = new AuthResponse();
         logInResponse.setServerDownResponse();
+        //Checks for invalid server response
         assertEquals(false, logInResponse.getResponse());
         assertEquals("The server is Down!", logInResponse.getErrorMsg());
         assertEquals(503, logInResponse.getStatusCode());       
         logInResponse.setValidResponse("Server operates!");
+        //Checks for valid server response
         assertEquals(true, logInResponse.getResponse());
         assertEquals(200, logInResponse.getStatusCode());
 
-        
+        String logInAttempt = mangaDB.logIn("John","password",false);
+        assertEquals("Incorrect Username + Password", logInAttempt);
+        //John creates his account now...
+        String createAccSuccess = mangaDB.addAccount("John", "password");
+        assertEquals("Added Account successfully.", createAccSuccess);
+        logInAttempt = mangaDB.logIn("John","password",false);
+        assertEquals("Logged In Successfully", logInAttempt);
+
+        //Now he's at his recipeList and creates some recipes
+        vRec.setInput("lol.mp3");
+
+        String audioFile = vRec.getOutput();
+        whisp.setInput(audioFile);
+        String mealType = whisp.getOutput("Lunch", "Bacon Eggs");
+        audioFile = vRec.getOutput();
+        String ingredients = whisp.getOutput("Lunch", "Bacon Eggs");
+        Recipe r1 = gpt.generate(mealType, ingredients);
+        assertEquals("Lunch", r1.getMealType());
+        assertEquals("Bacon Eggs", r1.getRecipeDetail());
+        r1 = gpt.regenerate(mealType, ingredients);
+        assertEquals("Rice and Chicken", r1.getTitle());
+        assertEquals("Lunch", r1.getMealType());
+        assertEquals("Bacon Eggs", r1.getRecipeDetail());
+        List<Recipe> lst = app.getRecipeList();
+
+        app.addNewRecipeToList(r1);
+        mangaDB.setRecipeList("John", lst);
+        mangaDB.storeRecipes(r1);
+        mangaDB.editRecipe(r1, "Bacon Eggs, Cooks eggs then Bacon");
+        assertEquals("Bacon Eggs, Cooks eggs then Bacon", mangaDB.getRecipeDetails(r1));
+        whisp.setInput(audioFile);
+        mealType = whisp.getOutput("Dinner", "Chicken and Rice");
+        audioFile = vRec.getOutput();
+        ingredients = whisp.getOutput("Dinner", "Chicken and Rice");
+        Recipe r2 = gpt.generate(mealType, ingredients);
+        app.addNewRecipeToList(r2);
+        lst = app.getRecipeList();
+        assertEquals(2, lst.size());
+        System.out.println("RECIPELIST after 2nd recipe insertion: " + lst.size());
+        System.out.println(lst.get(0).getRecipeDetail());
+        mangaDB.setRecipeList("John", lst);
+        mangaDB.storeRecipes(r2);
+        assertEquals("Dinner", lst.get(lst.indexOf(r2)).getMealType());
+
+        //BUGGY CODE
+        // assertEquals(1,app.reverseSortRecipesByDate(null));
+        // app.sortRecipesByDate(null);
+        lst = app.getRecipeList();
+        assertEquals("Chicken and Rice",lst.get(0).getTitle());
+        assertEquals(2, lst.size());
+        assertEquals(1, app.handleFilter("Dinner").size());
+        assertEquals("Chicken and Rice", app.handleFilter("Dinner").get(0).getTitle());
+
+        //Share Recipe 
+        String shareURL = mangaDB.shareRecipe(r2);
+        assertEquals("Chicken and Rice.html",shareURL);
+        shareURL = mangaDB.shareRecipe(r1);
+        assertEquals("Rice and Chicken.html", shareURL);
+        mangaDB.logOut();
+        //Assume account exists for user:<test> password:<123>
+        mangaDB.logIn("test", "123", true);
+
+        assertEquals("Logged In Successfully", mangaDB.logIn());
     }
 
     @Test

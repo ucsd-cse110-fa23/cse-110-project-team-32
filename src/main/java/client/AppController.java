@@ -41,6 +41,7 @@ public class AppController {
   private LogInView logInView;
   private Scene logInScene;
 
+
   private static final Double windowWidth = 500D;
   private static final Double windowHeight = 500D;
 
@@ -98,6 +99,12 @@ public class AppController {
     this.recipeListView = new RecipeListView(true);
     this.recipeListContainer = recipeListView.getRecipeListContainer();
   }
+
+  //   public AppController(mockDataBase mangaDB) {
+  //   // constructor for testing
+  //   this.recipeListView = new RecipeListView(true);
+  //   this.recipeListContainer = recipeListView.getRecipeListContainer();
+  // }
 
   // when user successfully logs in, load the recipe list
   public void registerRecipeListController(RecipeListController rlController) {
@@ -542,6 +549,8 @@ public class AppController {
     logInController.showError("Server is Down! Please Come back Later!");
     stage.setScene(logInScene);
   }
+
+
 }
 /*
  * generated recipes are automatically in edit mode
