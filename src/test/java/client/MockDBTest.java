@@ -89,7 +89,7 @@ class mockDataBase{
     }
 }
 
-public class AccountTest {
+public class MockDBTest {
 
   //Fake Database
 

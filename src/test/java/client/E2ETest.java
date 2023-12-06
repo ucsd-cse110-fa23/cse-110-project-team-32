@@ -1,6 +1,10 @@
 package client;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import client.HttpResponse.AuthResponse;
+import client.HttpResponse.ServerResponse;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
@@ -9,7 +13,23 @@ public class E2ETest {
 
 
     @Test void JohnUsesPP2(){
-        Recipe recipe = new Recipe("Chicken and Rice", "Dinner", "Its Chicken and Rice man...");
+        AppController app = new AppController();
+        List<Recipe> currRecipes;
+        mockChatGPT gpt = new mockChatGPT();
+        mockWhisper whisp = new mockWhisper("lol.mp3");
+        mockVoiceRecorder vRec = new mockVoiceRecorder();  
+        vRec.setInput("lol.mp3");
+        mockDataBase mangaDB = new mockDataBase();  
+        ServerResponse<Boolean> logInResponse = new AuthResponse();
+        logInResponse.setServerDownResponse();
+        assertEquals(false, logInResponse.getResponse());
+        assertEquals("The server is Down!", logInResponse.getErrorMsg());
+        assertEquals(503, logInResponse.getStatusCode());       
+        logInResponse.setValidResponse("Server operates!");
+        assertEquals(true, logInResponse.getResponse());
+        assertEquals(200, logInResponse.getStatusCode());
+
+        
     }
 
     @Test

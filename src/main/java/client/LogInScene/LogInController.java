@@ -44,14 +44,15 @@ public class LogInController {
       initRecipeList();
     }
     // if not, stay here, display saved username if there is one
-    String savedUsername = USER_SETTINGS.getUsername();
-    if (savedUsername != null) {
-      logInView.getUsernameField().setText(savedUsername);
-    }
+    // String savedUsername = USER_SETTINGS.getUsername();
+    // if (savedUsername != null) {
+    //   logInView.getUsernameField().setText(savedUsername);
+    // }
   }
 
   private void initRecipeList() {
     appController.loadRecipeList();
+    logInView.clearForm();
     appController.changeToRecipeListScene();
   }
 

@@ -438,6 +438,8 @@ public class AppController {
     // Sanity check
     if (stage != null && logInScene != null) {
       // Set scene
+      createAccountView.clearForm();
+      logInView.clearForm();
       stage.setScene(logInScene);
       stage.setTitle("Log In");
     }
