@@ -17,7 +17,7 @@ public class Whisper implements API {
   public Whisper(String path) {
     this.FILE_PATH = path;
     API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
-    TOKEN = "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";    ;
+    TOKEN = "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"; 
     MODEL = "whisper-1";
   }
 

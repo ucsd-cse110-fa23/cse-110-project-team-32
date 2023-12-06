@@ -40,7 +40,7 @@ public class RecipeListView {
     private Button logOutButton;
     // Button to filter by meal type
     private MenuButton filterButton;
-    private RadioMenuItem lastSelectedFilter;
+    public RadioMenuItem lastSelectedFilter;
     private ToggleGroup mealTypeToggle;
     private Button sortButton;
     private Button reverseSortButton;
@@ -48,6 +48,10 @@ public class RecipeListView {
     private Button sortDateButton;
     private Button sortReverseDateButton;
     private MenuButton sortMenuButton;
+    private RadioMenuItem breakfastItem;
+    private RadioMenuItem lunchItem;
+    private RadioMenuItem dinnerItem;
+    private RadioMenuItem resetFilter;
 
     // Constructor
     public RecipeListView(AppController appController) {
@@ -73,14 +77,15 @@ public class RecipeListView {
         // setSortButtonEventHandler(appController);
         mealTypeToggle = new ToggleGroup();
         // setSortButtonEventHandler(appController);
-        RadioMenuItem breakfastItem = new RadioMenuItem("Breakfast");
-        breakfastItem.setToggleGroup(mealTypeToggle);
-        RadioMenuItem lunchItem = new RadioMenuItem("Lunch");
-        lunchItem.setToggleGroup(mealTypeToggle);
-        RadioMenuItem dinnerItem = new RadioMenuItem("Dinner");
-        dinnerItem.setToggleGroup(mealTypeToggle);
-        RadioMenuItem resetFilter = new RadioMenuItem("Reset Filter");
-        resetFilter.setToggleGroup(mealTypeToggle);
+        this.breakfastItem = new RadioMenuItem("Breakfast");
+
+        this.breakfastItem.setToggleGroup(mealTypeToggle);
+        this.lunchItem = new RadioMenuItem("Lunch");
+        this.lunchItem.setToggleGroup(mealTypeToggle);
+        this.dinnerItem = new RadioMenuItem("Dinner");
+        this.dinnerItem.setToggleGroup(mealTypeToggle);
+        this.resetFilter = new RadioMenuItem("Reset Filter");
+        this.resetFilter.setToggleGroup(mealTypeToggle);
         MenuItem sortTitleItem = new MenuItem("Title (A-Z)");
         MenuItem reverseSortTitleItem = new MenuItem("Title (Z-A)");
         MenuItem sortDateItem = new MenuItem("Date (Oldest to Newest)");
@@ -196,12 +201,29 @@ public class RecipeListView {
         this.logOutButton.setOnAction(eventHandler);
     }
 
-    private void initializeFilterSelection() {
+    public void initializeFilterSelection() {
         mealTypeToggle.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 lastSelectedFilter = (RadioMenuItem) newValue;
             }
         });
+    }
+
+    public void resetFilterButton() {
+        if (mealTypeToggle != null) {
+            mealTypeToggle.selectToggle(null);
+        }
+        lastSelectedFilter = null;
+        this.breakfastItem.setSelected(false);
+        this.lunchItem.setSelected(false);
+        this.dinnerItem.setSelected(false);
+        this.resetFilter.setSelected(false);
+
+    }
+
+    public void handleResetFilterButton() {
+        resetFilterButton();
+        // Add any additional logic or actions you need after resetting the filter
     }
 
     public String getSelectedMealType() {
@@ -213,7 +235,8 @@ public class RecipeListView {
 
     public void setFilterAction(EventHandler<ActionEvent> eventHandler) {
         if (mealTypeToggle != null) {
-            mealTypeToggle.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            mealTypeToggle.selectedToggleProperty().addListener((observable, oldValue,
+                    newValue) -> {
                 if (newValue != null) {
                     lastSelectedFilter = (RadioMenuItem) newValue;
                     eventHandler.handle(new ActionEvent());
