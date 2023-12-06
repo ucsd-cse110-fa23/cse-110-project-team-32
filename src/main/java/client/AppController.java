@@ -306,7 +306,7 @@ public class AppController {
       for (Recipe x : finalRecipe) {
         sortedRecipes.add(x);
       }
-      updateRecipeListViews2(sortedRecipes);
+      updateRecipeListViews(sortedRecipes, finalRecipe);
     } else {
       mealType = mealType.toLowerCase();
       for (Recipe x : finalRecipe) {
@@ -314,7 +314,7 @@ public class AppController {
           sortedRecipes.add(x);
         }
       }
-      updateRecipeListViews2(sortedRecipes);
+      updateRecipeListViews(sortedRecipes, finalRecipe);
     }
     for (Recipe x : finalRecipe) {
       System.out.print(x.getTitle() + " " + x.getIndex());
