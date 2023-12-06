@@ -526,6 +526,9 @@ public class AppController {
 
     // recipeView.resetFilterButton();
     // reverseSortRecipesByDate(null);
+    if (recipeListController == null ) {
+      return;
+    }
     recipeListController.recipeListView.resetFilterButton();
 
     // Reverse sort recipes by date
