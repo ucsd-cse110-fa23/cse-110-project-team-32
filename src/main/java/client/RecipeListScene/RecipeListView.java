@@ -91,11 +91,14 @@ public class RecipeListView {
 
         Region r = new Region();
         Region r1 = new Region();
+        Region r2 = new Region();
         HBox.setHgrow(r, Priority.ALWAYS);
         HBox.setHgrow(r1, Priority.ALWAYS);
+        HBox.setHgrow(r2, Priority.ALWAYS);
 
         // creates horizontal box for the buttons and adds buttons to button group
-        HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, sortMenuButton, logOutButton);
+        HBox buttonGroup = new HBox(newRecipeButton, r, filterButton, r1, sortMenuButton, r2, logOutButton);
+        
         buttonGroup.setPrefSize(500D, 20);
 
         // set button group up top
@@ -103,6 +106,14 @@ public class RecipeListView {
         // creates container for recipe list
         recipeListContainer = new VBox();
         borderPane.setCenter(recipeListContainer);
+
+        // UI Styling (WIP)
+        String buttonStyle = "-fx-background-color: #DAE5EA; -fx-border-width: 0;";
+        newRecipeButton.setStyle(buttonStyle);
+        filterButton.setStyle(buttonStyle);
+        sortMenuButton.setStyle(buttonStyle);
+        logOutButton.setStyle(buttonStyle);
+
 
         initializeFilterSelection();
     }

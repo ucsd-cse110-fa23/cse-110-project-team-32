@@ -28,6 +28,7 @@ public class CreateAccountView {
     public CreateAccountView(){
         
         borderPane = new BorderPane();
+
         title = new HBox(new Text("Create Account"));
         borderPane.setTop(title);
         username = new TextFieldLowerChar();
@@ -37,7 +38,10 @@ public class CreateAccountView {
         // error = new Text("Username already taken");
         error = new Text();
         accountDetails = new VBox(username, password, error);
+       
+        
         borderPane.setCenter(accountDetails);
+        accountDetails.setAlignment(Pos.CENTER); //delete later 
         createAccButton = new Button("Sign Up");
         logInButton = new Button("Back");
         buttonList = new HBox(createAccButton,logInButton);
@@ -51,6 +55,10 @@ public class CreateAccountView {
             buttonList.setSpacing(15);
             createAccButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
             logInButton.setStyle("-fx-background-color: #DAE5EA; -fx-border-width: 0;");
+
+
+           
+            
         }
   
   // getter method for borderpane
